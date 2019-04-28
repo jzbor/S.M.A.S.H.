@@ -8,14 +8,42 @@
 
 % Packages
 \usepackage{amsmath}
+\usepackage{german}
 
 % Document
-\title{Pflichtenheft "S.M.A.S.H."}
+\title{Pflichtenheft 'S.M.A.S.H.'}
 \author{Anton Lampenscherf, Christian Arzberger, Fabio Neugebauer, Julian Zboril}
 
 \begin{document}
 
     \maketitle
+
+    \section{Beschreibung}\label{sec:beschreibung}
+    S.M.A.S.H.\ ist ein Eins-gegen-Eins 2D-Spiel.
+    Jeder Spieler versucht, den gegnerischen Avatar von einer Plattform zu \„smashen\“.
+    Gesmasht wird durch Angriffsschläge, die auf einem Schaden-zu-Rückschlag-Verhältnis basieren.
+    Durch den Rückschlag dieser Schläge kann der gegnerische Avatar von der Plattform gestoßen werden.
+    Es gibt zwei Arten des Angriffsschlags, die Attacke und die Super-Attacke.
+    Beide können von den Spielern durch die Tastatur ausgeführt werden und fügen dem gegnerischen Avatar, falls dieser in Richtung und Reichweite des Angriffsschlags ist, Schaden und Rückschlag zu. Man kann sowohl Attacke als auch Super-Attacke nicht ununterbrochen durchführen, sondern es muss eine gewisse Ladezeit abgewartet werden, bis diese Aktionen wieder aufgerufen werden können.
+    Dem Schaden-zu-Rückschlag-Verhältnis liegt eine proportionale Zuordnung zu Grunde.
+    Desto größer der Schaden ist, den ein Avatar im Laufe des Spiels erhalten hat, desto mehr Rückschlag erfährt er durch die Angriffsschläge, die ihn treffen.
+    Der Schaden, den die Avatare zum gegenwärtigen Spielstand erhalten haben, wird den Spielern am Rand des Bildschirmfensters von S.M.A.S.H.\ angezeigt.
+    Die Spieler können ihre Avatare mit Hilfe der Tastatur steuern.
+    Dabei können sie die Avatare sowohl nach links und rechts laufen lassen, die Attacken der Avatare auslösen, als auch die Avatare springen lassen.
+    Da man nicht auf der Plattform stehen muss, um zu springen, ist ein Kampf noch nicht vorbei, wenn ein Spieler von der Plattform abgekommen ist.
+    Die Avatare können durch geschickte Sprünge wieder zur Plattform gesteuert werden.
+    Sobald aber ein Avatar einen gewissen Abstand zur Plattform erreicht hat, hat der zugehörige Spieler in S.M.A.S.H verloren.
+    Nach obenhin ist das Spielfeld insofern begrenzt, dass nur bis zu einer gewissen Höhe gesprungen werden kann.
+
+    \section{Muss}\label{sec:muss}
+    Das Spiel hat Sounds, einen Startbildschirm und ist im "Zwei-Spieler-Modus" (eine Tastatur) spielbar.
+    Das Programm enthält mehrere Maps/Level die durch ihr Aussehen unterscheiden.
+    Ein Muss-Faktor ist die, normale Attaken ergänzende, Superattacke.
+    Es gibt Hintergrund-Musik, die während des Spieles auch an- und abschaltbar ist.
+
+    \section{Kann Nicht}\label{sec:kann-nicht}
+    Das Spiel ist weder online noch gegen den Computer spielbar.
+    Auch sind Animationen gering auflösend.
 
 
 \end{document}
