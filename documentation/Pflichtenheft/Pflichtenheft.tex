@@ -10,6 +10,8 @@
 \usepackage{amsmath}
 \usepackage{german}
 \usepackage{xparse}
+\usepackage{verbatim}
+\usepackage{comment}
 
 % Document
 \title{Pflichtenheft 'S.M.A.S.H.'}
@@ -54,32 +56,78 @@
     \noindent
     Nach obenhin ist das Spielfeld insofern begrenzt, dass nur bis zu einer gewissen H\"ohe gesprungen werden kann.
 
-    \section{Muss}\label{sec:muss}
-    Das Spiel hat Sounds, einen Startbildschirm und ist im \glqq Zwei-Spieler-Modus\grqq{} (eine Tastatur) spielbar.
-    Das Programm enth\"alt mehrere Maps/Level die sich durch ihr Aussehen unterscheiden.
-    Ein Muss-Faktor ist die, normale Attaken erg\"anzende, Superattacke.
-    Es gibt Hintergrund-Musik, die w\"ahrend des Spieles auch an- und ausschaltbar ist.
+    \section{Pflichtfunktionen}\label{sec:muss}
+    Das Spiel hat Sounds f\"ur bestimmte Aktionen, wie Schlagen, Springe, Sterben.
+    \vspace{\paragraphspace}
 
-    \section{Kann Nicht}\label{sec:kann-nicht}
+    \noindent
+    Es gibt einen Startbildschirm, bevor man zum eigentlichen Spiel gelangt.
+    \vspace{\paragraphspace}
+
+    \noindent
+    Spielbar ist es im \glqq Zwei-Spieler-Modus\grqq{} mit einer Tastatur, auf der es f\"ur beide Spieler verschiedene
+    Tasten zur Steuerung des jeweiligen Avatars gibt.
+    \vspace{\paragraphspace}
+
+    \noindent
+    Mehrere Maps/Level sind verf\"ugbar, die sich in ihrem Aussehen unterscheiden.
+    \vspace{\paragraphspace}
+
+    \noindent
+    Neben der normalen Schlagattacke gibt es noch eine Superattacke, welche einen anderen Effekt hat.
+    \vspace{\paragraphspace}
+
+    \noindent
+    Die Hintegrund-Musik kann sowohl vor Spielbeginn, als auch w\"ahrend dem Spiel ein- und ausgeschaltet werden.
+ %   \begin{comment}
+%        Das Spiel hat Sounds, einen Startbildschirm und ist im \glqq Zwei-Spieler-Modus\grqq{} (eine Tastatur) spielbar.
+%        Das Programm enth\"alt mehrere Maps/Level die sich durch ihr Aussehen unterscheiden.
+%        Ein Muss-Faktor ist die, normale Attaken erg\"anzende, Superattacke.
+%        Es gibt Hintergrund-Musik, die w\"ahrend des Spieles auch an- und ausschaltbar ist.
+ %   \end{comment}
+
+    \section{Nicht Realisiertes}\label{sec:kann-nicht}
+
     Das Spiel ist weder online noch gegen den Computer spielbar.
-    Auch sind Animationen gering aufl\"osend.
-
-    \section{Kann}\label{sec:kann}
-    Dies wird das Programm vielleicht k\"onnen:
     \vspace{\paragraphspace}
 
     \noindent
-    Kamerabewegung und -zoom sorgt daf\"ur, dass sich die Spieler immer im Sichtfeld befinden und das aktuell benutze Sopielfeld m\"oglichst
-    gut \"uberschaubar ist. Ausnahme von der Regel,dass sich beide Spieler immer im Sichtfeld befinden, ist ein zu gro\ss{}er Abstand eines Spielers zu der
-    Spielplattform.
+    Die Animationen der Schl\"age und Bewegungen sind geringaufl\"osend.
+
+%    \begin{comment}
+
+%    Das Spiel ist weder online noch gegen den Computer spielbar.
+%    Auch sind Animationen gering aufl\"osend.
+%    \end{comment}
+
+    \section{M\"ogliche Funktionen}\label{sec:kann}
+
+    Die Kamera wird w\"ahrend dem Spiel immer so bewegt und heraus- bzw. herangezoomt, sodass sich immer beide
+    Spieler im Sichtbereich befinden und dabei gleichzeitig der Fokus auf dem aktuell benutzten Spielbereich liegt. Wenn sich
+    ein Spieler jedoch zu weit von der Plattform entfernt wird nicht weiter herausgezoomt, sondern nur noch die Richtung angezeigt,
+    in der er sich relativ zu der Plattform befindet. entfernen. Dies soll f\"ur mehr Spieldynamik und bessere \"Ubersicht sorgen.
     \vspace{\paragraphspace}
 
     \noindent
-    Kurze Beschreibungen bzw. Biographien erscheinen, wenn man seinen Avatar ausw\"ahlt.
+    Es werden bei der Auswahl seines Avatars kurze Beschreibungen bzw. Biographien angezeigt, die den einzelnen Charakteren
+    eine Hintergrundgeschichte geben.
     \vspace{\paragraphspace}
 
     \noindent
-    Die Tastatur kann in den Einstellungen nach eigenen Vorlieben konfiguriert werden, sodass die
-    einzelnen Aktionen auf andere Tatsten als die Vordefinierten gelegt werden k\"onnen.
+    Die Tastatur kann in den Einstellungen nach eigenen Vorlieben konfiguriert werden, sodass die Steuerung seines Avatars
+    personalisiert ist und nicht mit den vordefinierten Tasten gespielt werden muss.
+    \vspace{\paragraphspace}
+
+    \noindent
+    Die Maps/Level unterscheiden sich nicht nur im Aussehen, sondern auch in den pysikalischen Eigenschaften, wie der
+    Schwerkraft
+
+    \section{Systemvorraussetzungen}\label{sec:systemvorraussetungen}
+
+    Das Spiel soll auf einem Bildschirm der Gr\"o\"ss{}e 1024 x 768 angezeigt werden k\"onnen.
+    \vspace{\paragraphspace}
+
+    \noindent
+    Es soll auf einem Schulrechner unter Windows laufen.
 
 \end{document}
