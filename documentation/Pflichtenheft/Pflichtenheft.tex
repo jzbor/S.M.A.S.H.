@@ -9,10 +9,14 @@
 % Packages
 \usepackage{amsmath}
 \usepackage{german}
+\usepackage{xparse}
 
 % Document
 \title{Pflichtenheft 'S.M.A.S.H.'}
 \author{Anton Lampenscherf, Christian Arzberger, Fabio Neugebauer, Julian Zboril}
+
+%variable
+\newcommand{\paragraphspace}{0.3cm}
 
 \begin{document}
 
@@ -20,30 +24,62 @@
 
     \section{Beschreibung}\label{sec:beschreibung}
     S.M.A.S.H.\ ist ein Eins-gegen-Eins 2D-Spiel.
-    Jeder Spieler versucht, den gegnerischen Avatar von einer Plattform zu \„smashen\“.
-    Gesmasht wird durch Angriffsschläge, die auf einem Schaden-zu-Rückschlag-Verhältnis basieren.
-    Durch den Rückschlag dieser Schläge kann der gegnerische Avatar von der Plattform gestoßen werden.
+    Jeder Spieler versucht, den gegnerischen Avatar von einer Plattform zu \glqq smashen\grqq{}.
+    \vspace{\paragraphspace}
+
+    \noindent
+    Gesmasht wird durch Angriffsschl\"age, die auf einem Schaden-zu-R\"uckschlag-Verh\"altnis basieren.
+    Durch den R\"uckschlag dieser Schl\"age kann der gegnerische Avatar von der Plattform gesto\ss{}en werden.
+    \vspace{\paragraphspace}
+
+    \noindent
     Es gibt zwei Arten des Angriffsschlags, die Attacke und die Super-Attacke.
-    Beide können von den Spielern durch die Tastatur ausgeführt werden und fügen dem gegnerischen Avatar, falls dieser in Richtung und Reichweite des Angriffsschlags ist, Schaden und Rückschlag zu. Man kann sowohl Attacke als auch Super-Attacke nicht ununterbrochen durchführen, sondern es muss eine gewisse Ladezeit abgewartet werden, bis diese Aktionen wieder aufgerufen werden können.
-    Dem Schaden-zu-Rückschlag-Verhältnis liegt eine proportionale Zuordnung zu Grunde.
-    Desto größer der Schaden ist, den ein Avatar im Laufe des Spiels erhalten hat, desto mehr Rückschlag erfährt er durch die Angriffsschläge, die ihn treffen.
-    Der Schaden, den die Avatare zum gegenwärtigen Spielstand erhalten haben, wird den Spielern am Rand des Bildschirmfensters von S.M.A.S.H.\ angezeigt.
-    Die Spieler können ihre Avatare mit Hilfe der Tastatur steuern.
-    Dabei können sie die Avatare sowohl nach links und rechts laufen lassen, die Attacken der Avatare auslösen, als auch die Avatare springen lassen.
+    Beide k\"onnen von den Spielern durch die Tastatur ausgef\"uhrt werden und f\"ugen dem gegnerischen Avatar, falls dieser in Richtung und Reichweite des Angriffsschlags ist, Schaden und R\"uckschlag zu. Man kann sowohl Attacke als auch Super-Attacke nicht ununterbrochen durchf\"uhren, sondern es muss eine gewisse Ladezeit abgewartet werden, bis diese Aktionen wieder aufgerufen werden k\"onnen.
+    \vspace{\paragraphspace}
+
+    \noindent
+    Dem Schaden-zu-R\"uckschlag-Verh\"altnis liegt eine proportionale Zuordnung zu Grunde.
+    Desto gr\"o\ss{}er der Schaden ist, den ein Avatar im Laufe des Spiels erhalten hat, desto mehr R\"uckschlag erf\"ahrt er durch die Angriffsschl\"age, die ihn treffen.
+    Der Schaden, den die Avatare zum gegenw\"artigen Spielstand erhalten haben, wird den Spielern am Rand des Bildschirmfensters von S.M.A.S.H.\ angezeigt.
+    \vspace{\paragraphspace}
+
+    \noindent
+    Die Spieler k\"onnen ihre Avatare mit Hilfe der Tastatur steuern.
+    Dabei k\"onnen sie die Avatare sowohl nach links und rechts laufen lassen, die Attacken der Avatare ausl\"osen, als auch die Avatare springen lassen.
     Da man nicht auf der Plattform stehen muss, um zu springen, ist ein Kampf noch nicht vorbei, wenn ein Spieler von der Plattform abgekommen ist.
-    Die Avatare können durch geschickte Sprünge wieder zur Plattform gesteuert werden.
-    Sobald aber ein Avatar einen gewissen Abstand zur Plattform erreicht hat, hat der zugehörige Spieler in S.M.A.S.H verloren.
-    Nach obenhin ist das Spielfeld insofern begrenzt, dass nur bis zu einer gewissen Höhe gesprungen werden kann.
+    Die Avatare \"onnen durch geschickte Spr\"unge wieder zur Plattform gesteuert werden.
+    Sobald aber ein Avatar einen gewissen Abstand zur Plattform erreicht hat, hat der zugeh\"orige Spieler in S.M.A.S.H verloren.
+    \vspace{\paragraphspace}
+
+    \noindent
+    Nach obenhin ist das Spielfeld insofern begrenzt, dass nur bis zu einer gewissen H\"ohe gesprungen werden kann.
 
     \section{Muss}\label{sec:muss}
-    Das Spiel hat Sounds, einen Startbildschirm und ist im "Zwei-Spieler-Modus" (eine Tastatur) spielbar.
-    Das Programm enthält mehrere Maps/Level die durch ihr Aussehen unterscheiden.
-    Ein Muss-Faktor ist die, normale Attaken ergänzende, Superattacke.
-    Es gibt Hintergrund-Musik, die während des Spieles auch an- und abschaltbar ist.
+    Das Spiel hat Sounds, einen Startbildschirm und ist im \glqq Zwei-Spieler-Modus\grqq{} (eine Tastatur) spielbar.
+    Das Programm enth\"alt mehrere Maps/Level die sich durch ihr Aussehen unterscheiden.
+    Ein Muss-Faktor ist die, normale Attaken erg\"anzende, Superattacke.
+    Es gibt Hintergrund-Musik, die w\"ahrend des Spieles auch an- und ausschaltbar ist.
 
     \section{Kann Nicht}\label{sec:kann-nicht}
     Das Spiel ist weder online noch gegen den Computer spielbar.
-    Auch sind Animationen gering auflösend.
+    Auch sind Animationen gering aufl\"osend.
 
+    \section{Kann}\label{sec:kann}
+    Dies wird das Programm vielleicht k\"onnen:
+    \vspace{\paragraphspace}
+
+    \noindent
+    Kamerabewegung und -zoom sorgt daf\"ur, dass sich die Spieler immer im Sichtfeld befinden und das aktuell benutze Sopielfeld m\"oglichst
+    gut \"uberschaubar ist. Ausnahme von der Regel,dass sich beide Spieler immer im Sichtfeld befinden, ist ein zu gro\ss{}er Abstand eines Spielers zu der
+    Spielplattform.
+    \vspace{\paragraphspace}
+
+    \noindent
+    Kurze Beschreibungen bzw. Biographien erscheinen, wenn man seinen Avatar ausw\"ahlt.
+    \vspace{\paragraphspace}
+
+    \noindent
+    Die Tastatur kann in den Einstellungen nach eigenen Vorlieben konfiguriert werden, sodass die
+    einzelnen Aktionen auf andere Tatsten als die Vordefinierten gelegt werden k\"onnen.
 
 \end{document}
