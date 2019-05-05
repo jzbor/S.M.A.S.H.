@@ -9,10 +9,11 @@
 % Packages
 \usepackage{german}
 \usepackage{comment}
+\usepackage{scrextend} %Fuer die Auflistung am Ende
 
 % Document
 \title{Pflichtenheft 'S.M.A.S.H.'}
-\author{Anton Lampenscherf, Christian Arzberger, Fabio Neugebauer, Julian Zboril}
+\author{Anton Lampenscherf, Christian Arzberger,\newline  Fabio Neugebauer, Julian Zboril}
 
 \begin{document}
 
@@ -20,8 +21,8 @@
 
     \section{Beschreibung}\label{sec:beschreibung}
     S.M.A.S.H.\ ist ein Eins-gegen-Eins 2D-Spiel.
-    Das Akronym steht f"ur \glqq S.M.A.S.H. Macht Alle Sch"uler Happy\grqq und bzwichnet sowohl das Spiel, als auch die Gruppe. % @TODO gut?
-    Jeder Spieler versucht, den gegnerischen Avatar von einer Plattform zu \glqq smashen\grqq.\\
+    Das Akronym steht f"ur \newline\glqq S.M.A.S.H. Makes All Students Happy\grqq\space und bezeichnet sowohl das Spiel, als auch die Gruppe.
+    Jeder Spieler versucht, den gegnerischen Avatar von einer Plattform zu \glqq smashen\grqq. \glqq Smashen\grqq bedeutet, mit seinem Avatar einen Schlag auszuf"uhren.\\
 
     \noindent
     Gesmasht wird durch Angriffsschl"age, die auf einem Schaden-zu-R"uckschlag-Verh"altnis basieren.
@@ -67,13 +68,6 @@
     \noindent
     Die Hintegrund-Musik kann sowohl vor Spielbeginn, als auch w"ahrend des Spieles ein- und ausgeschaltet werden.
 
-    \section{Nicht enthaltene Funktionen}\label{sec:kann-nicht}
-
-    Das Spiel ist weder online noch gegen den Computer spielbar.\\
-
-    \noindent
-    Die Animationen der Schl"age und Bewegungen sind geringaufl"osend.
-
     \section{M"ogliche Funktionen}\label{sec:kann}
 
     Die Kamera wird w"ahrend dem Spiel immer so bewegt und heraus- bzw. herangezoomt, sodass sich immer beide
@@ -100,5 +94,23 @@
 
     \noindent
     Es soll auf einem Schulrechner unter Windows laufen.
+
+    \section{Nicht enthaltene Funktionen}\label{sec:kann-nicht}
+
+    Das Spiel ist weder online noch gegen den Computer spielbar.\\
+
+    \noindent
+    Die Animationen der Schl"age und Bewegungen sind geringaufl"osend.
+
+    \section{Wer macht was}\label{sec:wer-macht-was}
+    
+    \begin{labeling}{Sound/Musik (erstellen/raussuchen + implementieren)}
+        \item [Graphiken] Christian
+        \item [Sound/Musik (erstellen/raussuchen + implementieren)] Fabio
+        \item [Start-/Ladescreen] Christian, Fabio
+        \item [GUI f"ur den Spielscreen] Anton, Fabio,\newline Julian
+        \item [Physik (+Model)] Anton, Julian
+    \end{labeling}
+    
 
 \end{document}
