@@ -4,21 +4,16 @@
 %%
 
 % Preamble
-\documentclass[11pt]{article}
+\documentclass[a4paper, 11pt]{article}
 
 % Packages
-\usepackage{amsmath}
 \usepackage{german}
-\usepackage{xparse}
-\usepackage{verbatim}
 \usepackage{comment}
+\usepackage{scrextend} %Fuer die Auflistung am Ende
 
 % Document
-\title{Pflichtenheft \textquotedblleft S.M.A.S.H.\textquotedblright}
-\author{Anton Lampenscherf, Christian Arzberger, Fabio Neugebauer, Julian Zboril}
-
-%variable
-\newcommand{\paragraphspace}{0.3cm}
+\title{Pflichtenheft 'S.M.A.S.H.'}
+\author{Anton Lampenscherf, Christian Arzberger,\newline  Fabio Neugebauer, Julian Zboril}
 
 \begin{document}
 
@@ -26,109 +21,96 @@
 
     \section{Beschreibung}\label{sec:beschreibung}
     S.M.A.S.H.\ ist ein Eins-gegen-Eins 2D-Spiel.
-    Jeder Spieler versucht, den gegnerischen Avatar von einer Plattform zu \textquotedblleft smashen\textquotedblright.
-    \vspace{\paragraphspace}
+    Das Akronym steht f"ur \newline\glqq S.M.A.S.H. Makes All Students Happy\grqq\space und bezeichnet sowohl das Spiel, als auch die Gruppe.
+    Jeder Spieler versucht, den gegnerischen Avatar von einer Plattform zu \glqq smashen\grqq. \glqq Smashen\grqq bedeutet, mit seinem Avatar einen Schlag auszuf"uhren.\\
 
     \noindent
-    Gesmasht wird durch Angriffsschl\"age, die auf einem Schaden-zu-R\"uckschlag-Verh\"altnis basieren.
-    Durch den R\"uckschlag dieser Schl\"age kann der gegnerische Avatar von der Plattform gesto\"sen werden.
-    \vspace{\paragraphspace}
+    Gesmasht wird durch Angriffsschl"age, die auf einem Schaden-zu-R"uckschlag-Verh"altnis basieren.
+    Durch den R"uckschlag dieser Schl"age kann der gegnerische Avatar von der Plattform gesto"sen werden.\\
 
     \noindent
     Es gibt zwei Arten des Angriffsschlags, die Attacke und die Super-Attacke.
-    Beide k\"onnen von den Spielern durch die Tastatur ausgef\"uhrt werden und f\"ugen dem gegnerischen Avatar, falls dieser in Richtung und Reichweite des Angriffsschlags ist, Schaden und R\"uckschlag zu.
-    Man kann sowohl Attacke als auch Super-Attacke nicht ununterbrochen durchf\"uhren, sondern es muss eine gewisse Ladezeit abgewartet werden, bis diese Aktionen wieder aufgerufen werden k\"onnen.
-    \vspace{\paragraphspace}
+    Beide k"onnen von den Spielern durch die Tastatur ausgef"uhrt werden und f"ugen dem gegnerischen Avatar, falls dieser in Richtung und Reichweite des Angriffsschlags ist, Schaden und R"uckschlag zu.
+    Man kann sowohl Attacke als auch Super-Attacke nicht ununterbrochen durchf"uhren, sondern es muss eine gewisse Ladezeit abgewartet werden, bis diese Aktionen wieder aufgerufen werden k"onnen.
+    Hier unterscheiden sich die Ladezeiter f"ur normale und Super-Attacken.\\
 
     \noindent
-    Dem Schaden-zu-R\"uckschlag-Verh\"altnis liegt eine proportionale Zuordnung zu Grunde.
-    Desto gr\"o\"ser der Schaden ist, den ein Avatar im Laufe des Spiels erhalten hat, desto mehr R\"uckschlag erf\"ahrt er durch die Angriffsschl\"age, die ihn treffen.
-    Der Schaden, den die Avatare zum gegenw\"artigen Spielstand erhalten haben, wird den Spielern am Rand des Bildschirmfensters von S.M.A.S.H. angezeigt.
-    \vspace{\paragraphspace}
+    Dem Schaden-zu-R"uckschlag-Verh"altnis liegt eine proportionale Zuordnung zu Grunde.
+    Desto gr"o"ser der Schaden ist, den ein Avatar im Laufe des Spiels erhalten hat, desto mehr R"uckschlag erf"ahrt er durch die Angriffsschl"age, die ihn treffen.
+    Der Schaden, den die Avatare zum gegenw"artigen Spielstand erhalten haben, wird den Spielern am Rand des Bildschirmfensters von S.M.A.S.H.\ angezeigt.\\
 
     \noindent
-    Die Spieler k\"onnen ihre Avatare mit Hilfe der Tastatur steuern.
-    Dabei k\"onnen sie die Avatare sowohl nach links und rechts laufen lassen, die Attacken der Avatare ausl\"osen, als auch die Avatare springen lassen.
+    Die Spieler k"onnen ihre Avatare mit Hilfe der Tastatur steuern.
+    Dabei k"onnen sie die Avatare sowohl nach links und rechts laufen lassen, die Attacken der Avatare ausl"osen, als auch die Avatare springen lassen.
     Da man nicht auf der Plattform stehen muss, um zu springen, ist ein Kampf noch nicht vorbei, wenn ein Spieler von der Plattform abgekommen ist.
-    Die Avatare k\"onnen durch geschickte Spr\"unge wieder zur Plattform gesteuert werden.
-    Sobald aber ein Avatar einen gewissen Abstand zur Plattform erreicht hat, hat der zugeh\"orige Spieler in S.M.A.S.H verloren.
-    \vspace{\paragraphspace}
+    Die Avatare "onnen durch geschickte Spr"unge wieder zur Plattform gesteuert werden.
+    Sobald aber ein Avatar einen gewissen Abstand zur Plattform erreicht hat, hat der zugeh"orige Spieler in S.M.A.S.H verloren.\\
 
     \noindent
-    Nach obenhin ist das Spielfeld insofern begrenzt, dass nur bis zu einer gewissen H\"ohe gesprungen werden kann.
+    Nach obenhin ist das Spielfeld insofern begrenzt, dass nur bis zu einer gewissen H"ohe gesprungen werden kann.
 
     \section{Pflichtfunktionen}\label{sec:muss}
-    Das Spiel hat Sounds f\"ur bestimmte Aktionen, wie Schlagen, Springen, Sterben.
-    \vspace{\paragraphspace}
+    Das Spiel hat Sounds f"ur bestimmte Aktionen, wie Schlagen, Springen, Sterben.\\
 
     \noindent
-    Es gibt einen Startbildschirm, bevor man zum eigentlichen Spiel gelangt.
-    \vspace{\paragraphspace}
+    Es gibt einen Startbildschirm, bevor man zum eigentlichen Spiel gelangt.\\
 
     \noindent
-    Spielbar ist es im \textquotedblleft Zwei-Spieler-Modus\textquotedblright mit einer Tastatur, auf der es f\"ur beide Spieler verschiedene
-    Tasten zur Steuerung des jeweiligen Avatars gibt.
-    \vspace{\paragraphspace}
+    Spielbar ist es im Zwei-Spieler-Modus mit einer Tastatur, auf der es f"ur beide Spieler verschiedene
+    Tasten zur Steuerung des jeweiligen Avatars gibt.\\
 
     \noindent
-    Mehrere Maps/Level sind verf\"ugbar, die sich in ihrem Aussehen unterscheiden.
-    \vspace{\paragraphspace}
+    Mehrere Maps/Level sind verf"ugbar, die sich in ihrem Aussehen unterscheiden.\\
 
     \noindent
-    Neben der normalen Schlagattacke gibt es noch eine Superattacke, welche einen anderen Effekt hat.
-    \vspace{\paragraphspace}
+    Neben der normalen Schlagattacke gibt es noch eine Superattacke, welche einen anderen Effekt hat.\\
 
     \noindent
-    Die Hintergrund-Musik kann sowohl vor Spielbeginn, als auch w\"ahrend dem Spiel ein- und ausgeschaltet werden.
- %   \begin{comment}
-%        Das Spiel hat Sounds, einen Startbildschirm und ist im \glqq Zwei-Spieler-Modus\grqq{} (eine Tastatur) spielbar.
-%        Das Programm enth\"alt mehrere Maps/Level die sich durch ihr Aussehen unterscheiden.
-%        Ein Muss-Faktor ist die, normale Attaken erg\"anzende, Superattacke.
-%        Es gibt Hintergrund-Musik, die w\"ahrend des Spieles auch an- und ausschaltbar ist.
- %   \end{comment}
+    Die Hintegrund-Musik kann sowohl vor Spielbeginn, als auch w"ahrend des Spieles ein- und ausgeschaltet werden.
 
-    \section{Nicht Realisiertes}\label{sec:kann-nicht}
+    \section{M"ogliche Funktionen}\label{sec:kann}
 
-    Das Spiel ist weder online noch gegen den Computer spielbar.
-    \vspace{\paragraphspace}
+    Die Kamera wird w"ahrend dem Spiel immer so bewegt und heraus- bzw. herangezoomt, sodass sich immer beide
+    Spieler im Sichtbereich befinden und dabei gleichzeitig der Fokus auf dem aktuell benutzten Spielbereich liegt.
+    Wenn sich ein Spieler jedoch zu weit von der Plattform entfernt wird nicht weiter herausgezoomt, sondern nur noch die
+    Richtung angezeigt, in der er sich relativ zu der Plattform befindet.
+    Dies soll f"ur mehr Spieldynamik und bessere "Ubersicht sorgen.\\
 
     \noindent
-    Die Animationen der Schl\"age und Bewegungen sind geringaufl\"osend.
-
-%    \begin{comment}
-
-%    Das Spiel ist weder online noch gegen den Computer spielbar.
-%    Auch sind Animationen gering aufl\"osend.
-%    \end{comment}
-
-    \section{M\"ogliche Funktionen}\label{sec:kann}
-
-    Die Kamera wird w\"ahrend dem Spiel immer so bewegt und heraus- bzw. herangezoomt, sodass sich immer beide
-    Spieler im Sichtbereich befinden und dabei gleichzeitig der Fokus auf dem aktuell benutzten Spielbereich liegt. Wenn sich
-    ein Spieler jedoch zu weit von der Plattform entfernt wird nicht weiter herausgezoomt, sondern nur noch die Richtung angezeigt,
-    in der er sich relativ zu der Plattform befindet. entfernen. Dies soll f\"ur mehr Spieldynamik und bessere \"Ubersicht sorgen.
-    \vspace{\paragraphspace}
+    Es werden bei der Auswahl seines Avatars kurze Beschreibungen bzw. Biographien angezeigt, die den einzelnen Charakteren
+    eine Hintergrundgeschichte geben.\\
 
     \noindent
-    Es werden bei der Auswahl eines Avatars kurze Beschreibungen bzw. Biographien angezeigt, die den einzelnen Charakteren
-    eine Hintergrundgeschichte geben.
-    \vspace{\paragraphspace}
-
-    \noindent
-    Die Tastatur kann in den Einstellungen nach eigenen Vorlieben konfiguriert werden, sodass die Steuerung seines Avatars
-    personalisiert ist und nicht mit den vordefinierten Tasten gespielt werden muss.
-    \vspace{\paragraphspace}
+    Die Tastatur kann in den Einstellungen nach eigenen Vorlieben konfiguriert werden, sodass die Steuerung eines Avatars
+    personalisiert ist und nicht mit den vordefinierten Tasten gespielt werden muss.\\
 
     \noindent
     Die Maps/Level unterscheiden sich nicht nur im Aussehen, sondern auch in den pysikalischen Eigenschaften, wie der
-    Schwerkraft
+    Schwerkraft.
 
-    \section{Systemvorraussetzungen}\label{sec:systemvorraussetungen}
+    \section{Systemvoraussetzungen}\label{sec:systemvorraussetungen}
 
-    Das Spiel soll auf einem Bildschirm der Gr\"oße 1024 x 768 angezeigt werden k\"onnen.
-    \vspace{\paragraphspace}
+    Das Spiel soll auf einem Bildschirm der Gr"o"ss{}e 1024 x 768 angezeigt werden k"onnen.\\
 
     \noindent
     Es soll auf einem Schulrechner unter Windows laufen.
+
+    \section{Nicht enthaltene Funktionen}\label{sec:kann-nicht}
+
+    Das Spiel ist weder online noch gegen den Computer spielbar.\\
+
+    \noindent
+    Die Animationen der Schl"age und Bewegungen sind geringaufl"osend.
+
+    \section{Wer macht was}\label{sec:wer-macht-was}
+    
+    \begin{labeling}{Sound/Musik (erstellen/raussuchen + implementieren)}
+        \item [Graphiken] Christian
+        \item [Sound/Musik (erstellen/raussuchen + implementieren)] Fabio
+        \item [Start-/Ladescreen] Christian, Fabio
+        \item [GUI f"ur den Spielscreen] Anton, Fabio,\newline Julian
+        \item [Physik (+Model)] Anton, Julian
+    \end{labeling}
+    
 
 \end{document}
