@@ -11,6 +11,8 @@ import java.awt.event.KeyListener;
 
 public class GamePanel extends Panel implements KeyListener {
 
+    private static final int FRAMERATE = 60;
+    private int currentFramerate;
     private boolean running;
     private long lastFrame;
     private GameloopThread gameloopThread;
@@ -27,15 +29,16 @@ public class GamePanel extends Panel implements KeyListener {
         levelMap = map;
 
 
-    // start
+        // start
         gameloopThread.start();
-}
+    }
 
-    public void gameloop(){
-        lastFrame = System.currentTimeMillis();
-        while (running){
-            long timedelta = System.currentTimeMillis() - lastFrame;
-            lastFrame = System.currentTimeMillis();
+    public void gameloop() {
+        lastFrame = System.currentTimeMillis() - 1;
+        while (running) {
+            long thisFrame = System.currentTimeMillis();
+            long timedelta = thisFrame - lastFrame;
+            currentFramerate = (int) (1000 / timedelta);
 
             player1.calc(timedelta);
             player2.calc(timedelta);
@@ -45,6 +48,16 @@ public class GamePanel extends Panel implements KeyListener {
             player2.collide(levelMap);
 
             updateUI();
+
+            if ((System.currentTimeMillis() - thisFrame) < (1000.0 / FRAMERATE)) {
+                int sleep = (int) ((1000.0 / FRAMERATE) - (System.currentTimeMillis() - thisFrame));
+                try {
+                    Thread.sleep(sleep);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            lastFrame = thisFrame;
         }
     }
 
@@ -52,11 +65,13 @@ public class GamePanel extends Panel implements KeyListener {
     protected void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
 
-        Graphics2D graphics2D = (Graphics2D)graphics;
+        Graphics2D graphics2D = (Graphics2D) graphics;
 
         player1.draw(graphics2D);
         player2.draw(graphics2D);
         levelMap.draw(graphics2D);
+
+        System.out.println(currentFramerate);
     }
 
     @Override
