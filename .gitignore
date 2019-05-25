@@ -1,3 +1,5 @@
 # Exclude .idea configuration folder
 *.idea
+Smash.iml
+smash.iml
 out/
