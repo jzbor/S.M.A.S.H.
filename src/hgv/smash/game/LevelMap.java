@@ -24,4 +24,5 @@ public class LevelMap extends GameObject {
     public void draw(Graphics2D graphics2D) {
 
     }
+
 }

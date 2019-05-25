@@ -13,14 +13,23 @@ public class GamePanel extends Panel implements KeyListener {
 
     private boolean running;
     private long lastFrame;
-    private GameloopThread gameloop;
+    private GameloopThread gameloopThread;
     private Player player1;
     private Player player2;
     private LevelMap levelMap;
 
     public GamePanel(Avatar a1, Avatar a2, LevelMap map) {
+        // assign and create params
+        running = true;
+        gameloopThread = new GameloopThread(this);
+        player1 = new Player(a1);
+        player2 = new Player(a2);
+        levelMap = map;
 
-    }
+
+    // start
+        gameloopThread.start();
+}
 
     public void gameloop(){
         lastFrame = System.currentTimeMillis();

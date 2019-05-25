@@ -13,7 +13,6 @@ public class GameloopThread extends Thread {
     @Override
     public void run() {
         super.run();
-
-
+        panel.gameloop();
     }
 }
