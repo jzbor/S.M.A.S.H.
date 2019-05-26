@@ -8,8 +8,9 @@ import hgv.smash.resources.Avatar;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
 
-public class GamePanel extends Panel implements KeyListener {
+public class GamePanel extends Panel implements KeyEventDispatcher, KeyListener {
 
     private static final int FRAMERATE = 60;
     private int currentFramerate;
@@ -19,15 +20,17 @@ public class GamePanel extends Panel implements KeyListener {
     private Player player1;
     private Player player2;
     private LevelMap levelMap;
+    private BufferedImage frameBuffer;
 
     public GamePanel(Avatar a1, Avatar a2, LevelMap map) {
         // assign and create params
         running = true;
         gameloopThread = new GameloopThread(this);
-        player1 = new Player(a1);
-        player2 = new Player(a2);
+        player1 = new Player(a1, 50);
+        player2 = new Player(a2, 150);
         levelMap = map;
-
+        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(this);
+        addKeyListener(this);
 
         // start
         gameloopThread.start();
@@ -46,6 +49,18 @@ public class GamePanel extends Panel implements KeyListener {
 
             player1.collide(levelMap);
             player2.collide(levelMap);
+
+            BufferedImage bi = new BufferedImage(1024, 768, BufferedImage.TYPE_INT_ARGB_PRE);
+            Graphics2D graphics2D = (Graphics2D) bi.getGraphics();
+
+            levelMap.draw(graphics2D);
+            player1.draw(graphics2D);
+            player2.draw(graphics2D);
+
+            graphics2D.setColor(Color.BLACK);
+            graphics2D.drawString(currentFramerate + " FPS", 20, 20);
+
+            frameBuffer = bi;
 
             updateUI();
 
@@ -66,12 +81,14 @@ public class GamePanel extends Panel implements KeyListener {
         super.paintComponent(graphics);
 
         Graphics2D graphics2D = (Graphics2D) graphics;
+        graphics2D.drawImage(frameBuffer, 0, 0, this);
 
-        player1.draw(graphics2D);
-        player2.draw(graphics2D);
-        levelMap.draw(graphics2D);
+    }
 
-        System.out.println(currentFramerate);
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent keyEvent) {
+        processKeyEvent(keyEvent);
+        return true;
     }
 
     @Override
@@ -81,11 +98,44 @@ public class GamePanel extends Panel implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent keyEvent) {
+        char key = keyEvent.getKeyChar();
 
+        switch (key) {
+            case 'w': {
+                player1.jump();
+                break;
+            }
+            case 'a': {
+                player1.walkLeft();
+                break;
+            }
+            case 'd': {
+                player1.walkRight();
+                break;
+            }
+            case 'i': {
+                player2.jump();
+                break;
+            }
+            case 'j': {
+                player2.walkLeft();
+                break;
+            }
+            case 'l': {
+                player2.walkRight();
+                break;
+            }
+        }
     }
 
     @Override
     public void keyReleased(KeyEvent keyEvent) {
+        char key = keyEvent.getKeyChar();
 
+        if (key == 'a' || key == 'd') {
+            player1.stay();
+        } else if (key == 'j' || key == 'l') {
+            player2.stay();
+        }
     }
 }
