@@ -1,5 +1,7 @@
 package hgv.smash.game;
 
+import hgv.smash.Main;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -25,7 +27,7 @@ public class LevelMap extends GameObject {
     public static LevelMap load(String name) throws IOException {
         File bgFile = new File(name + "-bg.jpeg");
         BufferedImage bufferedImage = ImageIO.read(bgFile);
-        Rectangle debugRect = new Rectangle(165, 545, 730, 10);
+        Rectangle debugRect = new Rectangle(165, 545, 730, 20);
         return new LevelMap(bufferedImage, new Rectangle[]{debugRect});
     }
 
@@ -52,11 +54,13 @@ public class LevelMap extends GameObject {
     public void draw(Graphics2D graphics2D) {
         graphics2D.drawImage(backgroundImage, 0, 0, null);
 
-        // @DEBUG
-        graphics2D.setColor(Color.MAGENTA);
-        for (Rectangle rect :
-                platformModels) {
-            graphics2D.fill(rect);
+        if (Main.DEBUG) {
+            // @DEBUG
+            graphics2D.setColor(Color.MAGENTA);
+            for (Rectangle rect :
+                    platformModels) {
+                graphics2D.fill(rect);
+            }
         }
     }
 
