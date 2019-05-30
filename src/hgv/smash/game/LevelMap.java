@@ -10,8 +10,8 @@ import java.io.IOException;
 
 public class LevelMap extends GameObject {
 
-    public static final String[] MAP_NAMES = {"map_1", "map_2"};
-    private static final String MAP_PATH = "./resources/maps/";
+    public static final String[] MAP_NAMES = {"clouds", "map_2"};
+    public static final String MAP_PATH = "./resources/maps/";
     private BufferedImage backgroundImage;
     private Rectangle[] platformModels;
 
