@@ -177,6 +177,7 @@ public class MenuPanel extends Panel implements ActionListener {
             GamePanel gamePanel=new GamePanel(new Avatar(), new Avatar(), new LevelMap(backgroundImage, new Rectangle[1]));
             frame.getContentPane().removeAll();
             frame.setContentPane(gamePanel);
+            ((JPanel)(frame.getContentPane())).updateUI();
         }
     }
 
