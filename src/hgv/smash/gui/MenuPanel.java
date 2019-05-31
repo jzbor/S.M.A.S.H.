@@ -12,6 +12,7 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 
 //Klasse für das Start- und Hauptmenü:
@@ -22,10 +23,11 @@ public class MenuPanel extends Panel implements ActionListener {
     private BufferedImage previewPlayer1;
     private BufferedImage previewPlayer2;
     private JButton startButton;
-    private JLabel labelGameTitel ;
-    private JFrame frame;
-    public MenuPanel (JFrame theFrame) {
-        frame=theFrame;
+    private JLabel labelGameTitel;
+    private Frame frame;
+
+    public MenuPanel() {
+        frame = Frame.getInstance();
         setLayout(null);
         //Einfuegen und Deklarieren der Hintergrundgraphik
         try {
@@ -33,7 +35,7 @@ public class MenuPanel extends Panel implements ActionListener {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        repaint();
+        //repaint();
 
         //Avatar_Names ist ein statisches Feld und ein public Attribut der Klasse Avatar.
         buttonPlayer1 = new JComboBox(Avatar.AVATAR_NAMES);
@@ -44,9 +46,9 @@ public class MenuPanel extends Panel implements ActionListener {
         buttonPlayer2.addActionListener(this);
         buttonMap.addActionListener(this);
 
-        buttonPlayer1.setBounds(1024/4-75,230,150,50);
-        buttonPlayer2.setBounds(1024/4*3-75,230,150,50);
-        buttonMap.setBounds(1024/2-75,230,150,50);
+        buttonPlayer1.setBounds(1024 / 4 - 75, 230, 150, 50);
+        buttonPlayer2.setBounds(1024 / 4 * 3 - 75, 230, 150, 50);
+        buttonMap.setBounds(1024 / 2 - 75, 230, 150, 50);
         buttonPlayer1.setRenderer(new MyComboBoxRenderer("Choose Avatar one"));
         buttonPlayer1.setSelectedIndex(-1);
         buttonPlayer2.setRenderer(new MyComboBoxRenderer("Choose Avatar two"));
@@ -60,31 +62,32 @@ public class MenuPanel extends Panel implements ActionListener {
 
         add(buttonPlayer1);
         add(buttonPlayer2);
-        add (buttonMap);
+        add(buttonMap);
 
-        startButton= new JButton("Let's Fight");
-        startButton.setBounds(462,400, 100, 50);
+        startButton = new JButton("Let's Fight");
+        startButton.setBounds(462, 400, 100, 50);
         startButton.setBackground(Color.WHITE);
         startButton.addActionListener(this);
         add(startButton);
 
-        labelGameTitel= new JLabel("S.M.A.S.H");
-        labelGameTitel.setBounds(15,-70,400,200);
+        labelGameTitel = new JLabel("S.M.A.S.H");
+        labelGameTitel.setBounds(15, -70, 400, 200);
         labelGameTitel.setFont(new Font("Comic Sans MS", Font.BOLD, 45));
         add(labelGameTitel);
 
-        previewPlayer1=null;
-        previewPlayer2=null;
+        previewPlayer1 = null;
+        previewPlayer2 = null;
 
 
     }
+
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
         if (actionEvent.getSource() == buttonPlayer1) {
             String s = (String) buttonPlayer1.getSelectedItem();
             int variable = -1;
             for (int i = 0; i < Avatar.AVATAR_NAMES.length; i++) {
-                if (Avatar.AVATAR_NAMES[i] == s) {
+                if (Avatar.AVATAR_NAMES[i].equals(s)) {
                     variable = i;
                 }
             }
@@ -144,7 +147,7 @@ public class MenuPanel extends Panel implements ActionListener {
             String s = (String) buttonMap.getSelectedItem();
             int variable = -1;
             for (int i = 0; i < LevelMap.MAP_NAMES.length; i++) {
-                if (LevelMap.MAP_NAMES[i] == s) {
+                if (LevelMap.MAP_NAMES[i].equals(s)) {
                     variable = i;
                 }
             }
@@ -171,43 +174,47 @@ public class MenuPanel extends Panel implements ActionListener {
                     System.err.println("Avatar nicht existent");
                     break;
             }
-        }
-        else if (actionEvent.getSource()==startButton){
+        } else if (actionEvent.getSource() == startButton) {
 
-            GamePanel gamePanel=new GamePanel(new Avatar(), new Avatar(), new LevelMap(backgroundImage, new Rectangle[1]));
+            LevelMap levelMap = null;
+            try {
+                levelMap = LevelMap.load(LevelMap.MAP_PATH + LevelMap.MAP_NAMES[0]);
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.println("failed");
+            }
+
+            GamePanel gamePanel = new GamePanel(new Avatar(), new Avatar(), levelMap);
             frame.getContentPane().removeAll();
             frame.setContentPane(gamePanel);
-            ((JPanel)(frame.getContentPane())).updateUI();
+            ((JPanel) (frame.getContentPane())).updateUI();
         }
     }
-
-
-
 
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        Graphics2D graphics2D=(Graphics2D)g;
+        Graphics2D graphics2D = (Graphics2D) g;
         graphics2D.drawImage(backgroundImage, 0, 0, null);
         graphics2D.drawImage(previewPlayer1, 210, 320, null);
-        graphics2D.drawImage(previewPlayer2, 723,320, null);
+        graphics2D.drawImage(previewPlayer2, 723, 320, null);
 
-        Ellipse2D cloud=new Ellipse2D.Double(100,220,300,120);
+        Ellipse2D cloud = new Ellipse2D.Double(100, 220, 300, 120);
         graphics2D.setColor(new Color(102, 51, 0));
 
         //graphics2D.fill(cloud);
 
 
-        graphics2D.setColor(new Color(255,204, 51));
-        Rectangle2D floor=new Rectangle2D.Double(165,528,180,15);
+        graphics2D.setColor(new Color(255, 204, 51));
+        Rectangle2D floor = new Rectangle2D.Double(165, 528, 180, 15);
         graphics2D.fill(floor);
-        Rectangle2D floor2=new Rectangle2D.Double(670, 528,180,15);
+        Rectangle2D floor2 = new Rectangle2D.Double(670, 528, 180, 15);
         graphics2D.fill(floor2);
         graphics2D.setColor(Color.YELLOW);
-        Rectangle2D throne=new Rectangle2D.Double(690, 508, 140, 20);
+        Rectangle2D throne = new Rectangle2D.Double(690, 508, 140, 20);
         graphics2D.fill(throne);
-        Rectangle2D throne2=new Rectangle2D.Double(185, 508, 140, 20);
+        Rectangle2D throne2 = new Rectangle2D.Double(185, 508, 140, 20);
         graphics2D.fill(throne2);
 
 

@@ -1,0 +1,10 @@
+START
+    name=Georg;
+    path_to_resource=;
+    right_step_1=;
+    right_step_2=;
+    left_step_1=;
+    left_step_2=;
+    normal_attack_right=;
+    normal_attack_left=;
+STOP

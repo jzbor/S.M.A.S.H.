@@ -13,6 +13,29 @@ import java.awt.image.BufferedImage;
 
 public class GamePanel extends Panel implements KeyEventDispatcher, KeyListener {
 
+    public static class Movement{
+        public static final int MOVE_LEFT=-1;
+        public static final int MOVE_RIGHT=1;
+        public static final int STOP_MOVING=0;
+        public static final int JUMP=2;
+        public static final int NORMAL_HIT=3;
+    }
+    //keys for movement
+
+    //player1
+    private char[] keys_player_1={'w','a','d','f'};
+    private boolean[] booleans_player1={false,false,false,false};
+
+    //player2
+    private char[] keys_player_2={'i','j','l','ö'};
+    private boolean[] booleans_player2={false,false,false,false};
+    //actions for keys in same order as keys
+    private int[] actions ={GamePanel.Movement.JUMP, GamePanel.Movement.MOVE_LEFT,GamePanel.Movement.MOVE_RIGHT, Movement.NORMAL_HIT};
+    //last performed action by pressing
+    private int lastChangePlayer1=Movement.STOP_MOVING;
+    private int lastChangePlayer2=Movement.STOP_MOVING;
+
+
     private static final int FRAMERATE = 60;
     private static long JUMP_COOLDOWN = 2000;
     private boolean running;
@@ -26,8 +49,10 @@ public class GamePanel extends Panel implements KeyEventDispatcher, KeyListener 
         // assign and create params
         running = true;
         GameloopThread gameloopThread = new GameloopThread(this);
-        player1 = new Player(a1, 200);
-        player2 = new Player(a2, 300);
+        player1 = new Player(a1, 200,map);
+        player2 = new Player(a2, 300,map);
+        player1.setOtherPlayer(player2);
+        player2.setOtherPlayer(player1);
         levelMap = map;
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(this);
         addKeyListener(this);
@@ -49,8 +74,8 @@ public class GamePanel extends Panel implements KeyEventDispatcher, KeyListener 
             levelMap.calc(timedelta);
 
             // collision detection
-            player1.collide(levelMap);
-            player2.collide(levelMap);
+            //player1.collide(levelMap);
+            //player2.collide(levelMap);
 
             // buffer frame
             BufferedImage bi = new BufferedImage(1024, 768, BufferedImage.TYPE_INT_ARGB_PRE);
@@ -104,40 +129,34 @@ public class GamePanel extends Panel implements KeyEventDispatcher, KeyListener 
 
     @Override
     public void keyTyped(KeyEvent keyEvent) {
+        //problem: long typed Keys solved by using keyPressed and keyReleased
+        /*
         char key = keyEvent.getKeyChar();
 
         switch (key) {
             case 'w': {
-                player1.jump();
+                player1.changeMovement(Movement.JUMP);
                 break;
             }
             case 'i': {
-                player2.jump();
+                player2.changeMovement(Movement.JUMP);
                 break;
             }
         }
-    }
+*/    }
 
     @Override
     public void keyPressed(KeyEvent keyEvent) {
         char key = keyEvent.getKeyChar();
 
-        switch (key) {
-            case 'a': {
-                player1.walkLeft();
-                break;
+        for(int i=0;i<keys_player_1.length;i++){
+            if(key==keys_player_1[i]&&!booleans_player1[i]){
+                player1.changeMovement(actions[i]);
+                booleans_player1[i]=true;
             }
-            case 'd': {
-                player1.walkRight();
-                break;
-            }
-            case 'j': {
-                player2.walkLeft();
-                break;
-            }
-            case 'l': {
-                player2.walkRight();
-                break;
+            if(key==keys_player_2[i]&&!booleans_player2[i]){
+                player2.changeMovement(actions[i]);
+                booleans_player2[i]=true;
             }
         }
     }
@@ -146,10 +165,31 @@ public class GamePanel extends Panel implements KeyEventDispatcher, KeyListener 
     public void keyReleased(KeyEvent keyEvent) {
         char key = keyEvent.getKeyChar();
 
-        if (key == 'a' || key == 'd') {
-            player1.stay();
-        } else if (key == 'j' || key == 'l') {
-            player2.stay();
+        for(int i=0;i<keys_player_1.length;i++){
+            if(key==keys_player_1[i]&&booleans_player1[i]){
+                booleans_player1[i]=false;
+            }
+            if(key==keys_player_2[i]&&booleans_player2[i]){
+                booleans_player2[i]=false;
+            }
+        }
+        if(!booleans_player1[1]&&!booleans_player1[2]) {
+            player1.changeMovement(GamePanel.Movement.STOP_MOVING);
+        }
+        if(!booleans_player2[1]&&!booleans_player2[2]) {
+            player2.changeMovement(GamePanel.Movement.STOP_MOVING);
+        }
+        //player1 change direction if both keys were pressed and now one was released
+        if(!booleans_player1[1]&&booleans_player1[2]) {
+            player1.changeMovement(actions[2]);
+        }else if(booleans_player1[1]&&!booleans_player1[2]){
+            player1.changeMovement(actions[1]);
+        }
+        //player2 change direction if both keys were pressed and now one was released
+        if(!booleans_player2[1]&&booleans_player2[2]) {
+            player2.changeMovement(actions[2]);
+        }else if(booleans_player2[1]&&!booleans_player2[2]){
+            player2.changeMovement(actions[1]);
         }
     }
 }

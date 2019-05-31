@@ -2,11 +2,16 @@ package hgv.smash;
 
 
 import hgv.smash.gui.Frame;
+import hgv.smash.gui.MenuPanel;
+
+import javax.swing.*;
 
 public class Main {
     public static final boolean DEBUG = true;
 
     public static void main(String[] args) {
-        Frame.getInstance();
+        JPanel panel = new MenuPanel();
+        panel.setSize(Frame.getInstance().getContentPane().getSize());
+        Frame.getInstance().setContentPane(panel);
     }
 }

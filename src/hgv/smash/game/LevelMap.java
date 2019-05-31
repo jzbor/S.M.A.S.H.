@@ -24,6 +24,10 @@ public class LevelMap extends GameObject {
         return load(MAP_PATH + MAP_NAMES[0]);
     }
 
+    public Rectangle[] getPlatformModels(){
+        return platformModels;
+    }
+
     public static LevelMap load(String name) throws IOException {
         File bgFile = new File(name + "-bg.jpeg");
         BufferedImage bufferedImage = ImageIO.read(bgFile);
