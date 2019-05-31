@@ -21,10 +21,11 @@ public class MenuPanel extends Panel implements ActionListener {
     private BufferedImage backgroundImage;
     private BufferedImage previewPlayer1;
     private BufferedImage previewPlayer2;
-    private Graphics g;
     private JButton startButton;
     private JLabel labelGameTitel ;
-    public MenuPanel () {
+    private JFrame frame;
+    public MenuPanel (JFrame theFrame) {
+        frame=theFrame;
         setLayout(null);
         //Einfuegen und Deklarieren der Hintergrundgraphik
         try {
@@ -64,10 +65,11 @@ public class MenuPanel extends Panel implements ActionListener {
         startButton= new JButton("Let's Fight");
         startButton.setBounds(462,400, 100, 50);
         startButton.setBackground(Color.WHITE);
+        startButton.addActionListener(this);
         add(startButton);
 
         labelGameTitel= new JLabel("S.M.A.S.H");
-        labelGameTitel.setBounds(20,0,400,200);
+        labelGameTitel.setBounds(15,-70,400,200);
         labelGameTitel.setFont(new Font("Comic Sans MS", Font.BOLD, 45));
         add(labelGameTitel);
 
@@ -169,6 +171,12 @@ public class MenuPanel extends Panel implements ActionListener {
                     System.err.println("Avatar nicht existent");
                     break;
             }
+        }
+        else if (actionEvent.getSource()==startButton){
+
+            GamePanel gamePanel=new GamePanel(new Avatar(), new Avatar(), new LevelMap(backgroundImage, new Rectangle[1]));
+            frame.getContentPane().removeAll();
+            frame.setContentPane(gamePanel);
         }
     }
 

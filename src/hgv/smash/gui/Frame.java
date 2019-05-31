@@ -18,7 +18,7 @@ public class Frame extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setSize(new Dimension(1024, 768));
 
-        JPanel panel = new MenuPanel();
+        JPanel panel = new MenuPanel(this);
         panel.setSize(getContentPane().getSize());
         setContentPane(panel);
 
