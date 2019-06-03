@@ -224,6 +224,13 @@ public class Player extends GameObject {
             graphics2D.fillRect(xpos[0], ypos[0], WIDTH, HEIGHT);
         }
 
-        avatar.draw(graphics2D, xpos[0], ypos[0], 0);
+        int state = 0;
+        if (vx[0] > 0)
+            state = Avatar.WALKING_R;
+        else if (vx[0] < 0)
+            state = Avatar.WALKING_L;
+        else if (vx[0] == 0)
+            state = Avatar.STANDING;
+        avatar.draw(graphics2D, xpos[0], ypos[0], state);
     }
 }

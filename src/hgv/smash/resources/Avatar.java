@@ -4,6 +4,7 @@ import hgv.smash.exceptions.AvatarNotAvailableException;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -68,7 +69,30 @@ public class Avatar {
     }
 
     public void draw(Graphics2D graphics2D, int x, int y, int state) {
-        graphics2D.drawImage(images[0], x, y, null);
+        if (state == NORMAL) {
+            graphics2D.drawImage(images[NORMAL], x, y, null);
+        } else if (state == WALKING_L) {
+            graphics2D.drawImage(images[WALKING_1], x, y, null);
+        } else if (state == WALKING_R) {
+            AffineTransform at = new AffineTransform();
+            BufferedImage image = images[WALKING_1];
+            at.concatenate(AffineTransform.getScaleInstance(-1, 1));
+            at.concatenate(AffineTransform.getTranslateInstance(-image.getHeight(), 0));
+            BufferedImage newImage = new BufferedImage(
+                    image.getWidth(), image.getHeight(),
+                    image.getType());
+            Graphics2D g = newImage.createGraphics();
+            g.transform(at);
+            g.drawImage(image, 0, 0, null);
+            g.dispose();
+            System.out.println("New image: ");
+            System.out.println("\tWidth: " + newImage.getWidth());
+            System.out.println("\tHeight: " + newImage.getHeight());
+            System.out.println("\tType: " + newImage.getType());
+            graphics2D.drawImage(newImage, x, y, null);
+        } else {
+            graphics2D.drawImage(images[0], x, y, null);
+        }
     }
 
 }
