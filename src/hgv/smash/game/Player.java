@@ -3,7 +3,6 @@ package hgv.smash.game;
 import hgv.smash.Main;
 import hgv.smash.gui.GamePanel;
 import hgv.smash.resources.Avatar;
-import javafx.application.Platform;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
@@ -20,8 +19,11 @@ public class Player extends GameObject {
     // [0] recent frame parameters
     // [1] parameters calculated from recent frame, used for collision detection, set by all inputs from keyboard and physics
     // [3] all should be filled with 0 for convenient shifting
-    private int xpos[], ypos[]; // position of player (usually upper left corner of model)
-    private double vx[], vy[], vx_punch; // speed of player
+    private int[] xpos;
+    private int[] ypos; // position of player (usually upper left corner of model)
+    private double[] vx;
+    private double[] vy;
+    private double vx_punch; // speed of player
     private Avatar avatar; // avatar to display for player
     private Shape model; // model (mainly for collision detection)
     private Player otherPlayer;//other player (for punches)
@@ -201,7 +203,7 @@ public class Player extends GameObject {
     }
 
     public void hit(Shape hitbox, int xCentre, int yCentre) {
-        if (((Rectangle2D) hitbox).intersects((Rectangle2D) model)) {
+        if (hitbox.intersects((Rectangle2D) model)) {
             Vector2D punchVector = new Vector2D(xpos[0] + WIDTH / 2 - xCentre, ypos[0] + HEIGHT / 2 - yCentre);
             //unit vector so that every punch results in same speed
             Vector2D unitPunchVector = punchVector.directionVector();

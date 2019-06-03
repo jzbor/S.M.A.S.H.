@@ -7,6 +7,7 @@ public class GameloopThread extends Thread {
     private GamePanel panel;
 
     public GameloopThread(GamePanel gamePanel){
+        super("Gameloop");
         this.panel = gamePanel;
     }
 
