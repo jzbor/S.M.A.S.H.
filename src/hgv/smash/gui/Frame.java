@@ -5,10 +5,10 @@ import java.awt.*;
 
 public class Frame extends JFrame {
 
-    private static Frame ourInstance=new Frame();
     private static final String TITLE = "S.M.A.S.H.";
     private static final Dimension FINAL_SIZE = new Dimension(1024, 768);
     private static final Dimension DEBUG_SIZE = new Dimension(1366, 768);
+    private static Frame ourInstance = new Frame();
 
     private Frame() {
         super(TITLE);
@@ -25,11 +25,11 @@ public class Frame extends JFrame {
 
         ((JPanel) getContentPane()).setBorder(BorderFactory.createLineBorder(Color.RED)); // debugging purposes
         ((JPanel) getContentPane()).updateUI();
-        ourInstance=this;
+        ourInstance = this;
 
     }
 
     public static Frame getInstance() {
-            return ourInstance;
+        return ourInstance;
     }
 }

@@ -115,7 +115,7 @@ public class MenuPanel extends Panel implements ActionListener {
             String s = (String) buttonPlayer2.getSelectedItem();
             int variable = -1;
             for (int i = 0; i < Avatar.AVATAR_NAMES.length; i++) {
-                if (Avatar.AVATAR_NAMES[i] == s) {
+                if (Avatar.AVATAR_NAMES[i].equals(s)) {
                     variable = i;
                 }
             }

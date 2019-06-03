@@ -132,7 +132,7 @@ public class Player extends GameObject {
         }
 
         //shift to new frame
-        for (int i = 0; i <2; i++) {
+        for (int i = 0; i < 2; i++) {
             vx[i] = vx[i + 1];
             vy[i] = vy[i + 1];
             xpos[i] = xpos[i + 1];
@@ -202,7 +202,7 @@ public class Player extends GameObject {
         otherPlayer.hit(hitbox, xpos[0] + WIDTH / 2, ypos[0] + HEIGHT / 2);
     }
 
-    public void hit(Shape hitbox, int xCentre, int yCentre) {
+    private void hit(Shape hitbox, int xCentre, int yCentre) {
         if (hitbox.intersects((Rectangle2D) model)) {
             Vector2D punchVector = new Vector2D(xpos[0] + WIDTH / 2 - xCentre, ypos[0] + HEIGHT / 2 - yCentre);
             //unit vector so that every punch results in same speed
