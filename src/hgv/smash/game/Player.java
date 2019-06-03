@@ -9,8 +9,8 @@ import java.awt.geom.Rectangle2D;
 
 public class Player extends GameObject {
 
-    private static final int WIDTH = 60; // width of model
-    private static final int HEIGHT = 100; // height of model
+    private static final int WIDTH = 95; // width of model
+    private static final int HEIGHT = 189; // height of model
     private static final double SPEED = 0.5; // speed of xpos movement (also used by jump())
     private static final double HIT_SPEED = 0.5;//speed when hit by other player
     private int jumps = 2; // jumps left
@@ -223,5 +223,7 @@ public class Player extends GameObject {
             graphics2D.setColor(Color.RED);
             graphics2D.fillRect(xpos[0], ypos[0], WIDTH, HEIGHT);
         }
+
+        avatar.draw(graphics2D, xpos[0], ypos[0], 0);
     }
 }

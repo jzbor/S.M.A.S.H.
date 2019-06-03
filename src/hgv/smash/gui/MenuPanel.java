@@ -12,7 +12,6 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 
 //Klasse für das Start- und Hauptmenü:
@@ -94,7 +93,7 @@ public class MenuPanel extends Panel implements ActionListener {
             switch (variable) {
                 case 0:
                     try {
-                        previewPlayer1 = ImageIO.read(new File(Avatar.AVATAR_PATH + Avatar.AVATAR_FILES[0]));
+                        previewPlayer1 = ImageIO.read(new File(Avatar.AVATAR_PATH + Avatar.FILENAMES[0]));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -102,7 +101,7 @@ public class MenuPanel extends Panel implements ActionListener {
                     break;
                 case 1:
                     try {
-                        previewPlayer1 = ImageIO.read(new File(Avatar.AVATAR_PATH + Avatar.AVATAR_FILES[1]));
+                        previewPlayer1 = ImageIO.read(new File(Avatar.AVATAR_PATH + Avatar.FILENAMES[1]));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -123,7 +122,7 @@ public class MenuPanel extends Panel implements ActionListener {
             switch (variable) {
                 case 0:
                     try {
-                        previewPlayer2 = ImageIO.read(new File(Avatar.AVATAR_PATH + Avatar.AVATAR_FILES[0]));
+                        previewPlayer2 = ImageIO.read(new File(Avatar.AVATAR_PATH + Avatar.FILENAMES[0]));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -132,7 +131,7 @@ public class MenuPanel extends Panel implements ActionListener {
                     break;
                 case 1:
                     try {
-                        previewPlayer2 = ImageIO.read(new File(Avatar.AVATAR_PATH + Avatar.AVATAR_FILES[1]));
+                        previewPlayer2 = ImageIO.read(new File(Avatar.AVATAR_PATH + Avatar.FILENAMES[1]));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -184,7 +183,7 @@ public class MenuPanel extends Panel implements ActionListener {
                 System.out.println("failed");
             }
 
-            GamePanel gamePanel = new GamePanel(new Avatar(), new Avatar(), levelMap);
+            GamePanel gamePanel = new GamePanel(Avatar.debugAvatar(), Avatar.debugAvatar(), levelMap);
             frame.getContentPane().removeAll();
             frame.setContentPane(gamePanel);
             ((JPanel) (frame.getContentPane())).updateUI();
