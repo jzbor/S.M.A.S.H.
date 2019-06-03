@@ -72,27 +72,44 @@ public class Avatar {
         if (state == NORMAL) {
             graphics2D.drawImage(images[NORMAL], x, y, null);
         } else if (state == WALKING_L) {
-            graphics2D.drawImage(images[WALKING_1], x, y, null);
-        } else if (state == WALKING_R) {
-            AffineTransform at = new AffineTransform();
             BufferedImage image = images[WALKING_1];
-            at.concatenate(AffineTransform.getScaleInstance(-1, 1));
-            at.concatenate(AffineTransform.getTranslateInstance(-image.getHeight(), 0));
-            BufferedImage newImage = new BufferedImage(
-                    image.getWidth(), image.getHeight(),
-                    image.getType());
-            Graphics2D g = newImage.createGraphics();
-            g.transform(at);
-            g.drawImage(image, 0, 0, null);
-            g.dispose();
-            System.out.println("New image: ");
-            System.out.println("\tWidth: " + newImage.getWidth());
-            System.out.println("\tHeight: " + newImage.getHeight());
-            System.out.println("\tType: " + newImage.getType());
-            graphics2D.drawImage(newImage, x, y, null);
+
+            long val = (System.currentTimeMillis() / 300) % 2;
+            if (val == 0)
+                image = images[WALKING_1];
+            else
+                image = images[WALKING_2];
+
+            graphics2D.drawImage(image, x, y, null);
+        } else if (state == WALKING_R) {
+            BufferedImage image = images[WALKING_1];
+
+            long val = (System.currentTimeMillis() / 300) % 2;
+            if (val == 0)
+                image = images[WALKING_1];
+            else
+                image = images[WALKING_2];
+
+            // Flip image
+            image = flipImage(image);
+            graphics2D.drawImage(image, x, y, null);
         } else {
             graphics2D.drawImage(images[0], x, y, null);
         }
+    }
+
+    private BufferedImage flipImage(BufferedImage image) {
+        AffineTransform at = new AffineTransform();
+        at.concatenate(AffineTransform.getScaleInstance(-1, 1));
+        at.concatenate(AffineTransform.getTranslateInstance(-image.getHeight(), 0));
+        BufferedImage newImage = new BufferedImage(
+                image.getWidth(), image.getHeight(),
+                image.getType());
+        Graphics2D g = newImage.createGraphics();
+        g.transform(at);
+        g.drawImage(image, 0, 0, null);
+        g.dispose();
+        return newImage;
     }
 
 }
