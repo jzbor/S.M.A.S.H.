@@ -26,7 +26,9 @@ public class ScorePanel extends Panel implements ActionListener {
         Box mainBox = Box.createVerticalBox();
 
         // Configure elements
-        gameoverLabel.setFont(Design.getDefaultFont());
+        gameoverLabel.setFont(Design.getGameoverFont(40));
+        gameoverLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        gameoverLabel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         // Compose layout
         setLayout(new BorderLayout());

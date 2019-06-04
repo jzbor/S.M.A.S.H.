@@ -11,7 +11,7 @@ public class Design {
     private static final String FONT_DIR = "./resources/fonts/";
     private static final String TITLE_FONT = "ZCOOL_KuaiLe/ZCOOLKuaiLe-Regular.ttf";
     private static final String DEFAULT_FONT = "Russo_One/RussoOne-Regular.ttf";
-    private static final String GAMEOVER_FONT = "Kumar_One_Outline/KumarOneOutline-Regular.ttf";
+    private static final String GAMEOVER_FONT = "ZCOOL_KuaiLe/ZCOOLKuaiLe-Regular.ttf";
 
     public static Color getPrimaryColor() {
         return Color.decode(PRIMARY_COLOR);
