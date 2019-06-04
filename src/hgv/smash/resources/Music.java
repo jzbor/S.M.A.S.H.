@@ -12,11 +12,8 @@ public class Music {
     private static Music ourInstance = new Music();
     private Clip clip;
     public Music(){
-        try {
-            fileGameMusic=new File("./resources/Sounds_and_Music/Sandstorm.wav");}
-        catch (Exception e)
-            {e.printStackTrace();
-        }
+
+        fileGameMusic = new File("./resources/Sounds_and_Music/Sandstorm.wav");
         try {
             clip= AudioSystem.getClip();
             clip.open(AudioSystem.getAudioInputStream(fileGameMusic));
