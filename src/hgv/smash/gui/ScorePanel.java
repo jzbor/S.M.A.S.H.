@@ -25,6 +25,7 @@ public class ScorePanel extends Panel implements ActionListener {
         // Create elements
         JLabel gameoverLabel = new JLabel("Game Over");
         JLabel wIconLabel = new JLabel(new ImageIcon(winner.getAvatar().getImage(Avatar.NORMAL)));
+        JLabel wNameLabel = new JLabel(winner.toString());
         JLabel lIconLabel = new JLabel(new ImageIcon(winner.getAvatar().getImage(Avatar.NORMAL)));
 
         // Configure elements

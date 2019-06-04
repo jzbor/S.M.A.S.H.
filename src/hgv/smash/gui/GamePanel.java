@@ -129,7 +129,7 @@ public class GamePanel extends Panel implements KeyEventDispatcher, KeyListener 
             Frame.getInstance().repaint();
             panel.updateUI();
 
-            Music.getInstance().stop();
+            Music.getInstanceGameMusic().stop();
             running = false;
         }
     }
