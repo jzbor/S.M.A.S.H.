@@ -2,6 +2,7 @@ package hgv.smash.gui;
 
 import hgv.smash.game.LevelMap;
 import hgv.smash.resources.Avatar;
+import hgv.smash.resources.Music;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -182,6 +183,8 @@ public class MenuPanel extends Panel implements ActionListener {
                 e.printStackTrace();
                 System.out.println("failed");
             }
+            Music music= Music.getInstance();
+            music.play();
 
             GamePanel gamePanel = new GamePanel(Avatar.debugAvatar(), Avatar.debugAvatar(), levelMap);
             frame.getContentPane().removeAll();
@@ -218,5 +221,6 @@ public class MenuPanel extends Panel implements ActionListener {
 
 
     }
+
 
 }
