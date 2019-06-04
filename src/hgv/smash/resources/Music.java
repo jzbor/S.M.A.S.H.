@@ -10,15 +10,17 @@ import java.io.IOException;
 public class Music {
     private File fileGameMusic;
     private static Music ourInstance = new Music();
+    private Clip clip;
     public Music(){
-        fileGameMusic=new File("./resources/Sounds_and_Music/Darude-Sandstorm.mp3");
-    }
-
-    public void play (){
         try {
-            Clip clip= AudioSystem.getClip();
+            fileGameMusic=new File("./resources/Sounds_and_Music/Sandstorm.wav");}
+        catch (Exception e)
+            {e.printStackTrace();
+        }
+        try {
+            clip= AudioSystem.getClip();
             clip.open(AudioSystem.getAudioInputStream(fileGameMusic));
-            clip.start();
+
         } catch (LineUnavailableException e) {
             e.printStackTrace();
         } catch (UnsupportedAudioFileException e) {
@@ -26,10 +28,15 @@ public class Music {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void play (){
+
+        clip.start();
 
     }
     public void stop(){
-
+        clip.stop();
     }
     public static Music getInstance() {
         return ourInstance;

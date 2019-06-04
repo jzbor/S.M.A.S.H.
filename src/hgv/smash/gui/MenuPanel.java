@@ -175,8 +175,7 @@ public class MenuPanel extends Panel implements ActionListener {
                     break;
             }
         } else if (actionEvent.getSource() == startButton) {
-            Music music= Music.getInstance();
-            music.play();
+
 
             LevelMap levelMap = null;
             try {
@@ -185,11 +184,18 @@ public class MenuPanel extends Panel implements ActionListener {
                 e.printStackTrace();
                 System.out.println("failed");
             }
-
+            try {
+                Music music = Music.getInstance();
+                music.play();
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
             GamePanel gamePanel = new GamePanel(Avatar.debugAvatar(), Avatar.debugAvatar(), levelMap);
             frame.getContentPane().removeAll();
             frame.setContentPane(gamePanel);
             ((JPanel) (frame.getContentPane())).updateUI();
+
         }
     }
 
