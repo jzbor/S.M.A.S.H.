@@ -24,7 +24,7 @@ public class MenuPanel extends Panel implements ActionListener {
     private BufferedImage previewPlayer2;
     private JButton startButton;
     private JLabel labelGameTitel;
-    private Frame frame;
+    private JFrame frame;
 
     public MenuPanel() {
         frame = Frame.getInstance();
@@ -191,8 +191,11 @@ public class MenuPanel extends Panel implements ActionListener {
             }
 
             GamePanel gamePanel = new GamePanel(Avatar.debugAvatar(), Avatar.debugAvatar(), levelMap);
+            // Keine Ahnung warum, aber irgendwie is frame immer null - dafuq? #workaround
+            frame = Frame.getInstance();
+            System.out.println(frame);
             frame.getContentPane().removeAll();
-            frame.setContentPane(gamePanel);
+            frame.getContentPane().add(gamePanel);
             ((JPanel) (frame.getContentPane())).updateUI();
         }
     }

@@ -16,6 +16,8 @@ public class GamePanel extends Panel implements KeyEventDispatcher, KeyListener 
     private static final int FRAMERATE = 60;
     //keys for movement
     private static long JUMP_COOLDOWN = 2000;
+    // y coords defining a death
+    private static int RANGE_OF_DEATH = 1000;
     //player1
     private char[] keys_player_1 = {'w', 'a', 'd', 'f'};
     private boolean[] booleans_player1 = {false, false, false, false};
@@ -58,6 +60,9 @@ public class GamePanel extends Panel implements KeyEventDispatcher, KeyListener 
             long timedelta = thisFrame - lastFrame;
             currentFramerate = (int) (1000 / timedelta);
 
+            // detect death
+            detectGameover();
+
             player1.calc(timedelta);
             player2.calc(timedelta);
             levelMap.calc(timedelta);
@@ -97,6 +102,24 @@ public class GamePanel extends Panel implements KeyEventDispatcher, KeyListener 
                 }
             }
             lastFrame = thisFrame;
+        }
+    }
+
+    private void detectGameover() {
+        if (player1.getYPos() > RANGE_OF_DEATH) {
+            BufferedImage img = new BufferedImage(getHeight(), getWidth(), BufferedImage.TYPE_INT_ARGB_PRE);
+            Graphics2D imageGraphics = img.createGraphics();
+            printAll(imageGraphics);
+            imageGraphics.dispose();
+
+            Panel panel = new ScorePanel(player2, player1, img);
+            Frame.getInstance().getContentPane().removeAll();
+            Frame.getInstance().getContentPane().add(panel);
+            panel.updateUI();
+            Frame.getInstance().repaint();
+            System.out.println("Content: " + Frame.getInstance().getContentPane());
+
+            running = false;
         }
     }
 

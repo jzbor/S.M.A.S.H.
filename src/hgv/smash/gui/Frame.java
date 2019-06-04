@@ -18,14 +18,12 @@ public class Frame extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setSize(new Dimension(1024, 768));
 
-        //Keine Ahnung warum aber so funktioniert das nicht
-//        JPanel panel = new MenuPanel();
-//        panel.setSize(getContentPane().getSize());
-//        setContentPane(panel);
-
-        ((JPanel) getContentPane()).setBorder(BorderFactory.createLineBorder(Color.RED)); // debugging purposes
+        JPanel panel = new MenuPanel();
+        panel.setSize(getContentPane().getSize());
+        getContentPane().add(panel);
         ((JPanel) getContentPane()).updateUI();
-        ourInstance = this;
+
+        System.out.println("Frame: " + this);
 
     }
 

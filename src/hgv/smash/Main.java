@@ -12,6 +12,5 @@ public class Main {
     public static void main(String[] args) {
         JPanel panel = new MenuPanel();
         panel.setSize(Frame.getInstance().getContentPane().getSize());
-        Frame.getInstance().setContentPane(panel);
     }
 }

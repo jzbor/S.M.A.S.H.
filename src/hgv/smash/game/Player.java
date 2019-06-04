@@ -213,6 +213,10 @@ public class Player extends GameObject {
         }
     }
 
+    public int getYPos() {
+        return ypos[0];
+    }
+
 
     @Override
     public void draw(Graphics2D graphics2D) {
