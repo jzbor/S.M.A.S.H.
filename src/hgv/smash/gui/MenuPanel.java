@@ -29,6 +29,7 @@ public class MenuPanel extends Panel implements ActionListener {
     private JFrame frame;
     private Avatar avatar1;
     private Avatar avatar2;
+    private LevelMap levelMap;
 
     public MenuPanel() {
         frame = Frame.getInstance();
@@ -142,38 +143,24 @@ public class MenuPanel extends Panel implements ActionListener {
                     variable = i;
                 }
             }
-
-            switch (variable) {
-                case 0:
-                    try {
-                        backgroundImage = ImageIO.read(new File((LevelMap.MAP_PATH + LevelMap.MAP_NAMES[0]) + "-bg.jpeg"));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    repaint();
-                    break;
-                case 1:
-
-                    try {
-                        backgroundImage = ImageIO.read(new File((LevelMap.MAP_PATH + LevelMap.MAP_NAMES[1]) + "-bg.jpeg"));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    repaint();
-                    break;
-                default:
-                    System.err.println("keine Map");
-                    break;
-            }
-        } else if (actionEvent.getSource() == startButton) {
-            if (avatar1 != null && avatar2 != null){
-                LevelMap levelMap = null;
+            if (variable>-1) {
                 try {
-                     levelMap = LevelMap.load(LevelMap.MAP_PATH + LevelMap.MAP_NAMES[0]);
+                    backgroundImage = ImageIO.read(new File((LevelMap.MAP_PATH + LevelMap.MAP_NAMES[variable]) + "-bg.jpeg"));
                 } catch (IOException e) {
-                     e.printStackTrace();
+                    e.printStackTrace();
+                }
+                repaint();
+                levelMap = null;
+                try {
+                    levelMap = LevelMap.load(LevelMap.MAP_PATH + LevelMap.MAP_NAMES[variable]);
+                } catch (IOException e) {
+                    e.printStackTrace();
                     System.out.println("failed");
                 }
+            }
+        } else if (actionEvent.getSource() == startButton) {
+            if (avatar1 != null && avatar2 != null && levelMap!=null){
+
                 Music oldMusic = Music.getInstanceMenuMusic();
                 oldMusic.stop();
                 Music newMusic = Music.getInstanceGameMusic();
