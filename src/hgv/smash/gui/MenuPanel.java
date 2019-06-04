@@ -2,7 +2,6 @@ package hgv.smash.gui;
 
 import hgv.smash.game.LevelMap;
 import hgv.smash.resources.Avatar;
-import hgv.smash.resources.Design;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -72,14 +71,8 @@ public class MenuPanel extends Panel implements ActionListener {
 
         labelGameTitel = new JLabel("S.M.A.S.H");
         labelGameTitel.setBounds(15, -70, 400, 200);
-        labelGameTitel.setFont(Design.getTitleFont(45));
+        labelGameTitel.setFont(new Font("Comic Sans MS", Font.BOLD, 45));
         add(labelGameTitel);
-
-        // Add fonts
-        buttonMap.setFont(Design.getDefaultFont(buttonMap.getFont().getSize()));
-        buttonPlayer1.setFont(Design.getDefaultFont(buttonPlayer1.getFont().getSize()));
-        buttonPlayer2.setFont(Design.getDefaultFont(buttonPlayer2.getFont().getSize()));
-        startButton.setFont(Design.getDefaultFont(startButton.getFont().getSize()));
 
         previewPlayer1 = null;
         previewPlayer2 = null;
