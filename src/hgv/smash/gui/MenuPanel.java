@@ -2,7 +2,6 @@ package hgv.smash.gui;
 
 import hgv.smash.game.LevelMap;
 import hgv.smash.resources.Avatar;
-import hgv.smash.resources.Music;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -176,7 +175,6 @@ public class MenuPanel extends Panel implements ActionListener {
             }
         } else if (actionEvent.getSource() == startButton) {
 
-
             LevelMap levelMap = null;
             try {
                 levelMap = LevelMap.load(LevelMap.MAP_PATH + LevelMap.MAP_NAMES[0]);
@@ -184,18 +182,11 @@ public class MenuPanel extends Panel implements ActionListener {
                 e.printStackTrace();
                 System.out.println("failed");
             }
-            try {
-                Music music = Music.getInstance();
-                music.play();
-            }
-            catch (Exception e){
-                e.printStackTrace();
-            }
+
             GamePanel gamePanel = new GamePanel(Avatar.debugAvatar(), Avatar.debugAvatar(), levelMap);
             frame.getContentPane().removeAll();
             frame.setContentPane(gamePanel);
             ((JPanel) (frame.getContentPane())).updateUI();
-
         }
     }
 

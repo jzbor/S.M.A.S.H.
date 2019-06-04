@@ -33,6 +33,7 @@ public class GamePanel extends Panel implements KeyEventDispatcher, KeyListener 
     private Player player2;
     private LevelMap levelMap;
     private BufferedImage frameBuffer;
+
     public GamePanel(Avatar a1, Avatar a2, LevelMap map) {
         // assign and create params
         running = true;
