@@ -11,7 +11,6 @@ import java.io.IOException;
 
 public class Avatar {
     public static final String[] AVATAR_NAMES = {"Georg", "Avatar2"};
-    public static final String[] AVATAR_FILES = {"georg/"};
     public static final int NORMAL = 0;
     public static final int STANDING = 1;
     public static final int WALKING_1 = 2;
@@ -21,6 +20,7 @@ public class Avatar {
     public static final int JUMPING = 6;
     public static final String AVATAR_PATH = "./resources/avatars/";
     public static final String[] FILENAMES = {"BNormal.png", "BStand.png", "BWalk1.png", "BWalk2.png"}; // @TODO make private
+    private static final String[] AVATAR_FILES = {"georg/"};
     private BufferedImage[] images;
 
     public Avatar(String name) throws AvatarNotAvailableException {
@@ -72,7 +72,7 @@ public class Avatar {
         if (state == NORMAL) {
             graphics2D.drawImage(images[NORMAL], x, y, null);
         } else if (state == WALKING_L) {
-            BufferedImage image = images[WALKING_1];
+            BufferedImage image;
 
             long val = (System.currentTimeMillis() / 300) % 2;
             if (val == 0)
@@ -82,7 +82,7 @@ public class Avatar {
 
             graphics2D.drawImage(image, x, y, null);
         } else if (state == WALKING_R) {
-            BufferedImage image = images[WALKING_1];
+            BufferedImage image;
 
             long val = (System.currentTimeMillis() / 300) % 2;
             if (val == 0)
