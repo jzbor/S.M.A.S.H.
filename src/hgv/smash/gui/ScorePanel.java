@@ -42,6 +42,7 @@ public class ScorePanel extends Panel implements ActionListener {
         Border paddingBorder = new EmptyBorder(30, 30, 30, 30);
         gameoverLabel.setFont(Design.getGameoverFont(80));
         gameoverLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        gameoverLabel.setBorder(paddingBorder);
 
         wIconLabel.setBorder(paddingBorder);
         wNameLabel.setFont(Design.getDefaultFont());
