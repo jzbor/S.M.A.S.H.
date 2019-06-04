@@ -4,6 +4,7 @@ import hgv.smash.Main;
 import hgv.smash.game.Player;
 import hgv.smash.resources.Avatar;
 import hgv.smash.resources.Design;
+import hgv.smash.resources.Music;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -20,6 +21,10 @@ public class ScorePanel extends Panel implements ActionListener {
     private BufferedImage lastFrame;
 
     public ScorePanel(Player winner, Player looser, BufferedImage lastFrame) {
+        Music oldMusic= Music.getInstanceGameMusic();
+        oldMusic.stop();
+        Music newMusic = Music.getOurInstanceScoreMusic();
+        newMusic.play();
         this.winner = winner;
         this.looser = looser;
         this.lastFrame = lastFrame;

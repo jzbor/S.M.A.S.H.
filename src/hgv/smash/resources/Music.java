@@ -18,8 +18,8 @@ public class Music {
     private Clip clip;
     public Music(String musicYouNeed){
         fileGameMusic = new File("./resources/Sounds_and_Music/Sandstorm.wav");
-        fileMenuMusic=new File ("");
-        fileScoreMusic=new File ("");
+        fileMenuMusic=new File ("./resources/Sounds_and_Music/Jeopardy.wav");
+        fileScoreMusic=new File ("./resources/Sounds_and_Music/National_Anthem_Sowjet.wav");
         switch (musicYouNeed) {
             case "GameMusic":
                 chosenMusic=fileGameMusic;
