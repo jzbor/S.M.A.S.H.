@@ -29,6 +29,12 @@ public class MenuPanel extends Panel implements ActionListener {
 
     public MenuPanel() {
         frame = Frame.getInstance();
+
+        Music oldMusic =Music.getOurInstanceScoreMusic();
+        oldMusic.stop();
+        Music newMusic=Music.getInstanceMenuMusic();
+        newMusic.play();
+
         setLayout(null);
         //Einfuegen und Deklarieren der Hintergrundgraphik
         try {
@@ -190,8 +196,10 @@ public class MenuPanel extends Panel implements ActionListener {
                 e.printStackTrace();
                 System.out.println("failed");
             }
-            Music music= Music.getInstance();
-            music.play();
+            Music oldMusic=Music.getInstanceMenuMusic();
+            oldMusic.stop();
+            Music newMusic= Music.getInstanceGameMusic();
+            newMusic.play();
 
             GamePanel gamePanel = new GamePanel(Avatar.debugAvatar(), Avatar.debugAvatar(), levelMap);
             // Keine Ahnung warum, aber irgendwie is frame immer null - dafuq? #workaround

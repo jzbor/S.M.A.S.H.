@@ -9,14 +9,33 @@ import java.io.IOException;
 
 public class Music {
     private File fileGameMusic;
-    private static Music ourInstance = new Music();
+    private File fileMenuMusic;
+    private File fileScoreMusic;
+    private File chosenMusic;
+    private static Music ourInstanceGameMusic=new Music("GameMusic");
+    private static Music ourInstanceMenuMusic=new Music ("MenuMusic");
+    private static Music ourInstanceScoreMusic=new Music ("ScoreMusic");
     private Clip clip;
-    public Music(){
-
+    public Music(String musicYouNeed){
         fileGameMusic = new File("./resources/Sounds_and_Music/Sandstorm.wav");
+        fileMenuMusic=new File ("");
+        fileScoreMusic=new File ("");
+        switch (musicYouNeed) {
+            case "GameMusic":
+                chosenMusic=fileGameMusic;
+                break;
+            case "MenuMusic":
+                chosenMusic=fileMenuMusic;
+                break;
+            case "ScoreMusic":
+                chosenMusic=fileScoreMusic;
+                break;
+            default:
+                break;
+        }
         try {
             clip= AudioSystem.getClip();
-            clip.open(AudioSystem.getAudioInputStream(fileGameMusic));
+            clip.open(AudioSystem.getAudioInputStream(chosenMusic));
 
         } catch (LineUnavailableException e) {
             e.printStackTrace();
@@ -26,17 +45,20 @@ public class Music {
             e.printStackTrace();
         }
     }
-
     public void play (){
-
         clip.start();
-
     }
     public void stop(){
         clip.stop();
     }
-    public static Music getInstance() {
-        return ourInstance;
+    public static Music getInstanceMenuMusic() {
+        return ourInstanceMenuMusic;
+    }
+    public static Music getInstanceGameMusic(){
+        return ourInstanceGameMusic;
+    }
+    public static Music getOurInstanceScoreMusic(){
+        return ourInstanceScoreMusic;
     }
 }
 
