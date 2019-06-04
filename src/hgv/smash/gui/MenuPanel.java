@@ -2,6 +2,7 @@ package hgv.smash.gui;
 
 import hgv.smash.game.LevelMap;
 import hgv.smash.resources.Avatar;
+import hgv.smash.resources.Music;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -174,6 +175,8 @@ public class MenuPanel extends Panel implements ActionListener {
                     break;
             }
         } else if (actionEvent.getSource() == startButton) {
+            Music music= Music.getInstance();
+            music.play();
 
             LevelMap levelMap = null;
             try {
