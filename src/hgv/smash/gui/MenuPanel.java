@@ -108,7 +108,7 @@ public class MenuPanel extends Panel implements ActionListener {
                     variable = i;
                 }
             }
-            if(variable>-1) {
+            if (variable > -1) {
                 try {
                     avatar1 = new Avatar(variable);
                 } catch (AvatarNotAvailableException e) {
@@ -125,7 +125,7 @@ public class MenuPanel extends Panel implements ActionListener {
                     variable = i;
                 }
             }
-            if(variable>-1) {
+            if (variable > -1) {
                 try {
                     avatar2 = new Avatar(variable);
                 } catch (AvatarNotAvailableException e) {
@@ -166,27 +166,28 @@ public class MenuPanel extends Panel implements ActionListener {
                     break;
             }
         } else if (actionEvent.getSource() == startButton) {
+            if (avatar1 != null && avatar2 != null){
+                LevelMap levelMap = null;
+                try {
+                     levelMap = LevelMap.load(LevelMap.MAP_PATH + LevelMap.MAP_NAMES[0]);
+                } catch (IOException e) {
+                     e.printStackTrace();
+                    System.out.println("failed");
+                }
+                Music oldMusic = Music.getInstanceMenuMusic();
+                oldMusic.stop();
+                Music newMusic = Music.getInstanceGameMusic();
+                newMusic.play();
 
-            LevelMap levelMap = null;
-            try {
-                levelMap = LevelMap.load(LevelMap.MAP_PATH + LevelMap.MAP_NAMES[0]);
-            } catch (IOException e) {
-                e.printStackTrace();
-                System.out.println("failed");
+                GamePanel gamePanel = new GamePanel(avatar1, avatar2, levelMap);
+                // Keine Ahnung warum, aber irgendwie is frame immer null - dafuq? #workaround
+                frame = Frame.getInstance();
+                 System.out.println(frame);
+                frame.getContentPane().removeAll();
+                frame.getContentPane().add(gamePanel);
+                ((JPanel) (frame.getContentPane())).updateUI();
             }
-            Music oldMusic=Music.getInstanceMenuMusic();
-            oldMusic.stop();
-            Music newMusic= Music.getInstanceGameMusic();
-            newMusic.play();
-
-            GamePanel gamePanel = new GamePanel(Avatar.debugAvatar(), Avatar.debugAvatar(), levelMap);
-            // Keine Ahnung warum, aber irgendwie is frame immer null - dafuq? #workaround
-            frame = Frame.getInstance();
-            System.out.println(frame);
-            frame.getContentPane().removeAll();
-            frame.getContentPane().add(gamePanel);
-            ((JPanel) (frame.getContentPane())).updateUI();
-        }
+    }
     }
 
 
