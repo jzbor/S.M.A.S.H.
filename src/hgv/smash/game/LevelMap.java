@@ -25,7 +25,7 @@ public class LevelMap extends GameObject {
     }
 
     public static LevelMap load(String name) throws IOException {
-        File bgFile = new File(name + "-bg.jpeg");
+        File bgFile = new File(MAP_PATH+name + "-bg.jpeg");
         BufferedImage bufferedImage = ImageIO.read(bgFile);
         Rectangle debugRect = new Rectangle(165, 545, 730, 20);
         return new LevelMap(bufferedImage, new Rectangle[]{debugRect});

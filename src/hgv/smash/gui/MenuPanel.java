@@ -1,5 +1,6 @@
 package hgv.smash.gui;
 
+import hgv.smash.exceptions.AvatarNotAvailableException;
 import hgv.smash.game.LevelMap;
 import hgv.smash.resources.Avatar;
 import hgv.smash.resources.Design;
@@ -26,6 +27,8 @@ public class MenuPanel extends Panel implements ActionListener {
     private JButton startButton;
     private JLabel labelGameTitel;
     private JFrame frame;
+    private Avatar avatar1;
+    private Avatar avatar2;
 
     public MenuPanel() {
         frame = Frame.getInstance();
@@ -98,32 +101,21 @@ public class MenuPanel extends Panel implements ActionListener {
     public void actionPerformed(ActionEvent actionEvent) {
         if (actionEvent.getSource() == buttonPlayer1) {
             String s = (String) buttonPlayer1.getSelectedItem();
+            System.out.println(s);
             int variable = -1;
             for (int i = 0; i < Avatar.AVATAR_NAMES.length; i++) {
                 if (Avatar.AVATAR_NAMES[i].equals(s)) {
                     variable = i;
                 }
             }
-            switch (variable) {
-                case 0:
-                    try {
-                        previewPlayer1 = ImageIO.read(new File(Avatar.AVATAR_PATH + Avatar.FILENAMES[0]));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    repaint();
-                    break;
-                case 1:
-                    try {
-                        previewPlayer1 = ImageIO.read(new File(Avatar.AVATAR_PATH + Avatar.FILENAMES[1]));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    repaint();
-                    break;
-                default:
-                    System.err.println("Avatar nicht existent");
-                    break;
+            if(variable>-1) {
+                try {
+                    avatar1 = new Avatar(variable);
+                } catch (AvatarNotAvailableException e) {
+                    e.printStackTrace();
+                }
+                previewPlayer1 = avatar1.getImage(Avatar.NORMAL);
+                repaint();
             }
         } else if (actionEvent.getSource() == buttonPlayer2) {
             String s = (String) buttonPlayer2.getSelectedItem();
@@ -133,28 +125,14 @@ public class MenuPanel extends Panel implements ActionListener {
                     variable = i;
                 }
             }
-            switch (variable) {
-                case 0:
-                    try {
-                        previewPlayer2 = ImageIO.read(new File(Avatar.AVATAR_PATH + Avatar.FILENAMES[0]));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    repaint();
-                    System.out.println("case 0");
-                    break;
-                case 1:
-                    try {
-                        previewPlayer2 = ImageIO.read(new File(Avatar.AVATAR_PATH + Avatar.FILENAMES[1]));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    repaint();
-                    System.out.println("case 1");
-                    break;
-                default:
-                    System.err.println("Avatar nicht existent");
-                    break;
+            if(variable>-1) {
+                try {
+                    avatar2 = new Avatar(variable);
+                } catch (AvatarNotAvailableException e) {
+                    e.printStackTrace();
+                }
+                previewPlayer2 = avatar2.getImage(Avatar.NORMAL);
+                repaint();
             }
         } else if (actionEvent.getSource() == buttonMap) {
             String s = (String) buttonMap.getSelectedItem();
@@ -184,7 +162,7 @@ public class MenuPanel extends Panel implements ActionListener {
                     repaint();
                     break;
                 default:
-                    System.err.println("Avatar nicht existent");
+                    System.err.println("keine Map");
                     break;
             }
         } else if (actionEvent.getSource() == startButton) {
