@@ -2,6 +2,7 @@ package hgv.smash.gui;
 
 import hgv.smash.Main;
 import hgv.smash.game.Player;
+import hgv.smash.resources.Avatar;
 import hgv.smash.resources.Design;
 
 import javax.swing.*;
@@ -23,32 +24,26 @@ public class ScorePanel extends Panel implements ActionListener {
 
         // Create elements
         JLabel gameoverLabel = new JLabel("Game Over");
-        Box mainBox = Box.createVerticalBox();
+        JLabel wIconLabel = new JLabel(new ImageIcon(winner.getAvatar().getImage(Avatar.NORMAL)));
+        JLabel lIconLabel = new JLabel(new ImageIcon(winner.getAvatar().getImage(Avatar.NORMAL)));
 
         // Configure elements
-        gameoverLabel.setFont(Design.getGameoverFont(40));
+        gameoverLabel.setFont(Design.getGameoverFont(80));
         gameoverLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        gameoverLabel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         // Compose layout
         setLayout(new BorderLayout());
-        mainBox.add(gameoverLabel);
         add(gameoverLabel, BorderLayout.NORTH);
-        setVisible(true);
-        setSize(1014, 710);
+        setSize(Frame.getInstance().getContentPane().getSize());
         setPreferredSize(getSize());
 
 
         // debugging
         if (Main.DEBUG) {
             setBorder(BorderFactory.createLineBorder(Color.RED)); // debugging purposes
-            gameoverLabel.setBorder(BorderFactory.createLineBorder(Color.RED));
             updateUI();
-
-            System.out.println("This: " + this);
-            System.out.println("Frame: " + Frame.getInstance());
-            System.out.println("Content: " + Frame.getInstance().getContentPane());
         }
+        System.out.println(gameoverLabel);
     }
 
     @Override

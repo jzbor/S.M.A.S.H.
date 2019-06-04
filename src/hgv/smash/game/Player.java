@@ -6,11 +6,12 @@ import hgv.smash.resources.Avatar;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 
 public class Player extends GameObject {
 
-    private static final int WIDTH = 95; // width of model
-    private static final int HEIGHT = 189; // height of model
+    private int width = 95; // width of model
+    private int height = 189; // height of model
     private static final double SPEED = 0.5; // speed of xpos movement (also used by jump())
     private static final double HIT_SPEED = 0.5;//speed when hit by other player
     private int jumps = 2; // jumps left
@@ -44,10 +45,13 @@ public class Player extends GameObject {
         vy = new double[3];
         vy[0] = 0;
         this.avatar = avatar;
-        this.model = new Rectangle(this.xpos[0], this.ypos[0], WIDTH, HEIGHT);
+        this.model = new Rectangle(this.xpos[0], this.ypos[0], width, height);
         this.levelMap = levelMap;
         this.platformModels = levelMap.getPlatformModels();//platform does not move right now
         jumped = false;
+        BufferedImage normalImage = avatar.getImage(Avatar.NORMAL);
+        height = normalImage.getHeight();
+        width = normalImage.getWidth();
     }
 
     //give other player for punches
@@ -110,19 +114,19 @@ public class Player extends GameObject {
         xpos[1] = (int) (xpos[0] + vx[0] * millis);
 
         // update model
-        this.model = new Rectangle(xpos[0], ypos[0], WIDTH, HEIGHT);
+        this.model = new Rectangle(xpos[0], ypos[0], width, height);
 
         //detect collision, reset [1] params if collision detected
         //@todo set coordinates to coordinats of platfrom(no early stop of movement)
         for (Rectangle platform : platformModels) {
-            if (platform.x + platform.width - xpos[1] >= 0 && xpos[1] + WIDTH - platform.x >= 0 && (ypos[0] + HEIGHT >= platform.y && ypos[0] <= platform.y + platform.height)) {
+            if (platform.x + platform.width - xpos[1] >= 0 && xpos[1] + width - platform.x >= 0 && (ypos[0] + height >= platform.y && ypos[0] <= platform.y + platform.height)) {
                 vx[1] = 0;
                 xpos[1] = xpos[0];
                 //you can jump if you hit platform from side
                 //last_jump = 0;
                 jumps = 2;
             }
-            if (platform.y + platform.height - ypos[1] >= 0 && ypos[1] + HEIGHT - platform.y >= 0 && (xpos[0] + WIDTH >= platform.x && xpos[0] <= platform.x + platform.width)) {
+            if (platform.y + platform.height - ypos[1] >= 0 && ypos[1] + height - platform.y >= 0 && (xpos[0] + width >= platform.x && xpos[0] <= platform.x + platform.width)) {
                 vy[1] = 0;
                 ypos[1] = ypos[0];
                 //Attention bug(or not) if you hit platform from below you can instantly jump again
@@ -198,19 +202,27 @@ public class Player extends GameObject {
     }
 
     private void punchOtherPlayer() {
-        Shape hitbox = new Rectangle(xpos[0] - WIDTH / 2, ypos[0] - HEIGHT / 3, WIDTH * 2, HEIGHT * 5 / 3);
-        otherPlayer.hit(hitbox, xpos[0] + WIDTH / 2, ypos[0] + HEIGHT / 2);
+        Shape hitbox = new Rectangle(xpos[0] - width / 2, ypos[0] - height / 3, width * 2, height * 5 / 3);
+        otherPlayer.hit(hitbox, xpos[0] + width / 2, ypos[0] + height / 2);
     }
 
     private void hit(Shape hitbox, int xCentre, int yCentre) {
         if (hitbox.intersects((Rectangle2D) model)) {
-            Vector2D punchVector = new Vector2D(xpos[0] + WIDTH / 2 - xCentre, ypos[0] + HEIGHT / 2 - yCentre);
+            Vector2D punchVector = new Vector2D(xpos[0] + width / 2 - xCentre, ypos[0] + height / 2 - yCentre);
             //unit vector so that every punch results in same speed
             Vector2D unitPunchVector = punchVector.directionVector();
             vx_punch = unitPunchVector.getX() * HIT_SPEED;
             vy[2] = unitPunchVector.getY() * HIT_SPEED;//todo why 0?
             System.out.println(unitPunchVector.toString());
         }
+    }
+
+    public Player getOtherPlayer() {
+        return otherPlayer;
+    }
+
+    public Avatar getAvatar() {
+        return avatar;
     }
 
     public int getYPos() {
@@ -225,7 +237,7 @@ public class Player extends GameObject {
         if (Main.DEBUG) {
             // for debugging purposes only:
             graphics2D.setColor(Color.RED);
-            graphics2D.fillRect(xpos[0], ypos[0], WIDTH, HEIGHT);
+            graphics2D.fillRect(xpos[0], ypos[0], width, height);
         }
 
         int state = 0;

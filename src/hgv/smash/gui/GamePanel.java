@@ -5,6 +5,7 @@ import hgv.smash.game.GameloopThread;
 import hgv.smash.game.LevelMap;
 import hgv.smash.game.Player;
 import hgv.smash.resources.Avatar;
+import hgv.smash.resources.Music;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -106,19 +107,29 @@ public class GamePanel extends Panel implements KeyEventDispatcher, KeyListener 
     }
 
     private void detectGameover() {
+        boolean gameover = false;
+        Player p = null;
         if (player1.getYPos() > RANGE_OF_DEATH) {
+            p = player2;
+            gameover = true;
+        } else if (player2.getYPos() > RANGE_OF_DEATH) {
+            p = player1;
+            gameover = true;
+        }
+
+        if (gameover) {
             BufferedImage img = new BufferedImage(getHeight(), getWidth(), BufferedImage.TYPE_INT_ARGB_PRE);
             Graphics2D imageGraphics = img.createGraphics();
             printAll(imageGraphics);
             imageGraphics.dispose();
 
-            Panel panel = new ScorePanel(player2, player1, img);
+            Panel panel = new ScorePanel(p, p.getOtherPlayer(), img);
             Frame.getInstance().getContentPane().removeAll();
             Frame.getInstance().getContentPane().add(panel);
-            panel.updateUI();
             Frame.getInstance().repaint();
-            System.out.println("Content: " + Frame.getInstance().getContentPane());
+            panel.updateUI();
 
+            Music.getInstance().stop();
             running = false;
         }
     }
