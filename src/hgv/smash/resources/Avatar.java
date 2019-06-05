@@ -22,6 +22,7 @@ public class Avatar {
     public static final String[] FILENAMES = {"BNormal.png", "BStand.png", "BWalk1.png", "BWalk2.png"}; // @TODO make private
     private static final String[] AVATAR_FILES = {"georg/"};
     private BufferedImage[] images;
+    private int[] lastAnimation = new int[2];
 
     public Avatar(String name) throws AvatarNotAvailableException {
         int index = -1;
@@ -69,6 +70,15 @@ public class Avatar {
     }
 
     public void draw(Graphics2D graphics2D, int x, int y, int state) {
+        if (state == lastAnimation[1]) {
+            lastAnimation[0] = state;
+        } else {
+            int i = lastAnimation[1];
+            lastAnimation[1] = lastAnimation[0];
+            lastAnimation[0] = state;
+            state = i;
+        }
+
         if (state == NORMAL) {
             graphics2D.drawImage(images[NORMAL], x, y, null);
         } else if (state == WALKING_L) {
