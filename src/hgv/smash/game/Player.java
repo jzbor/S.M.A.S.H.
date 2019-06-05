@@ -10,30 +10,57 @@ import java.awt.image.BufferedImage;
 
 public class Player extends GameObject {
 
+
+    //class representing all possible movements
+    public static class Movement {
+        public static final int MOVE_LEFT = -1;
+        public static final int MOVE_RIGHT = 1;
+        public static final int STOP_MOVING = 0;
+        public static final int JUMP = 2;
+        public static final int NORMAL_HIT = 3;
+    }
+
+    //acceleration and speed constants
     private static final double SPEED = 0.5; // speed of xpos movement (also used by jump())
     private static final double HIT_SPEED = 0.5;//speed when hit by other player
+    private final double x_slowdown_acceleration = 9.81;//acceleration slows down jump
+
+    //size of model ?loaded automatically
     private int width = 95; // width of model
     private int height = 189; // height of model
-    private int jumps = 2; // jumps left
 
-    //arrays of size 4:
-    // [0] recent frame parameters
-    // [1] parameters calculated from recent frame, used for collision detection, set by all inputs from keyboard and physics
-    // [3] all should be filled with 0 for convenient shifting
+    //speed and position of player
+        //arrays of size 3:
+            // [0] recent frame parameters
+            // [1] parameters calculated from recent frame, used for collision detection, set by all inputs from keyboard and physics
+            // [2] all should be filled with 0 for convenient shifting
     private int[] xpos;
     private int[] ypos; // position of player (usually upper left corner of model)
     private double[] vx;
     private double[] vy;
-    private double vx_punch; // speed of player
+
+    //classes used for calculation and drawing
     private Avatar avatar; // avatar to display for player
     private Shape model; // model (mainly for collision detection)
+
+    //other objects
     private Player otherPlayer;//other player (for punches)
     private LevelMap levelMap;//Map on which players are
     private Rectangle[] platformModels;//get all models from platform
-    private boolean jumped;//set true be changeMovement(); performs a jump in calc()
-    private boolean punch;//set to true when punch should be performed(performed in calc)
+
     private int movementDirection;//gives direction of movement
-    private double x_slowdown_acceleration = 9.81;//acceleration slows down jump
+
+    //jumping
+    private boolean jumped;//set true be changeMovement(); performs a jump in calc()
+    private int jumps = 2; // jumps left
+    private long jumpCooldown=2000;//millis needed between two jumps
+    private long lastJump;//time since last jump in millis
+
+    //punching
+    private boolean punch;//set to true when punch should be performed(performed in calc)
+    private double vx_punch,vy_punch; // speed of player because of punch
+    private final long punchCooldown=2000;//millis needed between two punches
+    private long lastPunch;//time since last punch in millis
 
     public Player(Avatar avatar, int xpos, LevelMap levelMap) {
         this.xpos = new int[3];
@@ -57,47 +84,39 @@ public class Player extends GameObject {
     //not needed right now
     @Override
     public void collide(GameObject go) {
- /*       if(go instanceof LevelMap){
-            //calculate new params
-            vx=
-        }
-        if (go instanceof LevelMap) {
-            LevelMap levelMap = (LevelMap) go;
-            if (levelMap.intersects(model)) {
-                vx = 0;
-                vy = 0;
-                // reset jumps
-                jumps = 2;
-            }
-        }*/
+
     }
 
     @Override
     public void calc(long millis) {
         double factor = 0.00005;
 
+
         // falling
-        vy[1] = vy[0] + millis * 9.81 * factor;
+        vy[1] = vy[0] + millis * 9.81 * factor+(vy_punch*2);
+        vy_punch=0;
 
         //calc horizontal movement
         vx[1] = SPEED * movementDirection;
         //slow down x movement after hit, no infinite movement after hit
         factor *= 0.5;
-        if (vx_punch - (x_slowdown_acceleration * (millis * factor)) > 0 && vx_punch > 0) {
+        if (vx_punch - (x_slowdown_acceleration *(millis * factor)) > 0 && vx_punch > 0) {
             vx_punch = vx_punch - (x_slowdown_acceleration * millis * factor);
         } else if ((vx_punch + (x_slowdown_acceleration * millis * factor) < 0 && vx_punch < 0)) {
             vx_punch = vx_punch + (x_slowdown_acceleration * millis * factor);
         } else {
             vx_punch = 0;
         }
-        vx[1] += vx_punch * 2;
+        vx[1] += vx_punch;
 
         //change speed if hit
+        lastPunch+=millis;
         if (punch) {
             punchOtherPlayer();
             punch = false;
         }
         //change speed if jumped
+        lastJump+=millis;
         if (jumped) {
             vy[1] = -SPEED;
             jumped = false;
@@ -119,6 +138,8 @@ public class Player extends GameObject {
                 //you can jump if you hit platform from side
                 //last_jump = 0;
                 jumps = 2;
+                //todo instant jump if hit platform???
+                lastJump=jumpCooldown;
             }
             if (platform.y + platform.height - ypos[1] >= 0 && ypos[1] + height - platform.y >= 0 && (xpos[1] + width >= platform.x && xpos[1] <= platform.x + platform.width)) {
                 vy[1] = 0;
@@ -126,6 +147,8 @@ public class Player extends GameObject {
                 //Attention bug(or not) if you hit platform from below you can instantly jump again
                 //last_jump = 0;
                 jumps = 2;
+                //todo instant jump if hit platform???
+                lastJump=jumpCooldown;
             }
         }
 
@@ -140,29 +163,33 @@ public class Player extends GameObject {
 
     public void changeMovement(int i) {
         switch (i) {
-            case GamePanel.Movement.JUMP: {
-                //todo: cooldown
-                if (jumps > 0) {
+            case Movement.JUMP: {
+                if (jumps > 0&&lastJump>=jumpCooldown) {
                     jumped = true;
                     jumps--;
+                    lastJump=0;
                 }
                 break;
             }
-            case GamePanel.Movement.MOVE_LEFT: {
+            //could be solved easier: movementDirection=i;
+            case Movement.MOVE_LEFT: {
                 movementDirection = -1;
                 break;
             }
-            case GamePanel.Movement.MOVE_RIGHT: {
+            case Movement.MOVE_RIGHT: {
                 movementDirection = 1;
                 break;
             }
-            case GamePanel.Movement.STOP_MOVING: {
+            case Movement.STOP_MOVING: {
                 movementDirection = 0;
                 break;
             }
-            case GamePanel.Movement.NORMAL_HIT: {
+            case Movement.NORMAL_HIT: {
                 //todo: cooldown
-                punch = true;
+                if(lastPunch>=punchCooldown){
+                    punch = true;
+                    lastPunch=0;
+                }
                 break;
             }
             default: {
@@ -170,30 +197,6 @@ public class Player extends GameObject {
             }
         }
     }
-
-/*    public void walkLeft() {
-        this.vx[1] = -SPEED;
-    }
-
-    public void walkRight() {
-        this.vx[1] = +SPEED;
-    }
-
-    public void jump() {
-        // jump only limited times
-       //if (jumps > 0) {
-            // speed up to the north
-            //this.vy[] = -SPEED * 1;
-            jumps--;
-            jumped=true;
-            System.out.println("jumped");
-        //}
-    }
-
-    public void stay() {
-        // reset x velocity
-        this.vx[1] = 0;
-    }*/
 
     private void punchOtherPlayer() {
         Shape hitbox = new Rectangle(xpos[0] - width / 2, ypos[0] - height / 3, width * 2, height * 5 / 3);
@@ -206,7 +209,7 @@ public class Player extends GameObject {
             //unit vector so that every punch results in same speed
             Vector2D unitPunchVector = punchVector.directionVector();
             vx_punch = unitPunchVector.getX() * HIT_SPEED;
-            vy[2] = unitPunchVector.getY() * HIT_SPEED;//todo why 0?
+            vy_punch = unitPunchVector.getY() * HIT_SPEED;
             System.out.println(unitPunchVector.toString());
         }
     }
@@ -239,13 +242,6 @@ public class Player extends GameObject {
             graphics2D.fillRect(xpos[0], ypos[0], width, height);
         }
 
-        int state = 0;
-        if (vx[0] > 0)
-            state = Avatar.WALKING_R;
-        else if (vx[0] < 0)
-            state = Avatar.WALKING_L;
-        else if (vx[0] == 0)
-            state = Avatar.STANDING;
-        avatar.draw(graphics2D, xpos[0], ypos[0], state);
+        avatar.draw(graphics2D, xpos[0], ypos[0], movementDirection);
     }
 }

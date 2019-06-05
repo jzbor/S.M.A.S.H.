@@ -26,10 +26,10 @@ public class GamePanel extends Panel implements KeyEventDispatcher, KeyListener 
     private char[] keys_player_2 = {'i', 'j', 'l', 'ö'};
     private boolean[] booleans_player2 = {false, false, false, false};
     //actions for keys in same order as keys
-    private int[] actions = {GamePanel.Movement.JUMP, GamePanel.Movement.MOVE_LEFT, GamePanel.Movement.MOVE_RIGHT, Movement.NORMAL_HIT};
+    private int[] actions = {Player.Movement.JUMP, Player.Movement.MOVE_LEFT, Player.Movement.MOVE_RIGHT, Player.Movement.NORMAL_HIT};
     //last performed action by pressing
-    private int lastChangePlayer1 = Movement.STOP_MOVING;
-    private int lastChangePlayer2 = Movement.STOP_MOVING;
+    private int lastChangePlayer1 = Player.Movement.STOP_MOVING;
+    private int lastChangePlayer2 = Player.Movement.STOP_MOVING;
     private boolean running;
     private int currentFramerate;
     private Player player1;
@@ -198,10 +198,10 @@ public class GamePanel extends Panel implements KeyEventDispatcher, KeyListener 
             }
         }
         if (!booleans_player1[1] && !booleans_player1[2]) {
-            player1.changeMovement(GamePanel.Movement.STOP_MOVING);
+            player1.changeMovement(Player.Movement.STOP_MOVING);
         }
         if (!booleans_player2[1] && !booleans_player2[2]) {
-            player2.changeMovement(GamePanel.Movement.STOP_MOVING);
+            player2.changeMovement(Player.Movement.STOP_MOVING);
         }
         //player1 change direction if both keys were pressed and now one was released
         if (!booleans_player1[1] && booleans_player1[2]) {
@@ -217,11 +217,4 @@ public class GamePanel extends Panel implements KeyEventDispatcher, KeyListener 
         }
     }
 
-    public static class Movement {
-        public static final int MOVE_LEFT = -1;
-        public static final int MOVE_RIGHT = 1;
-        public static final int STOP_MOVING = 0;
-        public static final int JUMP = 2;
-        public static final int NORMAL_HIT = 3;
-    }
 }

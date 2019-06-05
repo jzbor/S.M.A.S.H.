@@ -1,6 +1,8 @@
 package hgv.smash.resources;
 
 import hgv.smash.exceptions.AvatarNotAvailableException;
+import hgv.smash.game.Player;
+import hgv.smash.gui.GamePanel;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -70,18 +72,10 @@ public class Avatar {
     }
 
     public void draw(Graphics2D graphics2D, int x, int y, int state) {
-        if (state == lastAnimation[1]) {
-            lastAnimation[0] = state;
-        } else {
-            int i = lastAnimation[1];
-            lastAnimation[1] = lastAnimation[0];
-            lastAnimation[0] = state;
-            state = i;
-        }
 
-        if (state == NORMAL) {
+        if (state == Player.Movement.STOP_MOVING) {
             graphics2D.drawImage(images[NORMAL], x, y, null);
-        } else if (state == WALKING_L) {
+        } else if (state == Player.Movement.MOVE_LEFT) {
             BufferedImage image;
 
             long val = (System.currentTimeMillis() / 300) % 2;
@@ -91,7 +85,7 @@ public class Avatar {
                 image = images[WALKING_2];
 
             graphics2D.drawImage(image, x, y, null);
-        } else if (state == WALKING_R) {
+        } else if (state == Player.Movement.MOVE_RIGHT) {
             BufferedImage image;
 
             long val = (System.currentTimeMillis() / 300) % 2;
