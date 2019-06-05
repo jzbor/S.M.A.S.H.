@@ -10,10 +10,10 @@ import java.awt.image.BufferedImage;
 
 public class Player extends GameObject {
 
-    private int width = 95; // width of model
-    private int height = 189; // height of model
     private static final double SPEED = 0.5; // speed of xpos movement (also used by jump())
     private static final double HIT_SPEED = 0.5;//speed when hit by other player
+    private int width = 95; // width of model
+    private int height = 189; // height of model
     private int jumps = 2; // jumps left
 
     //arrays of size 4:
@@ -53,12 +53,6 @@ public class Player extends GameObject {
         height = normalImage.getHeight();
         width = normalImage.getWidth();
     }
-
-    //give other player for punches
-    public void setOtherPlayer(Player otherPlayer) {
-        this.otherPlayer = otherPlayer;
-    }
-
 
     //not needed right now
     @Override
@@ -144,30 +138,6 @@ public class Player extends GameObject {
         }
     }
 
-/*    public void walkLeft() {
-        this.vx[1] = -SPEED;
-    }
-
-    public void walkRight() {
-        this.vx[1] = +SPEED;
-    }
-
-    public void jump() {
-        // jump only limited times
-       //if (jumps > 0) {
-            // speed up to the north
-            //this.vy[] = -SPEED * 1;
-            jumps--;
-            jumped=true;
-            System.out.println("jumped");
-        //}
-    }
-
-    public void stay() {
-        // reset x velocity
-        this.vx[1] = 0;
-    }*/
-
     public void changeMovement(int i) {
         switch (i) {
             case GamePanel.Movement.JUMP: {
@@ -201,6 +171,30 @@ public class Player extends GameObject {
         }
     }
 
+/*    public void walkLeft() {
+        this.vx[1] = -SPEED;
+    }
+
+    public void walkRight() {
+        this.vx[1] = +SPEED;
+    }
+
+    public void jump() {
+        // jump only limited times
+       //if (jumps > 0) {
+            // speed up to the north
+            //this.vy[] = -SPEED * 1;
+            jumps--;
+            jumped=true;
+            System.out.println("jumped");
+        //}
+    }
+
+    public void stay() {
+        // reset x velocity
+        this.vx[1] = 0;
+    }*/
+
     private void punchOtherPlayer() {
         Shape hitbox = new Rectangle(xpos[0] - width / 2, ypos[0] - height / 3, width * 2, height * 5 / 3);
         otherPlayer.hit(hitbox, xpos[0] + width / 2, ypos[0] + height / 2);
@@ -219,6 +213,11 @@ public class Player extends GameObject {
 
     public Player getOtherPlayer() {
         return otherPlayer;
+    }
+
+    //give other player for punches
+    public void setOtherPlayer(Player otherPlayer) {
+        this.otherPlayer = otherPlayer;
     }
 
     public Avatar getAvatar() {

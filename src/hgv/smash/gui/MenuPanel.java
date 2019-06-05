@@ -34,9 +34,9 @@ public class MenuPanel extends Panel implements ActionListener {
     public MenuPanel() {
         frame = Frame.getInstance();
 
-        Music oldMusic =Music.getOurInstanceScoreMusic();
+        Music oldMusic = Music.getInstanceScoreMusic();
         oldMusic.stop();
-        Music newMusic=Music.getInstanceMenuMusic();
+        Music newMusic = Music.getInstanceMenuMusic();
         newMusic.play();
 
         setLayout(null);
@@ -143,7 +143,7 @@ public class MenuPanel extends Panel implements ActionListener {
                     variable = i;
                 }
             }
-            if (variable>-1) {
+            if (variable > -1) {
                 try {
                     backgroundImage = ImageIO.read(new File((LevelMap.MAP_PATH + LevelMap.MAP_NAMES[variable]) + "-bg.jpeg"));
                 } catch (IOException e) {
@@ -159,7 +159,7 @@ public class MenuPanel extends Panel implements ActionListener {
                 }
             }
         } else if (actionEvent.getSource() == startButton) {
-            if (avatar1 != null && avatar2 != null && levelMap!=null){
+            if (avatar1 != null && avatar2 != null && levelMap != null) {
 
                 Music oldMusic = Music.getInstanceMenuMusic();
                 oldMusic.stop();
@@ -169,12 +169,12 @@ public class MenuPanel extends Panel implements ActionListener {
                 GamePanel gamePanel = new GamePanel(avatar1, avatar2, levelMap);
                 // Keine Ahnung warum, aber irgendwie is frame immer null - dafuq? #workaround
                 frame = Frame.getInstance();
-                 System.out.println(frame);
+                System.out.println(frame);
                 frame.getContentPane().removeAll();
                 frame.getContentPane().add(gamePanel);
                 ((JPanel) (frame.getContentPane())).updateUI();
             }
-    }
+        }
     }
 
 
