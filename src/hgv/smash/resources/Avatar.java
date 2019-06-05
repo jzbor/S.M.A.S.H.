@@ -10,7 +10,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class Avatar {
-    public static final String[] AVATAR_NAMES = {"Georg", "Avatar2"};
+    public static final String[] AVATAR_NAMES = {"Georg"};
     public static final int NORMAL = 0;
     public static final int STANDING = 1;
     public static final int WALKING_1 = 2;
