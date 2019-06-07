@@ -19,6 +19,7 @@ public class ScorePanel extends Panel implements ActionListener {
     private Player winner;
     private Player looser;
     private BufferedImage lastFrame;
+    private JButton nextButton;
 
     public ScorePanel(Player winner, Player looser, BufferedImage lastFrame) {
         Music oldMusic = Music.getInstanceGameMusic();
@@ -37,6 +38,7 @@ public class ScorePanel extends Panel implements ActionListener {
         JLabel lIconLabel = new JLabel(new ImageIcon(winner.getAvatar().getImage(Avatar.NORMAL)));
         JLabel lNameLabel = new JLabel(looser.toString());
         JLabel lScoreLabel = new JLabel("Looser");
+        nextButton = new JButton("Next");
 
         JPanel scorePanel = new JPanel();
         JPanel p1Panel = new JPanel();
@@ -59,6 +61,9 @@ public class ScorePanel extends Panel implements ActionListener {
         lNameLabel.setBorder(paddingBorder);
         lScoreLabel.setFont(Design.getDefaultFont());
         lScoreLabel.setBorder(paddingBorder);
+        nextButton.setFont(Design.getDefaultFont());
+        nextButton.setBorder(paddingBorder);
+        nextButton.addActionListener(this);
 
         scorePanel.setLayout(new BoxLayout(scorePanel, BoxLayout.PAGE_AXIS));
         p1Panel.setLayout(new BorderLayout());
@@ -81,6 +86,7 @@ public class ScorePanel extends Panel implements ActionListener {
 
         add(gameoverLabel, BorderLayout.NORTH);
         add(scorePanel, BorderLayout.CENTER);
+        add(nextButton, BorderLayout.SOUTH);
         setSize(Frame.getInstance().getContentPane().getSize());
         setPreferredSize(getSize());
 
@@ -95,6 +101,13 @@ public class ScorePanel extends Panel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
+        Object src = actionEvent.getSource();
 
+        if (src == nextButton) {
+            Panel panel = new MenuPanel();
+            Frame.getInstance().getContentPane().removeAll();
+            Frame.getInstance().getContentPane().add(panel);
+            ((JPanel) Frame.getInstance().getContentPane().add(panel)).updateUI();
+        }
     }
 }
