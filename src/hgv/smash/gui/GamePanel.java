@@ -11,10 +11,15 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 
-public class GamePanel extends Panel implements KeyEventDispatcher, KeyListener {
+public class GamePanel extends Panel {
 
-    private static final int FRAMERATE = 60;
+
+    private static final int FRAMERATE = 100;
+    //size of frame
+    private double width;
+    private double height;
     //keys for movement
     private static long JUMP_COOLDOWN = 2000;
     // y coords defining a death
@@ -38,6 +43,8 @@ public class GamePanel extends Panel implements KeyEventDispatcher, KeyListener 
     private BufferedImage frameBuffer;
 
     public GamePanel(Avatar a1, Avatar a2, LevelMap map) {
+        height = Frame.getInstance().getHeight();
+        width = Frame.getInstance().getWidth();
         // assign and create params
         running = true;
         GameloopThread gameloopThread = new GameloopThread(this);
@@ -46,8 +53,8 @@ public class GamePanel extends Panel implements KeyEventDispatcher, KeyListener 
         player1.setOtherPlayer(player2);
         player2.setOtherPlayer(player1);
         levelMap = map;
-        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(this);
-        addKeyListener(this);
+
+        OurKeyListener.getInstance().setPanel(this);
 
         // start gameloop
         gameloopThread.start();
@@ -140,33 +147,104 @@ public class GamePanel extends Panel implements KeyEventDispatcher, KeyListener 
 
         // paint buffer
         Graphics2D graphics2D = (Graphics2D) graphics;
-        graphics2D.drawImage(frameBuffer, 0, 0, this);
+        //graphics2D.drawImage(frameBuffer, 0, 0, this);
+        Image image = null;
+        if(frameBuffer!=null){
+            image = claculateCamera();
+        }else {
+            image = frameBuffer;
+        }
 
+        graphics2D.drawImage(image, 0, 0, this);
     }
 
-    @Override
-    public boolean dispatchKeyEvent(KeyEvent keyEvent) {
-        processKeyEvent(keyEvent);
-        return true;
+    public Image claculateCamera() {
+        int offset = 100;
+
+
+        //find smallest rectangle wich has both players with offset inside
+        double yTop;
+        if (player1.getYPos() > player2.getYPos()) {
+            yTop = player2.getYPos();
+        } else {
+            yTop = player1.getYPos();
+        }
+        yTop -= offset;
+
+        double yBottom;
+        if (player1.getYPos() + player1.getHeight() > player2.getYPos() + player2.getHeight()) {
+            yBottom = player1.getYPos() + player1.getHeight();
+        } else {
+            yBottom = player2.getYPos() + player2.getHeight();
+        }
+        yBottom += offset;
+
+
+        double xLeft;
+        if (player1.getXPos() > player2.getXPos()) {
+            xLeft = player2.getXPos();
+        } else {
+            xLeft = player1.getXPos();
+        }
+        xLeft -= offset;
+
+        double xRight;
+        if (player1.getXPos() + player1.getWidth() > player2.getXPos() + player2.getWidth()) {
+            xRight = player1.getXPos() + player1.getWidth();
+        } else {
+            xRight = player2.getXPos() + player2.getWidth();
+        }
+        xRight += offset;
+
+
+        //calculate length of side of smallest rectangle and increase smaller size till it fits to relation of window
+        double xDiff = xRight - xLeft;
+        double yDiff = yBottom - yTop;
+
+        if (xDiff / yDiff < 1024.0 / 768.0) {
+            double xDiffOld = xDiff;
+            xDiff = 1024.0 / 768.0 * yDiff;
+            double xAdd = (xDiff - xDiffOld) / 2;
+            xLeft -= xAdd;
+        } else {
+            double yDiffOld = yDiff;
+            yDiff = 768.0 / 1024.0 * xDiff;
+            double yAdd = (yDiff - yDiffOld) / 2;
+            yTop -= (int) yAdd;
+        }
+
+
+        //no images greater than picture of map
+        if (xDiff > width) {
+            xDiff = width;
+        }
+        if (yDiff > height) {
+            yDiff = height;
+        }
+
+        //no images outside of picture of map
+        if (xLeft < 0) {
+            xLeft = 0;
+        }
+        if (xLeft + xDiff > 1024) {
+            xLeft = 1024 - xDiff;
+        }
+        if (yTop < 0) {
+            yTop = 0;
+        }
+        if (yTop + yDiff > 768) {
+            yTop = 768 - yDiff;
+        }
+
+        //create subimage and return upscaled one
+        BufferedImage subimage = frameBuffer.getSubimage((int) xLeft, (int) yTop, (int) xDiff, (int) yDiff);
+        //@todo replace with faster scaling method
+        return subimage.getScaledInstance(1024, 768, Image.SCALE_FAST);
     }
+
 
     @Override
     public void keyTyped(KeyEvent keyEvent) {
-        //problem: long typed Keys solved by using keyPressed and keyReleased
-        /*
-        char key = keyEvent.getKeyChar();
-
-        switch (key) {
-            case 'w': {
-                player1.changeMovement(Movement.JUMP);
-                break;
-            }
-            case 'i': {
-                player2.changeMovement(Movement.JUMP);
-                break;
-            }
-        }
-*/
     }
 
     @Override

@@ -12,6 +12,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
 public class ScorePanel extends Panel implements ActionListener {
@@ -109,5 +110,20 @@ public class ScorePanel extends Panel implements ActionListener {
             Frame.getInstance().getContentPane().add(panel);
             ((JPanel) Frame.getInstance().getContentPane().add(panel)).updateUI();
         }
+    }
+
+    @Override
+    public void keyTyped(KeyEvent keyEvent) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent keyEvent) {
+
+    }
+
+    @Override
+    public void keyReleased(KeyEvent keyEvent) {
+
     }
 }

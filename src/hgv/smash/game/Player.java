@@ -231,6 +231,16 @@ public class Player extends GameObject {
         return ypos[0];
     }
 
+    public int getXPos(){
+        return xpos[0];
+    }
+    public int getWidth(){
+        return width;
+    }
+    public int getHeight(){
+        return height;
+    }
+
 
     @Override
     public void draw(Graphics2D graphics2D) {

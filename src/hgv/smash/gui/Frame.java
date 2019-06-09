@@ -16,12 +16,8 @@ public class Frame extends JFrame {
         // Init Frame
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setSize(new Dimension(1024, 768));
+        setSize(FINAL_SIZE);
 
-        JPanel panel = new MenuPanel();
-        panel.setSize(getContentPane().getSize());
-        getContentPane().add(panel);
-        ((JPanel) getContentPane()).updateUI();
 
         System.out.println("Frame: " + this);
 

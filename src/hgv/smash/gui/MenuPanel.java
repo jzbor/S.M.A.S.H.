@@ -11,6 +11,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
@@ -167,7 +168,6 @@ public class MenuPanel extends Panel implements ActionListener {
                 newMusic.play();
 
                 GamePanel gamePanel = new GamePanel(avatar1, avatar2, levelMap);
-                // Keine Ahnung warum, aber irgendwie is frame immer null - dafuq? #workaround
                 frame = Frame.getInstance();
                 System.out.println(frame);
                 frame.getContentPane().removeAll();
@@ -206,5 +206,18 @@ public class MenuPanel extends Panel implements ActionListener {
 
     }
 
+    @Override
+    public void keyTyped(KeyEvent keyEvent) {
 
+    }
+
+    @Override
+    public void keyPressed(KeyEvent keyEvent) {
+
+    }
+
+    @Override
+    public void keyReleased(KeyEvent keyEvent) {
+
+    }
 }
