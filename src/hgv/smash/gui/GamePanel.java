@@ -154,6 +154,7 @@ public class GamePanel extends Panel {
         }else {
             image = frameBuffer;
         }
+        //graphics2D.setRenderingHint(RenderingHints.KEY_RENDERING,RenderingHints.VALUE_RENDER_SPEED);
 
         graphics2D.drawImage(image, 0, 0, this);
     }
