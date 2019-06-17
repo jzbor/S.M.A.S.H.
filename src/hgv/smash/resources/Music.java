@@ -17,12 +17,12 @@ public class Music {
     private File fileGameMusic;
     private File fileMenuMusic;
     private File fileScoreMusic;
-    //File von dem Lied, dass spielt
+    //File von dem Lied, das spielt
     private File chosenMusic;
     //auf den Clip wird das Lied geladen und der Clip kann dann auch abgespielt werden.
     private Clip clip;
 
-    //Man kann sich entscheiden ob man ein Objekt der Klasse Musik erzeugen will, dass die Menümusik,
+    //Man kann sich entscheiden ob man ein Objekt der Klasse Musik erzeugen will, das die Menümusik,
     //oder die Scoremusik abspielt.
     private Music(String musicYouNeed) {
 
