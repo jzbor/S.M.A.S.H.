@@ -10,4 +10,5 @@ public abstract class Panel extends JPanel {
     public abstract void keyTyped(KeyEvent keyEvent);
     public abstract void keyPressed(KeyEvent keyEvent);
     public abstract void keyReleased(KeyEvent keyEvent);
+
 }

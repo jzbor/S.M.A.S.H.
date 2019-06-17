@@ -34,12 +34,13 @@ public class MenuPanel extends Panel implements ActionListener {
 
     public MenuPanel() {
         frame = Frame.getInstance();
-
+        Frame.getInstance().currentpanel(0);
+        if (Frame.getInstance().getMusic()) {
         Music oldMusic = Music.getInstanceScoreMusic();
         oldMusic.stop();
         Music newMusic = Music.getInstanceMenuMusic();
         newMusic.play();
-
+        }
         setLayout(null);
         //Einfuegen und Deklarieren der Hintergrundgraphik
         try {
@@ -161,12 +162,13 @@ public class MenuPanel extends Panel implements ActionListener {
             }
         } else if (actionEvent.getSource() == startButton) {
             if (avatar1 != null && avatar2 != null && levelMap != null) {
-
-                Music oldMusic = Music.getInstanceMenuMusic();
-                oldMusic.stop();
-                Music newMusic = Music.getInstanceGameMusic();
-                newMusic.play();
-
+                if (Frame.getInstance().getMusic()) {
+                    Music oldMusic = Music.getInstanceMenuMusic();
+                    oldMusic.stop();
+                    Music newMusic = Music.getInstanceGameMusic();
+                    newMusic.play();
+                }
+                Frame.getInstance().currentpanel(1);
                 GamePanel gamePanel = new GamePanel(avatar1, avatar2, levelMap);
                 frame = Frame.getInstance();
                 System.out.println(frame);

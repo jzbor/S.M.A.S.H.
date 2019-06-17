@@ -23,10 +23,14 @@ public class ScorePanel extends Panel implements ActionListener {
     private JButton nextButton;
 
     public ScorePanel(Player winner, Player looser, BufferedImage lastFrame) {
-        Music oldMusic = Music.getInstanceGameMusic();
-        oldMusic.stop();
-        Music newMusic = Music.getInstanceScoreMusic();
-        newMusic.play();
+
+        if (Frame.getInstance().getMusic()) {
+            Music oldMusic = Music.getInstanceGameMusic();
+            oldMusic.stop();
+            Music newMusic = Music.getInstanceScoreMusic();
+            newMusic.play();
+        }
+        Frame.getInstance().currentpanel(2);
         this.winner = winner;
         this.looser = looser;
         this.lastFrame = lastFrame;
