@@ -5,19 +5,14 @@ import hgv.smash.game.GameloopThread;
 import hgv.smash.game.LevelMap;
 import hgv.smash.game.Player;
 import hgv.smash.resources.Avatar;
-import hgv.smash.resources.GraphicalContent;
 import hgv.smash.resources.Music;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
-import java.io.BufferedReader;
 import java.io.File;
 
 public class GamePanel extends Panel {
@@ -32,7 +27,7 @@ public class GamePanel extends Panel {
     //size of triangle representing player out of map
     private final int triangleSize = 150;
     // y coords defining a death
-    private static int RANGE_OF_DEATH = 1000000;
+    private static int RANGE_OF_DEATH = 10000;
     //player1
     private char[] keys_player_1 = {'w', 'a', 'd', 'f'};
     private boolean[] booleans_player1 = {false, false, false, false};
@@ -146,6 +141,7 @@ public class GamePanel extends Panel {
         }
 
         if (gameover) {
+            System.out.println("Gameover");
             BufferedImage img = new BufferedImage(getHeight(), getWidth(), BufferedImage.TYPE_INT_ARGB_PRE);
             Graphics2D imageGraphics = img.createGraphics();
             printAll(imageGraphics);
@@ -171,7 +167,7 @@ public class GamePanel extends Panel {
         //graphics2D.drawImage(frameBuffer, 0, 0, this);
         Image image = null;
         if (frameBuffer != null) {
-            image = claculateCamera();
+            image = calculateCamera();
         } else {
             image = frameBuffer;
         }
@@ -180,7 +176,8 @@ public class GamePanel extends Panel {
         graphics2D.drawImage(image, 0, 0, this);
     }
 
-    public Image claculateCamera() {
+    public Image calculateCamera
+            () {
         int offset = 100;
 
 
@@ -289,8 +286,8 @@ public class GamePanel extends Panel {
 
         //player1
 
-        int xPos[] = new int[3];
-        int yPos[] = new int[3];
+        int[] xPos = new int[3];
+        int[] yPos = new int[3];
 
         int xLeftInt = (int) xLeft;
         int xRightInt = (int) xRight;
@@ -329,7 +326,7 @@ public class GamePanel extends Panel {
                 theta = 1.25 * Math.PI;
                 xArrow = 0;
                 yArrow = 0;
-                System.out.println("top left");
+                //System.out.println("top left");
             }
             //bottom left corner
             else if (player.getXPos() + player.getWidth() < xLeftInt + halfArrowWidth && player.getYPos() > yBottomInt || player.getXPos() + player.getWidth() < xLeftInt && player.getYPos() > yBottomInt - halfArrowHeight) {
@@ -344,7 +341,7 @@ public class GamePanel extends Panel {
                 theta = 0.75 * Math.PI;
                 xArrow = 0;
                 yArrow = yDiffInt - transformImage.getHeight();
-                System.out.println("bottom left");
+                //System.out.println("bottom left");
             }
             //top right corner
             else if (player.getXPos() > xRightInt - halfArrowWidth && player.getYPos() + player.getHeight() < yTop || player.getXPos() > xRightInt && player.getYPos() + player.getHeight() < yTop + halfArrowHeight) {
@@ -359,7 +356,7 @@ public class GamePanel extends Panel {
                 theta = 1.75 * Math.PI;
                 xArrow = xDiffInt - transformImage.getWidth();
                 yArrow = 0;
-                System.out.println("top right");
+                //System.out.println("top right");
             }
             //bottom right corner
             else if (player.getXPos() > xRightInt - halfArrowWidth && player.getYPos() > yBottomInt || player.getXPos() > xRightInt && player.getYPos() > yBottomInt - halfArrowHeight) {
@@ -374,7 +371,7 @@ public class GamePanel extends Panel {
                 theta = 0.25 * Math.PI;
                 xArrow = xDiffInt - transformImage.getWidth();
                 yArrow = yDiffInt - transformImage.getHeight();
-                System.out.println("bottom right");
+                //System.out.println("bottom right");
             }
 
             //side
@@ -393,7 +390,7 @@ public class GamePanel extends Panel {
                 theta = Math.PI;
                 xArrow = 0;
                 yArrow = player.getYPos() - yTopInt + player.getHeight() / 2 - transformImage.getHeight() / 2;
-                System.out.println("left side");
+                //System.out.println("left side");
             }
             //right side
             else if (player.getXPos() > xRight) {
@@ -408,7 +405,7 @@ public class GamePanel extends Panel {
                 theta = 0;
                 xArrow = xDiffInt - transformImage.getWidth();
                 yArrow = player.getYPos() - yTopInt + player.getHeight() / 2 - transformImage.getHeight() / 2;
-                System.out.println("right side");
+                //System.out.println("right side");
             }
             //top side
             else if (player.getYPos() + player.getHeight() < yTop) {
@@ -423,7 +420,7 @@ public class GamePanel extends Panel {
                 theta = Math.PI * 1.5;
                 xArrow = player.getXPos() + player.getWidth() / 2 - xLeftInt - transformImage.getWidth() / 2;
                 yArrow = 0;
-                System.out.println("top side");
+                //System.out.println("top side");
             }
             //bottom side
             else if (player.getYPos() > yBottom) {
@@ -438,7 +435,7 @@ public class GamePanel extends Panel {
                 theta = Math.PI * 0.5;
                 xArrow = player.getXPos() - xLeftInt + player.getWidth() / 2 - halfArrowWidth;
                 yArrow = yDiffInt - transformImage.getHeight();
-                System.out.println("bottom side");
+                //System.out.println("bottom side");
             }
             //not out of map
             else {
