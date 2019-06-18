@@ -16,13 +16,10 @@ public class Avatar {
     public static final String[] AVATAR_NAMES = {"Georg", "Genosse Geist"};
     public static final int NORMAL = 0;
     public static final int STANDING = 1;
-    private static final int WALKING_1 = 2;
-    private static final int WALKING_2 = 3;
-    public static final int WALKING_L = 4;
-    public static final int WALKING_R = 5;
-    public static final int JUMPING = 6;
+    private static final int HIT = 2;
+    private static final int SUPER = 3;
     private static final String AVATAR_PATH = "./resources/avatars/";
-    private static final String[] REGULAR_FILENAMES = {"normal.png", "stand.png", "hit.png"};
+    private static final String[] REGULAR_FILENAMES = {"normal.png", "stand.png", "hit.png", "super.png"};
     private static final String[] ICON_FILENAMES = {"superloading.png", "superready.png"};
     private static final String ANIMATION_FILENAMES = "walk%d.png";
     private static final String[] AVATAR_FILES = {"georg/", "ghost/"};
@@ -30,6 +27,9 @@ public class Avatar {
     private BufferedImage[] animationImages;
     private BufferedImage[] icons;
     private int[] lastAnimation = new int[2];
+    private static final int HIT_ANIMATION_LENGTH = 400;
+    private long lastHit;
+    private long lastSuperHit;
 
     public Avatar(String name) throws AvatarNotAvailableException {
         int index = -1;
@@ -92,14 +92,26 @@ public class Avatar {
     }
 
     public void draw(Graphics2D graphics2D, int x, int y, int state) {
+        boolean hit = (System.currentTimeMillis() - lastHit < HIT_ANIMATION_LENGTH);
+        boolean superhit = (System.currentTimeMillis() - lastSuperHit < HIT_ANIMATION_LENGTH);
 
         if (state == Player.Movement.STOP_MOVING) {
-            graphics2D.drawImage(regularImages[NORMAL], x, y, null);
+            if (hit)
+                graphics2D.drawImage(regularImages[HIT], x, y, null);
+            else if (superhit)
+                graphics2D.drawImage(regularImages[SUPER], x, y, null);
+            else
+                graphics2D.drawImage(regularImages[NORMAL], x, y, null);
         } else if (state == Player.Movement.MOVE_LEFT) {
             BufferedImage image;
 
             int val = (int) ((System.currentTimeMillis() / 100) % animationImages.length);
             image = animationImages[val];
+
+            if (hit)
+                image = regularImages[HIT];
+            else if (superhit)
+                image = regularImages[SUPER];
 
             graphics2D.drawImage(image, x + (getImage(NORMAL).getWidth() - image.getWidth()), y, null);
         } else if (state == Player.Movement.MOVE_RIGHT) {
@@ -108,11 +120,21 @@ public class Avatar {
             int val = (int) ((System.currentTimeMillis() / 100) % animationImages.length);
             image = animationImages[val];
 
+            if (hit)
+                image = regularImages[HIT];
+            else if (superhit)
+                image = regularImages[SUPER];
+
             // Flip image
             image = flipImage(image);
             graphics2D.drawImage(image, x, y, null);
         } else {
-            graphics2D.drawImage(regularImages[0], x, y, null);
+            if (hit)
+                graphics2D.drawImage(regularImages[HIT], x, y, null);
+            else if (superhit)
+                graphics2D.drawImage(regularImages[SUPER], x, y, null);
+            else
+                graphics2D.drawImage(regularImages[NORMAL], x, y, null);
         }
     }
 
@@ -130,4 +152,12 @@ public class Avatar {
         return newImage;
     }
 
+
+    public void setLastHit(long lastHit) {
+        this.lastHit = lastHit;
+    }
+
+    public void setLastSuperHit(long lastSuperHit) {
+        this.lastSuperHit = lastSuperHit;
+    }
 }

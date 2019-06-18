@@ -103,11 +103,13 @@ public class Player extends GameObject {
         lastPunch+=millis;
         if (punch) {
             punchOtherPlayer(false);
+            avatar.setLastHit(System.currentTimeMillis());
             punch = false;
         }
         lastSuperPunch += millis;
         if (superPunch) {
             punchOtherPlayer(true);
+            avatar.setLastSuperHit(System.currentTimeMillis());
             superPunch = false;
         }
         //change speed if jumped
@@ -200,7 +202,7 @@ public class Player extends GameObject {
             }
             case Movement.SUPER_HIT: {
                 //todo: cooldown
-                if (lastPunch >= SUPER_PUNCH_COOLDOWN) {
+                if (lastSuperPunch >= SUPER_PUNCH_COOLDOWN) {
                     superPunch = true;
                     lastSuperPunch = 0;
                 }
