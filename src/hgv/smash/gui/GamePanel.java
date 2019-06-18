@@ -5,6 +5,7 @@ import hgv.smash.game.GameloopThread;
 import hgv.smash.game.LevelMap;
 import hgv.smash.game.Player;
 import hgv.smash.resources.Avatar;
+import hgv.smash.resources.Design;
 import hgv.smash.resources.Music;
 
 import javax.imageio.ImageIO;
@@ -29,13 +30,14 @@ public class GamePanel extends Panel {
     // y coords defining a death
     private static int RANGE_OF_DEATH = 10000;
     //player1
-    private char[] keys_player_1 = {'w', 'a', 'd', 'f'};
-    private boolean[] booleans_player1 = {false, false, false, false};
+    private char[] keys_player_1 = {'w', 'a', 'd', 'f', 'r'};
+    private boolean[] booleans_player1 = {false, false, false, false, false};
     //player2
-    private char[] keys_player_2 = {'i', 'j', 'l', 'ö'};
-    private boolean[] booleans_player2 = {false, false, false, false};
+    private char[] keys_player_2 = {'i', 'j', 'l', 'ö', 'p'};
+    private boolean[] booleans_player2 = {false, false, false, false, false};
     //actions for keys in same order as keys
-    private int[] actions = {Player.Movement.JUMP, Player.Movement.MOVE_LEFT, Player.Movement.MOVE_RIGHT, Player.Movement.NORMAL_HIT};
+    private int[] actions = {Player.Movement.JUMP, Player.Movement.MOVE_LEFT, Player.Movement.MOVE_RIGHT,
+            Player.Movement.NORMAL_HIT, Player.Movement.SUPER_HIT};
     //last performed action by pressing
     private int lastChangePlayer1 = Player.Movement.STOP_MOVING;
     private int lastChangePlayer2 = Player.Movement.STOP_MOVING;
@@ -45,7 +47,7 @@ public class GamePanel extends Panel {
     private Player player2;
     private Player[] players;
     private LevelMap levelMap;
-    private BufferedImage frameBuffer;
+    private Image frameBuffer;
     //
     private BufferedImage originalArrow;
 
@@ -111,18 +113,20 @@ public class GamePanel extends Panel {
             }
 
             // @TODO implement thread safety
-            frameBuffer = bi;
+            frameBuffer = calculateCamera(bi);
 
             // request ui update
             updateUI();
 
-            // sleep
+            // sleep @TODO solve weird shit
             if ((System.currentTimeMillis() - thisFrame) < (1000.0 / FRAMERATE)) {
                 int sleep = (int) ((1000.0 / FRAMERATE) - (System.currentTimeMillis() - thisFrame));
-                try {
-                    Thread.sleep(sleep);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                if (sleep > 0) {
+                    try {
+                        Thread.sleep(sleep);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
             lastFrame = thisFrame;
@@ -164,20 +168,14 @@ public class GamePanel extends Panel {
 
         // paint buffer
         Graphics2D graphics2D = (Graphics2D) graphics;
-        //graphics2D.drawImage(frameBuffer, 0, 0, this);
-        Image image = null;
-        if (frameBuffer != null) {
-            image = calculateCamera();
-        } else {
-            image = frameBuffer;
-        }
-        //graphics2D.setRenderingHint(RenderingHints.KEY_RENDERING,RenderingHints.VALUE_RENDER_SPEED);
 
-        graphics2D.drawImage(image, 0, 0, this);
+        graphics2D.drawImage(frameBuffer, 0, 0, this);
+        graphics2D.setColor(Design.getPrimaryColor());
+        graphics2D.setFont(Design.getDefaultFont(30));
+        graphics2D.drawString(player1.getPercentage() + "%", 50, 50);
     }
 
-    public Image calculateCamera
-            () {
+    private Image calculateCamera(BufferedImage bufferedImage) {
         int offset = 100;
 
 
@@ -268,7 +266,7 @@ public class GamePanel extends Panel {
         }
 
         //create subimage and return upscaled one
-        BufferedImage subimage = frameBuffer.getSubimage((int) xLeft, (int) yTop, (int) xDiff, (int) yDiff);
+        BufferedImage subimage = bufferedImage.getSubimage((int) xLeft, (int) yTop, (int) xDiff, (int) yDiff);
 
 
 

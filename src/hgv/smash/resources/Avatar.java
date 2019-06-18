@@ -2,7 +2,6 @@ package hgv.smash.resources;
 
 import hgv.smash.exceptions.AvatarNotAvailableException;
 import hgv.smash.game.Player;
-import hgv.smash.gui.GamePanel;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -15,13 +14,13 @@ public class Avatar {
     public static final String[] AVATAR_NAMES = {"Georg"};
     public static final int NORMAL = 0;
     public static final int STANDING = 1;
-    public static final int WALKING_1 = 2;
-    public static final int WALKING_2 = 3;
+    private static final int WALKING_1 = 2;
+    private static final int WALKING_2 = 3;
     public static final int WALKING_L = 4;
     public static final int WALKING_R = 5;
     public static final int JUMPING = 6;
-    public static final String AVATAR_PATH = "./resources/avatars/";
-    public static final String[] FILENAMES = {"BNormal.png", "BStand.png", "BWalk1.png", "BWalk2.png"}; // @TODO make private
+    private static final String AVATAR_PATH = "./resources/avatars/";
+    private static final String[] FILENAMES = {"normal.png", "stand.png", "walk1.png", "walk2.png"}; // @TODO make private
     private static final String[] AVATAR_FILES = {"georg/"};
     private BufferedImage[] images;
     private int[] lastAnimation = new int[2];
