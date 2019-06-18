@@ -132,8 +132,6 @@ public class Frame extends JFrame {
 
             }
         });
-
-
     }
 
     public void currentpanel(int i) {
