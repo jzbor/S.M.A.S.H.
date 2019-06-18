@@ -1,5 +1,6 @@
 package hgv.smash.gui;
 
+import hgv.smash.resources.Design;
 import hgv.smash.resources.Music;
 
 import javax.swing.*;
@@ -44,6 +45,28 @@ public class Frame extends JFrame {
         addPrefMenuItems(prefMenu);
         addGameMenuItems(gameMenu);
 
+        menuBar.setBackground(Design.getPrimaryColor());
+        fileMenu.setBackground(Design.getPrimaryColor());
+        prefMenu.setBackground(Design.getPrimaryColor());
+        gameMenu.setBackground(Design.getPrimaryColor());
+        setDesign(menuBar, Design.getPrimaryColor(), Design.getSecondaryColor(), Design.getDefaultFont());
+    }
+
+    private void setDesign(JMenuBar menuBar, Color backColor, Color foreColor, Font font) {
+        menuBar.setBackground(backColor);
+        menuBar.setFont(font);
+        for (int i = 0; i < menuBar.getMenuCount(); i++) {
+            JMenu menu = menuBar.getMenu(i);
+            menu.setFont(font);
+            menu.setBackground(backColor);
+            menu.setForeground(foreColor);
+            for (int j = 0; j < menu.getItemCount(); j++) {
+                JMenuItem item = menu.getItem(j);
+                item.setFont(font);
+                item.setBackground(backColor);
+                item.setForeground(foreColor);
+            }
+        }
     }
 
     private void addFileMenuItems(JMenu fileMenu) {

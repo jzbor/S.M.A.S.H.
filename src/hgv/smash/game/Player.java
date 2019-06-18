@@ -57,8 +57,9 @@ public class Player extends GameObject {
     private boolean punch, superPunch;//set to true when punch should be performed(performed in calc)
     private long lastSuperPunch;
     private int percentage = 15;
+    private int number; // number of player ( 1 or 2 )
 
-    public Player(Avatar avatar, int xpos, LevelMap levelMap) {
+    public Player(Avatar avatar, int xpos, LevelMap levelMap, int number) {
         this.xpos = new int[3];
         this.xpos[0] = xpos;
         this.ypos = new int[3];
@@ -71,7 +72,8 @@ public class Player extends GameObject {
         this.model = new Rectangle(this.xpos[0], this.ypos[0], width, height);
         this.levelMap = levelMap;
         this.platformModels = levelMap.getPlatformModels();//platform does not move right now
-        jumped = false;
+        this.number = number;
+        //        jumped = false;
         BufferedImage normalImage = avatar.getImage(Avatar.NORMAL);
         height = normalImage.getHeight();
         width = normalImage.getWidth();
@@ -290,5 +292,9 @@ public class Player extends GameObject {
             graphics2D.setColor(Color.RED);
             graphics2D.draw(model);
         }
+    }
+
+    public String getName() {
+        return "Player " + number;
     }
 }

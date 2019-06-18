@@ -17,6 +17,7 @@ import java.awt.image.BufferedImage;
 
 public class ScorePanel extends Panel implements ActionListener {
 
+    private int biggestWidth;
     private Player winner;
     private Player looser;
     private BufferedImage lastFrame;
@@ -35,13 +36,22 @@ public class ScorePanel extends Panel implements ActionListener {
         this.looser = looser;
         this.lastFrame = lastFrame;
 
+        // define width of icon container; call before loading the icon
+        int wwidth = winner.getAvatar().getImage(Avatar.NORMAL).getWidth();
+        int lwidth = looser.getAvatar().getImage(Avatar.NORMAL).getWidth();
+        if (wwidth > lwidth) {
+            biggestWidth = wwidth;
+        } else {
+            biggestWidth = lwidth;
+        }
+
         // Create elements
         JLabel gameoverLabel = new JLabel("Game Over");
-        JLabel wIconLabel = new JLabel(new ImageIcon(winner.getAvatar().getImage(Avatar.NORMAL)));
-        JLabel wNameLabel = new JLabel(winner.toString());
+        JLabel wIconLabel = new JLabel(new ImageIcon(scaleAvatar(winner.getAvatar())));
+        JLabel wNameLabel = new JLabel(winner.getName());
         JLabel wScoreLabel = new JLabel("Winner");
-        JLabel lIconLabel = new JLabel(new ImageIcon(looser.getAvatar().getImage(Avatar.NORMAL)));
-        JLabel lNameLabel = new JLabel(looser.toString());
+        JLabel lIconLabel = new JLabel(new ImageIcon(scaleAvatar(looser.getAvatar())));
+        JLabel lNameLabel = new JLabel(looser.getName());
         JLabel lScoreLabel = new JLabel("Looser");
         nextButton = new JButton("Next");
 
@@ -57,16 +67,16 @@ public class ScorePanel extends Panel implements ActionListener {
         gameoverLabel.setBorder(paddingBorder);
 
         wIconLabel.setBorder(paddingBorder);
-        wNameLabel.setFont(Design.getDefaultFont());
+        wNameLabel.setFont(Design.getDefaultFont(24));
         wNameLabel.setBorder(paddingBorder);
-        wScoreLabel.setFont(Design.getDefaultFont());
+        wScoreLabel.setFont(Design.getDefaultFont(24));
         wScoreLabel.setBorder(paddingBorder);
         lIconLabel.setBorder(paddingBorder);
-        lNameLabel.setFont(Design.getDefaultFont());
+        lNameLabel.setFont(Design.getDefaultFont(24));
         lNameLabel.setBorder(paddingBorder);
-        lScoreLabel.setFont(Design.getDefaultFont());
+        lScoreLabel.setFont(Design.getDefaultFont(24));
         lScoreLabel.setBorder(paddingBorder);
-        nextButton.setFont(Design.getDefaultFont());
+        nextButton.setFont(Design.getDefaultFont(24));
         nextButton.setBorder(paddingBorder);
         nextButton.addActionListener(this);
         nextButton.setBackground(Color.WHITE);
@@ -74,6 +84,19 @@ public class ScorePanel extends Panel implements ActionListener {
         scorePanel.setLayout(new BoxLayout(scorePanel, BoxLayout.PAGE_AXIS));
         p1Panel.setLayout(new BorderLayout());
         p2Panel.setLayout(new BorderLayout());
+
+
+        setBackground(Design.getPrimaryColor());
+        gameoverLabel.setBackground(Design.getPrimaryColor());
+        p1Panel.setBackground(Design.getPrimaryColor());
+        p2Panel.setBackground(Design.getPrimaryColor());
+        gameoverLabel.setForeground(Design.getSecondaryColor());
+        wNameLabel.setForeground(Design.getSecondaryColor());
+        wScoreLabel.setForeground(Design.getSecondaryColor());
+        lNameLabel.setForeground(Design.getSecondaryColor());
+        lScoreLabel.setForeground(Design.getSecondaryColor());
+        nextButton.setBackground(Design.getPrimaryColor());
+        nextButton.setForeground(Design.getSecondaryColor());
 
         // Compose layout
         setLayout(new BorderLayout());
@@ -103,6 +126,15 @@ public class ScorePanel extends Panel implements ActionListener {
             updateUI();
         }
         System.out.println(gameoverLabel);
+    }
+
+    private BufferedImage scaleAvatar(Avatar avatar) {
+        BufferedImage origImg = avatar.getImage(Avatar.NORMAL);
+        BufferedImage newImg = new BufferedImage(biggestWidth, origImg.getHeight(), origImg.getType());
+        Graphics2D graphics2D = newImg.createGraphics();
+        graphics2D.drawImage(origImg, newImg.getWidth() / 2 - origImg.getWidth() / 2, 0, (int) (origImg.getWidth() / 1.2), (int) (origImg.getHeight() / 1.2), null);
+        graphics2D.dispose();
+        return newImg;
     }
 
     @Override

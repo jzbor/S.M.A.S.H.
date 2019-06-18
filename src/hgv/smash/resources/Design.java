@@ -6,8 +6,8 @@ import java.io.IOException;
 
 public class Design {
 
-    private static final String PRIMARY_COLOR = "#000000";
-    private static final String SECONDARY_COLOR = "#EEEEEE";
+    private static final String PRIMARY_COLOR = "#450F08";
+    private static final String SECONDARY_COLOR = "#998F8E";
     private static final String FONT_DIR = "./resources/fonts/";
     private static final String TITLE_FONT = "ZCOOL_KuaiLe/ZCOOLKuaiLe-Regular.ttf";
     private static final String DEFAULT_FONT = "Russo_One/RussoOne-Regular.ttf";
@@ -44,7 +44,7 @@ public class Design {
     }
 
     public static Font getDefaultFont() {
-        return getFont(FONT_DIR + DEFAULT_FONT, Font.PLAIN, 18);
+        return getFont(FONT_DIR + DEFAULT_FONT, Font.PLAIN, 15);
     }
 
     public static Font getDefaultFont(float size) {

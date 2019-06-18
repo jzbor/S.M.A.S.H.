@@ -78,7 +78,7 @@ public class MenuPanel extends Panel implements ActionListener {
         add(buttonMap);
 
         startButton = new JButton("Let's Fight");
-        startButton.setBounds(462, 400, 100, 50);
+        startButton.setBounds(412, 400, 200, 50);
         startButton.setBackground(Color.WHITE);
         startButton.addActionListener(this);
         add(startButton);
@@ -89,15 +89,22 @@ public class MenuPanel extends Panel implements ActionListener {
         add(labelGameTitel);
 
         // Add fonts
-        buttonMap.setFont(Design.getDefaultFont(buttonMap.getFont().getSize()));
-        buttonPlayer1.setFont(Design.getDefaultFont(buttonPlayer1.getFont().getSize()));
-        buttonPlayer2.setFont(Design.getDefaultFont(buttonPlayer2.getFont().getSize()));
-        startButton.setFont(Design.getDefaultFont(startButton.getFont().getSize()));
+        buttonMap.setFont(Design.getDefaultFont());
+        buttonPlayer1.setFont(Design.getDefaultFont());
+        buttonPlayer2.setFont(Design.getDefaultFont());
+        startButton.setFont(Design.getDefaultFont());
+
+        buttonMap.setBackground(Design.getPrimaryColor());
+        buttonMap.setForeground(Design.getSecondaryColor());
+        buttonPlayer1.setBackground(Design.getPrimaryColor());
+        buttonPlayer1.setForeground(Design.getSecondaryColor());
+        buttonPlayer2.setBackground(Design.getPrimaryColor());
+        buttonPlayer2.setForeground(Design.getSecondaryColor());
+        startButton.setBackground(Design.getPrimaryColor());
+        startButton.setForeground(Design.getSecondaryColor());
 
         previewPlayer1 = null;
         previewPlayer2 = null;
-
-
     }
 
     @Override
