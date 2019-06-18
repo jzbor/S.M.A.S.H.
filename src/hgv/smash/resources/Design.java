@@ -7,7 +7,7 @@ import java.io.IOException;
 public class Design {
 
     private static final String PRIMARY_COLOR = "#000000";
-    private static final String SECONDARY_COLOR = "#000000";
+    private static final String SECONDARY_COLOR = "#EEEEEE";
     private static final String FONT_DIR = "./resources/fonts/";
     private static final String TITLE_FONT = "ZCOOL_KuaiLe/ZCOOLKuaiLe-Regular.ttf";
     private static final String DEFAULT_FONT = "Russo_One/RussoOne-Regular.ttf";

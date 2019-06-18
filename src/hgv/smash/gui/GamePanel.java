@@ -172,7 +172,12 @@ public class GamePanel extends Panel {
         graphics2D.drawImage(frameBuffer, 0, 0, this);
         graphics2D.setColor(Design.getPrimaryColor());
         graphics2D.setFont(Design.getDefaultFont(30));
-        graphics2D.drawString(player1.getPercentage() + "%", 50, 50);
+        FontMetrics fm = graphics2D.getFontMetrics();
+        int PADDING = 50;
+        String p1p = player1.getPercentage() + "%";
+        graphics2D.drawString(p1p, PADDING, PADDING);
+        String p2p = player2.getPercentage() + "%";
+        graphics2D.drawString(p2p, (int) (width - fm.stringWidth(p2p) - PADDING), PADDING);
     }
 
     private Image calculateCamera(BufferedImage bufferedImage) {
@@ -294,7 +299,7 @@ public class GamePanel extends Panel {
         int xDiffInt = xRightInt - xLeftInt;
         int yDiffInt = yBottomInt - yTopInt;
 
-        boolean isPlayerOutOfMap = true;
+        boolean isPlayerOutOfMap;
         double theta = 0.0;
         int xArrow = 0;
         int yArrow = 0;

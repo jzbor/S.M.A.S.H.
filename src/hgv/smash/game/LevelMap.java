@@ -5,17 +5,18 @@ import hgv.smash.Main;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LevelMap extends GameObject {
 
     public static final String[] MAP_NAMES = {"clouds"};
-    public static final String MAP_PATH = "./resources/maps/";
+    private static final String MAP_PATH = "./resources/maps/";
     private BufferedImage backgroundImage;
     private Rectangle[] platformModels;
 
-    public LevelMap(BufferedImage backgroundImage, Rectangle[] platformModels) {
+    private LevelMap(BufferedImage backgroundImage, Rectangle[] platformModels) {
         this.backgroundImage = backgroundImage;
         this.platformModels = platformModels;
     }
@@ -25,10 +26,30 @@ public class LevelMap extends GameObject {
     }
 
     public static LevelMap load(String name) throws IOException {
-        File bgFile = new File(name + "-bg.jpeg");
+        File bgFile = new File(MAP_PATH + name + "-bg.jpeg");
         BufferedImage bufferedImage = ImageIO.read(bgFile);
-        Rectangle debugRect = new Rectangle(165, 545, 730, 20);
-        return new LevelMap(bufferedImage, new Rectangle[]{debugRect});
+        File mapFile = new File(MAP_PATH + name + ".map");
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(mapFile)));
+        List<String> lines = new ArrayList<>();
+        String line;
+        while ((line = br.readLine()) != null) {
+            lines.add(line);
+            System.out.println(line);
+        }
+
+        Rectangle[] rects = new Rectangle[lines.size()];
+        for (int i = 0; i < lines.size(); i++) {
+            String[] svals = lines.get(i).split(" ");
+            int[] ivals = new int[svals.length];
+            for (int j = 0; j < svals.length; j++) {
+                ivals[j] = Integer.parseInt(svals[j]);
+            }
+            rects[i] = new Rectangle(ivals[0], ivals[1], ivals[2], ivals[3]);
+            System.out.println(rects[i]);
+        }
+
+        return new LevelMap(bufferedImage, rects);
     }
 
     public Rectangle[] getPlatformModels() {
@@ -42,6 +63,10 @@ public class LevelMap extends GameObject {
                 return true;
         }
         return false;
+    }
+
+    public BufferedImage getBackgroundImage() {
+        return backgroundImage;
     }
 
     @Override

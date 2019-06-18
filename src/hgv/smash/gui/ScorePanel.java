@@ -69,6 +69,7 @@ public class ScorePanel extends Panel implements ActionListener {
         nextButton.setFont(Design.getDefaultFont());
         nextButton.setBorder(paddingBorder);
         nextButton.addActionListener(this);
+        nextButton.setBackground(Color.WHITE);
 
         scorePanel.setLayout(new BoxLayout(scorePanel, BoxLayout.PAGE_AXIS));
         p1Panel.setLayout(new BorderLayout());

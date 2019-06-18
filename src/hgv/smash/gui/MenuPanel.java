@@ -146,19 +146,14 @@ public class MenuPanel extends Panel implements ActionListener {
                 }
             }
             if (variable > -1) {
+                levelMap = null;
                 try {
-                    backgroundImage = ImageIO.read(new File((LevelMap.MAP_PATH + LevelMap.MAP_NAMES[variable]) + "-bg.jpeg"));
+                    levelMap = LevelMap.load(LevelMap.MAP_NAMES[variable]);
+                    backgroundImage = levelMap.getBackgroundImage();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 repaint();
-                levelMap = null;
-                try {
-                    levelMap = LevelMap.load(LevelMap.MAP_PATH + LevelMap.MAP_NAMES[variable]);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    System.out.println("failed");
-                }
             }
         } else if (actionEvent.getSource() == startButton) {
             if (avatar1 != null && avatar2 != null && levelMap != null) {

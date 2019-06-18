@@ -14,7 +14,7 @@ public class Player extends GameObject {
 
     //acceleration and speed constants
     private static final double SPEED = 0.5; // speed of xpos movement (also used by jump())
-    private static final double HIT_SPEED = 0.5;//speed when hit by other player
+    private static final double HIT_SPEED = 0.005;//speed when hit by other player
     private final double x_slowdown_acceleration = 9.81;//acceleration slows down jump
 
     //size of model ?loaded automatically
@@ -49,14 +49,14 @@ public class Player extends GameObject {
     private long lastJump;//time since last jump in millis
     private final static long SUPER_PUNCH_COOLDOWN = 5000;//millis needed between two punches
     private double vx_punch,vy_punch; // speed of player because of punch
-    private static final int DAMAGE = 5;
-    private static final int SUPER_DAMAGE = 20;
+    private static final int[] DAMAGE_RANGE = new int[]{5, 15};
+    private static final int[] SUPER_DAMAGE_RANGE = new int[]{5, 60};
     private long lastPunch;//time since last punch in millis
     private static final int SUPER_MULTIPLIER = 10;
     //punching
     private boolean punch, superPunch;//set to true when punch should be performed(performed in calc)
     private long lastSuperPunch;
-    private int percentage = 0;
+    private int percentage = 15;
 
     public Player(Avatar avatar, int xpos, LevelMap levelMap) {
         this.xpos = new int[3];
@@ -226,12 +226,12 @@ public class Player extends GameObject {
                 vx_punch = unitPunchVector.getX() * HIT_SPEED * percentage * SUPER_MULTIPLIER;
                 vy_punch = unitPunchVector.getY() * HIT_SPEED * percentage * SUPER_MULTIPLIER;
                 System.out.println(unitPunchVector.toString());
-                percentage += SUPER_DAMAGE;
+                percentage += Math.random() * (SUPER_DAMAGE_RANGE[1] - SUPER_DAMAGE_RANGE[0]) + SUPER_DAMAGE_RANGE[0];
             } else {
                 vx_punch = unitPunchVector.getX() * HIT_SPEED * percentage;
                 vy_punch = unitPunchVector.getY() * HIT_SPEED * percentage;
                 System.out.println(unitPunchVector.toString());
-                percentage += DAMAGE;
+                percentage += Math.random() * (DAMAGE_RANGE[1] - DAMAGE_RANGE[0]) + DAMAGE_RANGE[0];
             }
 
         }
