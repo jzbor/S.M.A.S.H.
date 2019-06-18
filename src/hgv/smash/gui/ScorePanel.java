@@ -40,7 +40,7 @@ public class ScorePanel extends Panel implements ActionListener {
         JLabel wIconLabel = new JLabel(new ImageIcon(winner.getAvatar().getImage(Avatar.NORMAL)));
         JLabel wNameLabel = new JLabel(winner.toString());
         JLabel wScoreLabel = new JLabel("Winner");
-        JLabel lIconLabel = new JLabel(new ImageIcon(winner.getAvatar().getImage(Avatar.NORMAL)));
+        JLabel lIconLabel = new JLabel(new ImageIcon(looser.getAvatar().getImage(Avatar.NORMAL)));
         JLabel lNameLabel = new JLabel(looser.toString());
         JLabel lScoreLabel = new JLabel("Looser");
         nextButton = new JButton("Next");

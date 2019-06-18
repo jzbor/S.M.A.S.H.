@@ -9,9 +9,11 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Avatar {
-    public static final String[] AVATAR_NAMES = {"Georg"};
+    public static final String[] AVATAR_NAMES = {"Georg", "Genosse Geist"};
     public static final int NORMAL = 0;
     public static final int STANDING = 1;
     private static final int WALKING_1 = 2;
@@ -20,9 +22,13 @@ public class Avatar {
     public static final int WALKING_R = 5;
     public static final int JUMPING = 6;
     private static final String AVATAR_PATH = "./resources/avatars/";
-    private static final String[] FILENAMES = {"normal.png", "stand.png", "walk1.png", "walk2.png"}; // @TODO make private
-    private static final String[] AVATAR_FILES = {"georg/"};
-    private BufferedImage[] images;
+    private static final String[] REGULAR_FILENAMES = {"normal.png", "stand.png", "hit.png"};
+    private static final String[] ICON_FILENAMES = {"superloading.png", "superready.png"};
+    private static final String ANIMATION_FILENAMES = "walk%d.png";
+    private static final String[] AVATAR_FILES = {"georg/", "ghost/"};
+    private BufferedImage[] regularImages;
+    private BufferedImage[] animationImages;
+    private BufferedImage[] icons;
     private int[] lastAnimation = new int[2];
 
     public Avatar(String name) throws AvatarNotAvailableException {
@@ -55,56 +61,65 @@ public class Avatar {
         if (index < 0 || index >= AVATAR_FILES.length) {
             throw new AvatarNotAvailableException("Index " + index + "not available");
         }
-        images = new BufferedImage[FILENAMES.length];
-        for (int i = 0; i < FILENAMES.length; i++) {
-            File file = new File(AVATAR_PATH + AVATAR_FILES[index] + FILENAMES[i]);
+        regularImages = new BufferedImage[REGULAR_FILENAMES.length];
+        for (int i = 0; i < REGULAR_FILENAMES.length; i++) {
+            File file = new File(AVATAR_PATH + AVATAR_FILES[index] + REGULAR_FILENAMES[i]);
             try {
-                images[i] = ImageIO.read(file);
+                regularImages[i] = ImageIO.read(file);
             } catch (IOException e) {
                 throw new AvatarNotAvailableException("File " + file.getName() + " not available", e);
             }
         }
+        List<BufferedImage> list = new ArrayList<>();
+        File f = new File(AVATAR_PATH + AVATAR_FILES[index] + String.format(ANIMATION_FILENAMES, 0));
+        System.out.println(f.getPath());
+        for (int i = 0; f.exists(); i++) {
+            try {
+                list.add(ImageIO.read(f));
+            } catch (IOException e) {
+                throw new AvatarNotAvailableException("File " + f.getName() + " not available", e);
+            }
+            f = new File(AVATAR_PATH + AVATAR_FILES[index] + String.format(ANIMATION_FILENAMES, i + 1));
+        }
+        animationImages = list.toArray(new BufferedImage[0]);
+        if (animationImages.length == 0) {
+            throw new AvatarNotAvailableException("No animation files available");
+        }
     }
 
     public BufferedImage getImage(int animation) {
-        return images[animation];
+        return regularImages[animation];
     }
 
     public void draw(Graphics2D graphics2D, int x, int y, int state) {
 
         if (state == Player.Movement.STOP_MOVING) {
-            graphics2D.drawImage(images[NORMAL], x, y, null);
+            graphics2D.drawImage(regularImages[NORMAL], x, y, null);
         } else if (state == Player.Movement.MOVE_LEFT) {
             BufferedImage image;
 
-            long val = (System.currentTimeMillis() / 300) % 2;
-            if (val == 0)
-                image = images[WALKING_1];
-            else
-                image = images[WALKING_2];
+            int val = (int) ((System.currentTimeMillis() / 100) % animationImages.length);
+            image = animationImages[val];
 
-            graphics2D.drawImage(image, x, y, null);
+            graphics2D.drawImage(image, x + (getImage(NORMAL).getWidth() - image.getWidth()), y, null);
         } else if (state == Player.Movement.MOVE_RIGHT) {
             BufferedImage image;
 
-            long val = (System.currentTimeMillis() / 300) % 2;
-            if (val == 0)
-                image = images[WALKING_1];
-            else
-                image = images[WALKING_2];
+            int val = (int) ((System.currentTimeMillis() / 100) % animationImages.length);
+            image = animationImages[val];
 
             // Flip image
             image = flipImage(image);
             graphics2D.drawImage(image, x, y, null);
         } else {
-            graphics2D.drawImage(images[0], x, y, null);
+            graphics2D.drawImage(regularImages[0], x, y, null);
         }
     }
 
     private BufferedImage flipImage(BufferedImage image) {
         AffineTransform at = new AffineTransform();
         at.concatenate(AffineTransform.getScaleInstance(-1, 1));
-        at.concatenate(AffineTransform.getTranslateInstance(-image.getHeight(), 0));
+        at.concatenate(AffineTransform.getTranslateInstance(-image.getWidth(), 0));
         BufferedImage newImage = new BufferedImage(
                 image.getWidth(), image.getHeight(),
                 image.getType());
