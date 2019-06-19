@@ -15,10 +15,12 @@ public class LevelMap extends GameObject {
     private static final String MAP_PATH = "./resources/maps/";
     private BufferedImage backgroundImage;
     private Rectangle[] platformModels;
+    private boolean jumpThrough;     // @TODO change name
 
-    private LevelMap(BufferedImage backgroundImage, Rectangle[] platformModels) {
+    private LevelMap(BufferedImage backgroundImage, Rectangle[] platformModels, boolean jumpThrough) {
         this.backgroundImage = backgroundImage;
         this.platformModels = platformModels;
+        this.jumpThrough = jumpThrough;
     }
 
     public static LevelMap debugMap() throws IOException {
@@ -38,18 +40,24 @@ public class LevelMap extends GameObject {
             System.out.println(line);
         }
 
-        Rectangle[] rects = new Rectangle[lines.size()];
-        for (int i = 0; i < lines.size(); i++) {
+        boolean jumpup = Boolean.getBoolean(lines.get(0));
+
+        Rectangle[] rects = new Rectangle[lines.size() - 1];
+        for (int i = 1; i < lines.size(); i++) {
             String[] svals = lines.get(i).split(" ");
             int[] ivals = new int[svals.length];
             for (int j = 0; j < svals.length; j++) {
                 ivals[j] = Integer.parseInt(svals[j]);
             }
-            rects[i] = new Rectangle(ivals[0], ivals[1], ivals[2], ivals[3]);
-            System.out.println(rects[i]);
+            System.out.println(i + ": " + rects.length + " | " + ivals.length);
+            rects[i - 1] = new Rectangle(ivals[0], ivals[1], ivals[2], ivals[3]);
         }
 
-        return new LevelMap(bufferedImage, rects);
+        return new LevelMap(bufferedImage, rects, jumpup);
+    }
+
+    public boolean permeable() {
+        return jumpThrough;
     }
 
     public Rectangle[] getPlatformModels() {

@@ -8,7 +8,9 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +26,7 @@ public class Avatar {
     private static final String[] REGULAR_FILENAMES = {"normal.png", "stand.png", "hit.png", "super.png"};
     private static final String[] ICON_FILENAMES = {"superloading.png", "superready.png"};
     private static final String ANIMATION_FILENAMES = "walk%d.png";
+    private static final String STORY_FILENAME = "story.txt";
     private static final String[] AVATAR_FILES = {"georg/", "ghost/"};
     private static final int HIT_ANIMATION_LENGTH = 400;
     private BufferedImage[] regularImages;
@@ -32,6 +35,7 @@ public class Avatar {
     private int[] lastAnimation = new int[2];
     private long lastHit;
     private long lastSuperHit;
+    private String story;
 
     private Avatar(String name) throws AvatarNotAvailableException {
         int index = -1;
@@ -64,26 +68,39 @@ public class Avatar {
             throw new AvatarNotAvailableException("Index " + index + "not available");
         }
 
+        story = "";
+
+        File currentFile = new File(AVATAR_PATH + AVATAR_FILES[index] + STORY_FILENAME);
+        try {
+            InputStreamReader isr = new InputStreamReader(new FileInputStream(currentFile));
+            int i;
+            while ((i = isr.read()) != -1) {
+                story += (char) i;
+            }
+        } catch (IOException e) {
+            throw new AvatarNotAvailableException("File " + currentFile.getName() + " not available", e);
+        }
+
         regularImages = new BufferedImage[REGULAR_FILENAMES.length];
         for (int i = 0; i < REGULAR_FILENAMES.length; i++) {
-            File file = new File(AVATAR_PATH + AVATAR_FILES[index] + REGULAR_FILENAMES[i]);
+            currentFile = new File(AVATAR_PATH + AVATAR_FILES[index] + REGULAR_FILENAMES[i]);
             try {
-                regularImages[i] = ImageIO.read(file);
+                regularImages[i] = ImageIO.read(currentFile);
             } catch (IOException e) {
-                throw new AvatarNotAvailableException("File " + file.getName() + " not available", e);
+                throw new AvatarNotAvailableException("File " + currentFile.getName() + " not available", e);
             }
         }
 
         List<BufferedImage> list = new ArrayList<>();
-        File f = new File(AVATAR_PATH + AVATAR_FILES[index] + String.format(ANIMATION_FILENAMES, 0));
-        System.out.println(f.getPath());
-        for (int i = 0; f.exists(); i++) {
+        currentFile = new File(AVATAR_PATH + AVATAR_FILES[index] + String.format(ANIMATION_FILENAMES, 0));
+        System.out.println(currentFile.getPath());
+        for (int i = 0; currentFile.exists(); i++) {
             try {
-                list.add(ImageIO.read(f));
+                list.add(ImageIO.read(currentFile));
             } catch (IOException e) {
-                throw new AvatarNotAvailableException("File " + f.getName() + " not available", e);
+                throw new AvatarNotAvailableException("File " + currentFile.getName() + " not available", e);
             }
-            f = new File(AVATAR_PATH + AVATAR_FILES[index] + String.format(ANIMATION_FILENAMES, i + 1));
+            currentFile = new File(AVATAR_PATH + AVATAR_FILES[index] + String.format(ANIMATION_FILENAMES, i + 1));
         }
         animationImages = list.toArray(new BufferedImage[0]);
         if (animationImages.length == 0) {
@@ -92,11 +109,11 @@ public class Avatar {
 
         icons = new BufferedImage[ICON_FILENAMES.length];
         for (int i = 0; i < ICON_FILENAMES.length; i++) {
-            f = new File(AVATAR_PATH + AVATAR_FILES[index] + ICON_FILENAMES[i]);
+            currentFile = new File(AVATAR_PATH + AVATAR_FILES[index] + ICON_FILENAMES[i]);
             try {
-                icons[i] = ImageIO.read(f);
+                icons[i] = ImageIO.read(currentFile);
             } catch (IOException e) {
-                throw new AvatarNotAvailableException("File " + f.getName() + " not available", e);
+                throw new AvatarNotAvailableException("File " + currentFile.getName() + " not available", e);
             }
         }
     }
@@ -107,6 +124,10 @@ public class Avatar {
 
     public BufferedImage getIcon(int icon) {
         return icons[icon];
+    }
+
+    public String getStory() {
+        return story;
     }
 
     public void draw(Graphics2D graphics2D, int x, int y, int state) {

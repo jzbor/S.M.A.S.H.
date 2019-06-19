@@ -19,8 +19,12 @@ public class ScorePanel extends Panel implements ActionListener {
 
     private int biggestWidth;
     private JButton nextButton;
+    private JButton storyButton;
+    private Player winner;
 
     public ScorePanel(Player winner, Player looser, BufferedImage lastFrame) {
+
+        this.winner = winner;
 
         if (Frame.getInstance().getMusic()) {
             Music oldMusic = Music.getInstanceGameMusic();
@@ -47,10 +51,12 @@ public class ScorePanel extends Panel implements ActionListener {
         JLabel lIconLabel = new JLabel(new ImageIcon(scaleAvatar(looser.getAvatar())));
         JLabel lNameLabel = new JLabel(looser.getName());
         JLabel lScoreLabel = new JLabel("Looser");
+        storyButton = new JButton("Winner-Story");
         nextButton = new JButton("Next");
 
         JPanel scorePanel = new JPanel();
         JPanel p1Panel = new JPanel();
+        JPanel nameStoryPanel = new JPanel();
         JPanel p2Panel = new JPanel();
 
 
@@ -70,25 +76,32 @@ public class ScorePanel extends Panel implements ActionListener {
         lNameLabel.setBorder(paddingBorder);
         lScoreLabel.setFont(Design.getDefaultFont(24));
         lScoreLabel.setBorder(paddingBorder);
+        storyButton.setFont(Design.getDefaultFont(18));
+        storyButton.setBorder(paddingBorder);
+        storyButton.addActionListener(this);
+        //storyButton.setPreferredSize(new Dimension(storyButton.getPreferredSize().width, 22));
         nextButton.setFont(Design.getDefaultFont(24));
         nextButton.setBorder(paddingBorder);
         nextButton.addActionListener(this);
-        nextButton.setBackground(Color.WHITE);
 
         scorePanel.setLayout(new BoxLayout(scorePanel, BoxLayout.PAGE_AXIS));
         p1Panel.setLayout(new BorderLayout());
+        nameStoryPanel.setLayout(new BorderLayout());
         p2Panel.setLayout(new BorderLayout());
 
 
         setBackground(Design.getPrimaryColor());
         gameoverLabel.setBackground(Design.getPrimaryColor());
         p1Panel.setBackground(Design.getPrimaryColor());
+        nameStoryPanel.setBackground(Design.getPrimaryColor());
         p2Panel.setBackground(Design.getPrimaryColor());
         gameoverLabel.setForeground(Design.getSecondaryColor());
         wNameLabel.setForeground(Design.getSecondaryColor());
         wScoreLabel.setForeground(Design.getSecondaryColor());
         lNameLabel.setForeground(Design.getSecondaryColor());
         lScoreLabel.setForeground(Design.getSecondaryColor());
+        storyButton.setBackground(Design.getPrimaryColor());
+        storyButton.setForeground(Design.getSecondaryColor());
         nextButton.setBackground(Design.getPrimaryColor());
         nextButton.setForeground(Design.getSecondaryColor());
 
@@ -96,8 +109,10 @@ public class ScorePanel extends Panel implements ActionListener {
         setLayout(new BorderLayout());
 
         p1Panel.add(wIconLabel, BorderLayout.LINE_START);
-        p1Panel.add(wNameLabel, BorderLayout.CENTER);
-        p1Panel.add(wScoreLabel, BorderLayout.LINE_END);
+        nameStoryPanel.add(wNameLabel, BorderLayout.CENTER);
+        nameStoryPanel.add(storyButton, BorderLayout.SOUTH);
+        nameStoryPanel.add(wScoreLabel, BorderLayout.LINE_END);
+        p1Panel.add(nameStoryPanel, BorderLayout.CENTER);
 
         p2Panel.add(lIconLabel, BorderLayout.LINE_START);
         p2Panel.add(lNameLabel, BorderLayout.CENTER);
@@ -140,6 +155,10 @@ public class ScorePanel extends Panel implements ActionListener {
             Frame.getInstance().getContentPane().removeAll();
             Frame.getInstance().getContentPane().add(panel);
             ((JPanel) Frame.getInstance().getContentPane().add(panel)).updateUI();
+        }
+        if (src == storyButton) {
+            JDialog dialog = new TextDialog(winner.getAvatar().getStory(), (Frame) SwingUtilities.getWindowAncestor(this));
+
         }
     }
 
