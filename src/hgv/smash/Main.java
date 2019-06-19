@@ -2,7 +2,6 @@ package hgv.smash;
 
 
 import hgv.smash.gui.Frame;
-import hgv.smash.gui.KeySetPanel;
 import hgv.smash.gui.MenuPanel;
 
 import javax.swing.*;
@@ -15,7 +14,7 @@ public class Main {
         panel.setSize(Frame.getInstance().getContentPane().getSize());
         Frame.getInstance().getContentPane().add(panel);
         ((JPanel) Frame.getInstance().getContentPane()).updateUI();
-       // JPanel panel = new MenuPanel();
-      //  panel.setSize(Frame.getInstance().getContentPane().getSize());
+        // JPanel panel = new MenuPanel();
+        //  panel.setSize(Frame.getInstance().getContentPane().getSize());
     }
 }

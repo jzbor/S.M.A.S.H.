@@ -15,44 +15,37 @@ public class Player extends GameObject {
     //acceleration and speed constants
     private static final double SPEED = 0.5; // speed of xpos movement (also used by jump())
     private static final double HIT_SPEED = 0.005;//speed when hit by other player
-    private final double x_slowdown_acceleration = 9.81;//acceleration slows down jump
-
+    private static final long JUMP_COOLDOWN = 1000;//millis needed between two jumps
+    private final static long SUPER_PUNCH_COOLDOWN = 5000;//millis needed between two punches
+    private static final int[] DAMAGE_RANGE = new int[]{5, 15};
+    private static final int[] SUPER_DAMAGE_RANGE = new int[]{5, 60};
+    private static final int SUPER_MULTIPLIER = 10;
+    private static final double X_SLOWDOWN_ACCELERATION = 9.81;//acceleration slows down jump
     //size of model ?loaded automatically
     private int width = 95; // width of model
     private int height = 189; // height of model
-
     //speed and position of player
-        //arrays of size 3:
-            // [0] recent frame parameters
-            // [1] parameters calculated from recent frame, used for collision detection, set by all inputs from keyboard and physics
-            // [2] all should be filled with 0 for convenient shifting
+    //arrays of size 3:
+    // [0] recent frame parameters
+    // [1] parameters calculated from recent frame, used for collision detection, set by all inputs from keyboard and physics
+    // [2] all should be filled with 0 for convenient shifting
     private int[] xpos;
     private int[] ypos; // position of player (usually upper left corner of model)
     private double[] vx;
     private double[] vy;
-
     //classes used for calculation and drawing
     private Avatar avatar; // avatar to display for player
     private Shape model; // model (mainly for collision detection)
-
     //other objects
     private Player otherPlayer;//other player (for punches)
-    private LevelMap levelMap;//Map on which players are
     private Rectangle[] platformModels;//get all models from platform
-
     private int movementDirection;//gives direction of movement
-
     //jumping
     private boolean jumped;//set true be changeMovement(); performs a jump in calc()
     private int jumps = 2; // jumps left
-    private long jumpCooldown=2000;//millis needed between two jumps
     private long lastJump;//time since last jump in millis
-    private final static long SUPER_PUNCH_COOLDOWN = 5000;//millis needed between two punches
-    private double vx_punch,vy_punch; // speed of player because of punch
-    private static final int[] DAMAGE_RANGE = new int[]{5, 15};
-    private static final int[] SUPER_DAMAGE_RANGE = new int[]{5, 60};
+    private double vx_punch, vy_punch; // speed of player because of punch
     private long lastPunch;//time since last punch in millis
-    private static final int SUPER_MULTIPLIER = 10;
     //punching
     private boolean punch, superPunch;//set to true when punch should be performed(performed in calc)
     private long lastSuperPunch;
@@ -70,7 +63,7 @@ public class Player extends GameObject {
         vy[0] = 0;
         this.avatar = avatar;
         this.model = new Rectangle(this.xpos[0], this.ypos[0], width, height);
-        this.levelMap = levelMap;
+        //Map on which players are
         this.platformModels = levelMap.getPlatformModels();//platform does not move right now
         this.number = number;
         //        jumped = false;
@@ -85,17 +78,17 @@ public class Player extends GameObject {
 
 
         // falling
-        vy[1] = vy[0] + millis * 9.81 * factor+(vy_punch*2);
-        vy_punch=0;
+        vy[1] = vy[0] + millis * 9.81 * factor + (vy_punch * 2);
+        vy_punch = 0;
 
         //calc horizontal movement
         vx[1] = SPEED * movementDirection;
         //slow down x movement after hit, no infinite movement after hit
         factor *= 0.5;
-        if (vx_punch - (x_slowdown_acceleration *(millis * factor)) > 0 && vx_punch > 0) {
-            vx_punch = vx_punch - (x_slowdown_acceleration * millis * factor);
-        } else if ((vx_punch + (x_slowdown_acceleration * millis * factor) < 0 && vx_punch < 0)) {
-            vx_punch = vx_punch + (x_slowdown_acceleration * millis * factor);
+        if (vx_punch - (X_SLOWDOWN_ACCELERATION * (millis * factor)) > 0 && vx_punch > 0) {
+            vx_punch = vx_punch - (X_SLOWDOWN_ACCELERATION * millis * factor);
+        } else if ((vx_punch + (X_SLOWDOWN_ACCELERATION * millis * factor) < 0 && vx_punch < 0)) {
+            vx_punch = vx_punch + (X_SLOWDOWN_ACCELERATION * millis * factor);
         } else {
             vx_punch = 0;
         }
@@ -113,7 +106,7 @@ public class Player extends GameObject {
             superPunch = false;
         }
         //change speed if jumped
-        lastJump+=millis;
+        lastJump += millis;
         if (jumped) {
             vy[1] = -SPEED;
             jumped = false;
@@ -138,7 +131,7 @@ public class Player extends GameObject {
                 //last_jump = 0;
                 jumps = 2;
                 //todo instant jump if hit platform???
-                lastJump=jumpCooldown;
+                lastJump = JUMP_COOLDOWN;
             }
             if (platform.y + platform.height - ypos[1] >= 0
                     && ypos[1] + height - platform.y >= 0
@@ -150,7 +143,7 @@ public class Player extends GameObject {
                 //last_jump = 0;
                 jumps = 2;
                 //todo instant jump if hit platform???
-                lastJump=jumpCooldown;
+                lastJump = JUMP_COOLDOWN;
             }
         }
 
@@ -172,10 +165,10 @@ public class Player extends GameObject {
     public void changeMovement(int i) {
         switch (i) {
             case Movement.JUMP: {
-                if (jumps > 0&&lastJump>=jumpCooldown) {
+                if (jumps > 0 && lastJump >= JUMP_COOLDOWN) {
                     jumped = true;
                     jumps--;
-                    lastJump=0;
+                    lastJump = 0;
                 }
                 break;
             }
@@ -273,24 +266,16 @@ public class Player extends GameObject {
         return ypos[0];
     }
 
-    public int getXPos(){
+    public int getXPos() {
         return xpos[0];
     }
-    public int getWidth(){
+
+    public int getWidth() {
         return width;
     }
-    public int getHeight(){
-        return height;
-    }
 
-    //class representing all possible movements
-    public static class Movement {
-        public static final int MOVE_LEFT = -1;
-        public static final int MOVE_RIGHT = 1;
-        public static final int STOP_MOVING = 0;
-        public static final int JUMP = 2;
-        public static final int NORMAL_HIT = 3;
-        public static final int SUPER_HIT = 4;
+    public int getHeight() {
+        return height;
     }
 
     @Override
@@ -307,5 +292,15 @@ public class Player extends GameObject {
 
     public String getName() {
         return "Player " + number;
+    }
+
+    //class representing all possible movements
+    public static class Movement {
+        public static final int MOVE_LEFT = -1;
+        public static final int MOVE_RIGHT = 1;
+        public static final int STOP_MOVING = 0;
+        public static final int JUMP = 2;
+        public static final int NORMAL_HIT = 3;
+        public static final int SUPER_HIT = 4;
     }
 }

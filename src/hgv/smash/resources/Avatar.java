@@ -16,24 +16,24 @@ public class Avatar {
     public static final String[] AVATAR_NAMES = {"Georg", "Genosse Geist"};
     public static final int NORMAL = 0;
     public static final int STANDING = 1;
-    private static final int HIT = 2;
-    private static final int SUPER = 3;
     public static final int SUPER_LOADING = 0;
     public static final int SUPER_READY = 1;
+    private static final int HIT = 2;
+    private static final int SUPER = 3;
     private static final String AVATAR_PATH = "./resources/avatars/";
     private static final String[] REGULAR_FILENAMES = {"normal.png", "stand.png", "hit.png", "super.png"};
     private static final String[] ICON_FILENAMES = {"superloading.png", "superready.png"};
     private static final String ANIMATION_FILENAMES = "walk%d.png";
     private static final String[] AVATAR_FILES = {"georg/", "ghost/"};
+    private static final int HIT_ANIMATION_LENGTH = 400;
     private BufferedImage[] regularImages;
     private BufferedImage[] animationImages;
     private BufferedImage[] icons;
     private int[] lastAnimation = new int[2];
-    private static final int HIT_ANIMATION_LENGTH = 400;
     private long lastHit;
     private long lastSuperHit;
 
-    public Avatar(String name) throws AvatarNotAvailableException {
+    private Avatar(String name) throws AvatarNotAvailableException {
         int index = -1;
         for (int i = 0; i < AVATAR_NAMES.length; i++) {
             if (AVATAR_NAMES[i].equals(name)) {

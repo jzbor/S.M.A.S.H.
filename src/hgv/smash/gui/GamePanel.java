@@ -20,15 +20,16 @@ public class GamePanel extends Panel {
 
 
     private static final int FRAMERATE = 100;
+    private static final int[] FREEZE_COLOR = new int[]{126, 197, 252, 125};
+    // y coords defining a death
+    private static final int RANGE_OF_DEATH = 10000;
+    //size of triangle representing player out of map
+    private static final int TRIANGLE_SIZE = 150;
+    //keys for movement
+    private static long JUMP_COOLDOWN = 2000;
     //size of frame
     private double width;
     private double height;
-    //keys for movement
-    private static long JUMP_COOLDOWN = 2000;
-    //size of triangle representing player out of map
-    private final int triangleSize = 150;
-    // y coords defining a death
-    private static int RANGE_OF_DEATH = 10000;
     //player1
     private char[] keys_player_1 = {'w', 'a', 'd', 'f', 'r'};
     private boolean[] booleans_player1 = {false, false, false, false, false};
@@ -50,8 +51,6 @@ public class GamePanel extends Panel {
     private Image frameBuffer;
     private BufferedImage originalArrow;
     private boolean paused;
-    private static final int[] FREEZE_COLOR = new int[]{126, 197, 252, 125};
-    private long pauseTime; // compensate cooldown
 
     public GamePanel(Avatar a1, Avatar a2, LevelMap map) {
         height = Frame.getInstance().getHeight();
@@ -62,9 +61,9 @@ public class GamePanel extends Panel {
         int[] spawnPositions = map.getSpawnPositions();
         player1 = new Player(a1, spawnPositions[0], map, 1);
         player2 = new Player(a2, spawnPositions[1] - a1.getImage(Avatar.NORMAL).getWidth(), map, 2);
-        players=new Player[2];
-        players[0]=player1;
-        players[1]=player2;
+        players = new Player[2];
+        players[0] = player1;
+        players[1] = player2;
         player1.setOtherPlayer(player2);
         player2.setOtherPlayer(player1);
         levelMap = map;
@@ -302,9 +301,6 @@ public class GamePanel extends Panel {
         BufferedImage subimage = bufferedImage.getSubimage((int) xLeft, (int) yTop, (int) xDiff, (int) yDiff);
 
 
-
-
-
         //draw direction of player if outside of map
 
         //create picture for final arrow
@@ -337,21 +333,21 @@ public class GamePanel extends Panel {
         transformImage = resizePicture(originalArrow, factor);
 
 
-        int halfArrowWidth=transformImage.getWidth()/2;
-        int halfArrowHeight=transformImage.getHeight()/2;
+        int halfArrowWidth = transformImage.getWidth() / 2;
+        int halfArrowHeight = transformImage.getHeight() / 2;
 
 
-        for(Player player:players) {
-            isPlayerOutOfMap=true;
+        for (Player player : players) {
+            isPlayerOutOfMap = true;
             //corners
             //top left corner
             if (player.getXPos() + player.getWidth() < xLeftInt + halfArrowWidth && player.getYPos() + player.getHeight() < yTop || player.getXPos() + player.getWidth() < xLeftInt && player.getYPos() + player.getHeight() < yTop + halfArrowHeight) {
                 if (Main.DEBUG) {
                     xPos[0] = 0;
                     xPos[1] = 0;
-                    xPos[2] = triangleSize;
+                    xPos[2] = TRIANGLE_SIZE;
                     yPos[0] = 0;
-                    yPos[1] = triangleSize;
+                    yPos[1] = TRIANGLE_SIZE;
                     yPos[2] = 0;
                 }
                 theta = 1.25 * Math.PI;
@@ -364,8 +360,8 @@ public class GamePanel extends Panel {
                 if (Main.DEBUG) {
                     xPos[0] = 0;
                     xPos[1] = 0;
-                    xPos[2] = triangleSize;
-                    yPos[0] = yDiffInt - triangleSize;
+                    xPos[2] = TRIANGLE_SIZE;
+                    yPos[0] = yDiffInt - TRIANGLE_SIZE;
                     yPos[1] = yDiffInt;
                     yPos[2] = yDiffInt;
                 }
@@ -379,9 +375,9 @@ public class GamePanel extends Panel {
                 if (Main.DEBUG) {
                     xPos[0] = xDiffInt;
                     xPos[1] = xDiffInt;
-                    xPos[2] = xDiffInt - triangleSize;
+                    xPos[2] = xDiffInt - TRIANGLE_SIZE;
                     yPos[0] = 0;
-                    yPos[1] = triangleSize;
+                    yPos[1] = TRIANGLE_SIZE;
                     yPos[2] = 0;
                 }
                 theta = 1.75 * Math.PI;
@@ -394,9 +390,9 @@ public class GamePanel extends Panel {
                 if (Main.DEBUG) {
                     xPos[0] = xRightInt;
                     xPos[1] = xRightInt;
-                    xPos[2] = xRightInt - triangleSize;
+                    xPos[2] = xRightInt - TRIANGLE_SIZE;
                     yPos[0] = yBottomInt;
-                    yPos[1] = yBottomInt - triangleSize;
+                    yPos[1] = yBottomInt - TRIANGLE_SIZE;
                     yPos[2] = yBottomInt;
                 }
                 theta = 0.25 * Math.PI;
@@ -412,11 +408,11 @@ public class GamePanel extends Panel {
             else if (player.getXPos() + player.getWidth() < (int) xLeft) {
                 if (Main.DEBUG) {
                     xPos[0] = 0;
-                    xPos[1] = (int) Math.sqrt(2 * Math.pow(triangleSize, 2)) / 2;
-                    xPos[2] = (int) Math.sqrt(2 * Math.pow(triangleSize, 2)) / 2;
+                    xPos[1] = (int) Math.sqrt(2 * Math.pow(TRIANGLE_SIZE, 2)) / 2;
+                    xPos[2] = (int) Math.sqrt(2 * Math.pow(TRIANGLE_SIZE, 2)) / 2;
                     yPos[0] = player.getYPos() - yTopInt + player.getHeight() / 2;
-                    yPos[1] = player.getYPos() - yTopInt - (int) Math.sqrt(2 * Math.pow(triangleSize, 2)) / 2 + player.getHeight() / 2;
-                    yPos[2] = player.getYPos() - yTopInt + (int) Math.sqrt(2 * Math.pow(triangleSize, 2)) / 2 + player.getHeight() / 2;
+                    yPos[1] = player.getYPos() - yTopInt - (int) Math.sqrt(2 * Math.pow(TRIANGLE_SIZE, 2)) / 2 + player.getHeight() / 2;
+                    yPos[2] = player.getYPos() - yTopInt + (int) Math.sqrt(2 * Math.pow(TRIANGLE_SIZE, 2)) / 2 + player.getHeight() / 2;
                 }
                 theta = Math.PI;
                 xArrow = 0;
@@ -427,11 +423,11 @@ public class GamePanel extends Panel {
             else if (player.getXPos() > xRight) {
                 if (Main.DEBUG) {
                     xPos[0] = xDiffInt;
-                    xPos[1] = xDiffInt - (int) Math.sqrt(2 * Math.pow(triangleSize, 2)) / 2;
-                    xPos[2] = xDiffInt - (int) Math.sqrt(2 * Math.pow(triangleSize, 2)) / 2;
+                    xPos[1] = xDiffInt - (int) Math.sqrt(2 * Math.pow(TRIANGLE_SIZE, 2)) / 2;
+                    xPos[2] = xDiffInt - (int) Math.sqrt(2 * Math.pow(TRIANGLE_SIZE, 2)) / 2;
                     yPos[0] = player.getYPos() - yTopInt + player.getHeight() / 2;
-                    yPos[1] = player.getYPos() - yTopInt - (int) Math.sqrt(2 * Math.pow(triangleSize, 2)) / 2 + player.getHeight() / 2;
-                    yPos[2] = player.getYPos() - yTopInt + (int) Math.sqrt(2 * Math.pow(triangleSize, 2)) / 2 + player.getHeight() / 2;
+                    yPos[1] = player.getYPos() - yTopInt - (int) Math.sqrt(2 * Math.pow(TRIANGLE_SIZE, 2)) / 2 + player.getHeight() / 2;
+                    yPos[2] = player.getYPos() - yTopInt + (int) Math.sqrt(2 * Math.pow(TRIANGLE_SIZE, 2)) / 2 + player.getHeight() / 2;
                 }
                 theta = 0;
                 xArrow = xDiffInt - transformImage.getWidth();
@@ -442,11 +438,11 @@ public class GamePanel extends Panel {
             else if (player.getYPos() + player.getHeight() < yTop) {
                 if (Main.DEBUG) {
                     xPos[0] = player.getXPos() + player.getWidth() / 2;
-                    xPos[1] = player.getXPos() + player.getWidth() / 2 - (int) Math.sqrt(2 * Math.pow(triangleSize, 2)) / 2;
-                    xPos[2] = player.getXPos() + player.getWidth() / 2 + (int) Math.sqrt(2 * Math.pow(triangleSize, 2)) / 2;
+                    xPos[1] = player.getXPos() + player.getWidth() / 2 - (int) Math.sqrt(2 * Math.pow(TRIANGLE_SIZE, 2)) / 2;
+                    xPos[2] = player.getXPos() + player.getWidth() / 2 + (int) Math.sqrt(2 * Math.pow(TRIANGLE_SIZE, 2)) / 2;
                     yPos[0] = 0;
-                    yPos[1] = (int) Math.sqrt(2 * Math.pow(triangleSize, 2)) / 2;
-                    yPos[2] = (int) Math.sqrt(2 * Math.pow(triangleSize, 2)) / 2;
+                    yPos[1] = (int) Math.sqrt(2 * Math.pow(TRIANGLE_SIZE, 2)) / 2;
+                    yPos[2] = (int) Math.sqrt(2 * Math.pow(TRIANGLE_SIZE, 2)) / 2;
                 }
                 theta = Math.PI * 1.5;
                 xArrow = player.getXPos() + player.getWidth() / 2 - xLeftInt - transformImage.getWidth() / 2;
@@ -457,11 +453,11 @@ public class GamePanel extends Panel {
             else if (player.getYPos() > yBottom) {
                 if (Main.DEBUG) {
                     xPos[0] = player.getXPos() + player.getWidth() / 2;
-                    xPos[1] = player.getXPos() + player.getWidth() / 2 - (int) Math.sqrt(2 * Math.pow(triangleSize, 2)) / 2;
-                    xPos[2] = player.getXPos() + player.getWidth() / 2 + (int) Math.sqrt(2 * Math.pow(triangleSize, 2)) / 2;
+                    xPos[1] = player.getXPos() + player.getWidth() / 2 - (int) Math.sqrt(2 * Math.pow(TRIANGLE_SIZE, 2)) / 2;
+                    xPos[2] = player.getXPos() + player.getWidth() / 2 + (int) Math.sqrt(2 * Math.pow(TRIANGLE_SIZE, 2)) / 2;
                     yPos[0] = yDiffInt;
-                    yPos[1] = yDiffInt - (int) Math.sqrt(2 * Math.pow(triangleSize, 2)) / 2;
-                    yPos[2] = yDiffInt - (int) Math.sqrt(2 * Math.pow(triangleSize, 2)) / 2;
+                    yPos[1] = yDiffInt - (int) Math.sqrt(2 * Math.pow(TRIANGLE_SIZE, 2)) / 2;
+                    yPos[2] = yDiffInt - (int) Math.sqrt(2 * Math.pow(TRIANGLE_SIZE, 2)) / 2;
                 }
                 theta = Math.PI * 0.5;
                 xArrow = player.getXPos() - xLeftInt + player.getWidth() / 2 - halfArrowWidth;
@@ -470,7 +466,7 @@ public class GamePanel extends Panel {
             }
             //not out of map
             else {
-                isPlayerOutOfMap=false;
+                isPlayerOutOfMap = false;
             }
             if (Main.DEBUG) {
                 graphics2D.fillPolygon(xPos, yPos, 3);
@@ -491,11 +487,6 @@ public class GamePanel extends Panel {
     }
 
     public void pause() {
-        if (paused) {
-            pauseTime = 0;
-        } else {
-            pauseTime = System.currentTimeMillis();
-        }
         paused = !paused;
     }
 

@@ -36,10 +36,10 @@ public class MenuPanel extends Panel implements ActionListener {
         frame = Frame.getInstance();
         Frame.getInstance().currentpanel(0);
         if (Frame.getInstance().getMusic()) {
-        Music oldMusic = Music.getInstanceScoreMusic();
-        oldMusic.stop();
-        Music newMusic = Music.getInstanceMenuMusic();
-        newMusic.play();
+            Music oldMusic = Music.getInstanceScoreMusic();
+            oldMusic.stop();
+            Music newMusic = Music.getInstanceMenuMusic();
+            newMusic.play();
         }
         setLayout(null);
         //Einfuegen und Deklarieren der Hintergrundgraphik

@@ -6,12 +6,9 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
 public abstract class Panel extends JPanel {
-    public Panel(){
+    public Panel() {
         super();
     }
-    public abstract void keyTyped(KeyEvent keyEvent);
-    public abstract void keyPressed(KeyEvent keyEvent);
-    public abstract void keyReleased(KeyEvent keyEvent);
 
     public static BufferedImage scaleImage(BufferedImage img, int width, int height) {
         BufferedImage newImg = new BufferedImage(width, height, img.getType());
@@ -28,5 +25,11 @@ public abstract class Panel extends JPanel {
     public static BufferedImage scaleImgToWidth(BufferedImage img, int width) {
         return scaleImage(img, width, img.getHeight() / img.getWidth() * width);
     }
+
+    public abstract void keyTyped(KeyEvent keyEvent);
+
+    public abstract void keyPressed(KeyEvent keyEvent);
+
+    public abstract void keyReleased(KeyEvent keyEvent);
 
 }

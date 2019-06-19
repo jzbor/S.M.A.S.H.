@@ -18,9 +18,6 @@ import java.awt.image.BufferedImage;
 public class ScorePanel extends Panel implements ActionListener {
 
     private int biggestWidth;
-    private Player winner;
-    private Player looser;
-    private BufferedImage lastFrame;
     private JButton nextButton;
 
     public ScorePanel(Player winner, Player looser, BufferedImage lastFrame) {
@@ -32,9 +29,6 @@ public class ScorePanel extends Panel implements ActionListener {
             newMusic.play();
         }
         Frame.getInstance().currentpanel(2);
-        this.winner = winner;
-        this.looser = looser;
-        this.lastFrame = lastFrame;
 
         // define width of icon container; call before loading the icon
         int wwidth = winner.getAvatar().getImage(Avatar.NORMAL).getWidth();

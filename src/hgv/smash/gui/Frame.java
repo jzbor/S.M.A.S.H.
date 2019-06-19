@@ -13,7 +13,7 @@ public class Frame extends JFrame {
     private static final String TITLE = "S.M.A.S.H.";
     private static final Dimension FINAL_SIZE = new Dimension(1024, 768);
     private static final Dimension DEBUG_SIZE = new Dimension(1366, 768);
-    private static Frame ourInstance = new Frame();
+    private static final Frame ourInstance = new Frame();
     private boolean playMusic;
     private int currentPanel;
 
@@ -30,6 +30,10 @@ public class Frame extends JFrame {
 
         System.out.println("Frame: " + this);
 
+    }
+
+    public static Frame getInstance() {
+        return ourInstance;
     }
 
     private void createMenu() {
@@ -144,8 +148,5 @@ public class Frame extends JFrame {
 
     public boolean getMusic() {
         return playMusic;
-    }
-    public static Frame getInstance() {
-        return ourInstance;
     }
 }

@@ -1,21 +1,18 @@
 package hgv.smash.gui;
 
-import hgv.smash.gui.Panel;
-
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class OurKeyListener extends Component implements KeyListener, KeyEventDispatcher {
-    public static OurKeyListener ourInstance=new OurKeyListener();
-    public hgv.smash.gui.Panel panel;
+    private static OurKeyListener ourInstance = new OurKeyListener();
+    private hgv.smash.gui.Panel panel;
 
-    private OurKeyListener(){
-        panel=null;
+    private OurKeyListener() {
+        panel = null;
     }
 
-    public static OurKeyListener getInstance(){
+    public static OurKeyListener getInstance() {
         return ourInstance;
     }
 
