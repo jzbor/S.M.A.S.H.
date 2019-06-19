@@ -89,9 +89,9 @@ public class MenuPanel extends Panel implements ActionListener {
         add(labelGameTitel);
 
         // Add fonts
-        buttonMap.setFont(Design.getDefaultFont());
-        buttonPlayer1.setFont(Design.getDefaultFont());
-        buttonPlayer2.setFont(Design.getDefaultFont());
+        buttonMap.setFont(Design.getDefaultFont(buttonMap.getFont().getSize()));
+        buttonPlayer1.setFont(Design.getDefaultFont(buttonMap.getFont().getSize()));
+        buttonPlayer2.setFont(Design.getDefaultFont(buttonMap.getFont().getSize()));
         startButton.setFont(Design.getDefaultFont());
 
         buttonMap.setBackground(Design.getPrimaryColor());

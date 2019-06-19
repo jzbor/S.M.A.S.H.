@@ -40,7 +40,7 @@ public class LevelMap extends GameObject {
             System.out.println(line);
         }
 
-        boolean jumpup = Boolean.getBoolean(lines.get(0));
+        boolean jumpup = Boolean.parseBoolean(lines.get(0));
 
         Rectangle[] rects = new Rectangle[lines.size() - 1];
         for (int i = 1; i < lines.size(); i++) {
