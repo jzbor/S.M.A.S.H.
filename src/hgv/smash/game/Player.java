@@ -247,6 +247,11 @@ public class Player extends GameObject {
         }
     }
 
+    public void compensateCooldown(long l) {     // @TODO rename?
+        lastSuperPunch += l;
+        lastPunch += l;
+    }
+
     public int getPercentage() {
         return percentage;
     }

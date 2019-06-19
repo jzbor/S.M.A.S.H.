@@ -50,6 +50,8 @@ public class GamePanel extends Panel {
     private Image frameBuffer;
     private BufferedImage originalArrow;
     private boolean paused;
+    private static final int[] FREEZE_COLOR = new int[]{126, 197, 252, 125};
+    private long pauseTime; // compensate cooldown
 
     public GamePanel(Avatar a1, Avatar a2, LevelMap map) {
         height = Frame.getInstance().getHeight();
@@ -113,6 +115,14 @@ public class GamePanel extends Panel {
                 // draw fps
                 graphics2D.setColor(Color.BLACK);
                 graphics2D.drawString(currentFramerate + " FPS", 20, 20);
+            }
+
+            if (paused) {
+                player1.compensateCooldown(timedelta);
+                player2.compensateCooldown(timedelta);
+                Color color = new Color(FREEZE_COLOR[0], FREEZE_COLOR[1], FREEZE_COLOR[2], FREEZE_COLOR[3]);
+                graphics2D.setColor(color);
+                graphics2D.fillRect(0, 0, (int) width, (int) height);
             }
 
             // @TODO implement thread safety
@@ -481,6 +491,11 @@ public class GamePanel extends Panel {
     }
 
     public void pause() {
+        if (paused) {
+            pauseTime = 0;
+        } else {
+            pauseTime = System.currentTimeMillis();
+        }
         paused = !paused;
     }
 
@@ -492,14 +507,16 @@ public class GamePanel extends Panel {
     public void keyPressed(KeyEvent keyEvent) {
         char key = keyEvent.getKeyChar();
 
-        for (int i = 0; i < keys_player_1.length; i++) {
-            if (key == keys_player_1[i] && !booleans_player1[i]) {
-                player1.changeMovement(actions[i]);
-                booleans_player1[i] = true;
-            }
-            if (key == keys_player_2[i] && !booleans_player2[i]) {
-                player2.changeMovement(actions[i]);
-                booleans_player2[i] = true;
+        if (!paused) {
+            for (int i = 0; i < keys_player_1.length; i++) {
+                if (key == keys_player_1[i] && !booleans_player1[i]) {
+                    player1.changeMovement(actions[i]);
+                    booleans_player1[i] = true;
+                }
+                if (key == keys_player_2[i] && !booleans_player2[i]) {
+                    player2.changeMovement(actions[i]);
+                    booleans_player2[i] = true;
+                }
             }
         }
     }
