@@ -18,6 +18,8 @@ public class Avatar {
     public static final int STANDING = 1;
     private static final int HIT = 2;
     private static final int SUPER = 3;
+    public static final int SUPER_LOADING = 0;
+    public static final int SUPER_READY = 1;
     private static final String AVATAR_PATH = "./resources/avatars/";
     private static final String[] REGULAR_FILENAMES = {"normal.png", "stand.png", "hit.png", "super.png"};
     private static final String[] ICON_FILENAMES = {"superloading.png", "superready.png"};
@@ -61,6 +63,7 @@ public class Avatar {
         if (index < 0 || index >= AVATAR_FILES.length) {
             throw new AvatarNotAvailableException("Index " + index + "not available");
         }
+
         regularImages = new BufferedImage[REGULAR_FILENAMES.length];
         for (int i = 0; i < REGULAR_FILENAMES.length; i++) {
             File file = new File(AVATAR_PATH + AVATAR_FILES[index] + REGULAR_FILENAMES[i]);
@@ -70,6 +73,7 @@ public class Avatar {
                 throw new AvatarNotAvailableException("File " + file.getName() + " not available", e);
             }
         }
+
         List<BufferedImage> list = new ArrayList<>();
         File f = new File(AVATAR_PATH + AVATAR_FILES[index] + String.format(ANIMATION_FILENAMES, 0));
         System.out.println(f.getPath());
@@ -85,10 +89,24 @@ public class Avatar {
         if (animationImages.length == 0) {
             throw new AvatarNotAvailableException("No animation files available");
         }
+
+        icons = new BufferedImage[ICON_FILENAMES.length];
+        for (int i = 0; i < ICON_FILENAMES.length; i++) {
+            f = new File(AVATAR_PATH + AVATAR_FILES[index] + ICON_FILENAMES[i]);
+            try {
+                icons[i] = ImageIO.read(f);
+            } catch (IOException e) {
+                throw new AvatarNotAvailableException("File " + f.getName() + " not available", e);
+            }
+        }
     }
 
     public BufferedImage getImage(int animation) {
         return regularImages[animation];
+    }
+
+    public BufferedImage getIcon(int icon) {
+        return icons[icon];
     }
 
     public void draw(Graphics2D graphics2D, int x, int y, int state) {

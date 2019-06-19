@@ -102,13 +102,11 @@ public class Player extends GameObject {
         vx[1] += vx_punch;
 
         //change speed if hit
-        lastPunch+=millis;
         if (punch) {
             punchOtherPlayer(false);
             avatar.setLastHit(System.currentTimeMillis());
             punch = false;
         }
-        lastSuperPunch += millis;
         if (superPunch) {
             punchOtherPlayer(true);
             avatar.setLastSuperHit(System.currentTimeMillis());
@@ -196,17 +194,17 @@ public class Player extends GameObject {
             }
             case Movement.NORMAL_HIT: {
                 //todo: cooldown
-                if (lastPunch >= PUNCH_COOLDOWN) {
+                if (System.currentTimeMillis() - lastPunch >= PUNCH_COOLDOWN) {
                     punch = true;
-                    lastPunch=0;
+                    lastPunch = System.currentTimeMillis();
                 }
                 break;
             }
             case Movement.SUPER_HIT: {
                 //todo: cooldown
-                if (lastSuperPunch >= SUPER_PUNCH_COOLDOWN) {
+                if (System.currentTimeMillis() - lastSuperPunch >= SUPER_PUNCH_COOLDOWN) {
                     superPunch = true;
-                    lastSuperPunch = 0;
+                    lastSuperPunch = System.currentTimeMillis();
                 }
                 break;
             }
@@ -238,6 +236,14 @@ public class Player extends GameObject {
                 percentage += Math.random() * (DAMAGE_RANGE[1] - DAMAGE_RANGE[0]) + DAMAGE_RANGE[0];
             }
 
+        }
+    }
+
+    public BufferedImage getSuperIcon() {
+        if (System.currentTimeMillis() - lastSuperPunch < SUPER_PUNCH_COOLDOWN) {
+            return avatar.getIcon(Avatar.SUPER_LOADING);
+        } else {
+            return avatar.getIcon(Avatar.SUPER_READY);
         }
     }
 

@@ -48,8 +48,8 @@ public class GamePanel extends Panel {
     private Player[] players;
     private LevelMap levelMap;
     private Image frameBuffer;
-    //
     private BufferedImage originalArrow;
+    private boolean paused;
 
     public GamePanel(Avatar a1, Avatar a2, LevelMap map) {
         height = Frame.getInstance().getHeight();
@@ -89,9 +89,11 @@ public class GamePanel extends Panel {
             // detect death
             detectGameover();
 
-            player1.calc(timedelta);
-            player2.calc(timedelta);
-            levelMap.calc(timedelta);
+            if (!paused) {
+                player1.calc(timedelta);
+                player2.calc(timedelta);
+                levelMap.calc(timedelta);
+            }
 
             // collision detection
             //player1.collide(levelMap);
@@ -162,6 +164,29 @@ public class GamePanel extends Panel {
         }
     }
 
+    private void afterDraw(Graphics2D graphics2D) {
+        graphics2D.drawImage(frameBuffer, 0, 0, this);
+        graphics2D.setColor(Design.getPrimaryColor());
+        graphics2D.setFont(Design.getDefaultFont(50));
+        FontMetrics fm = graphics2D.getFontMetrics();
+        int PADDING = 25;
+
+        String p1p = player1.getPercentage() + "%";
+        BufferedImage p1Icon = scaleImgToHeight(player1.getSuperIcon(), player1.getSuperIcon().getHeight()); // @TODO adjust height
+        graphics2D.drawImage(p1Icon, PADDING,
+                PADDING, null);
+        graphics2D.drawString(p1p, (PADDING + p1Icon.getWidth()) + PADDING,
+                PADDING + p1Icon.getHeight() / 2);
+
+        String p2p = player2.getPercentage() + "%";
+        BufferedImage p2Icon = scaleImgToHeight(player2.getSuperIcon(), player2.getSuperIcon().getHeight()); // @TODO adjust height
+        graphics2D.drawImage(p2Icon, (int) (width - PADDING - p2Icon.getWidth()),
+                PADDING, null);
+        graphics2D.drawString(p2p, (int) ((width - PADDING - p2Icon.getWidth()) - fm.stringWidth(p2p) - PADDING),
+                PADDING + p2Icon.getHeight() / 2);
+
+    }
+
     @Override
     protected void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
@@ -169,15 +194,7 @@ public class GamePanel extends Panel {
         // paint buffer
         Graphics2D graphics2D = (Graphics2D) graphics;
 
-        graphics2D.drawImage(frameBuffer, 0, 0, this);
-        graphics2D.setColor(Design.getPrimaryColor());
-        graphics2D.setFont(Design.getDefaultFont(30));
-        FontMetrics fm = graphics2D.getFontMetrics();
-        int PADDING = 50;
-        String p1p = player1.getPercentage() + "%";
-        graphics2D.drawString(p1p, PADDING, PADDING);
-        String p2p = player2.getPercentage() + "%";
-        graphics2D.drawString(p2p, (int) (width - fm.stringWidth(p2p) - PADDING), PADDING);
+        afterDraw(graphics2D);
     }
 
     private Image calculateCamera(BufferedImage bufferedImage) {
@@ -462,6 +479,9 @@ public class GamePanel extends Panel {
         return subimage.getScaledInstance(1024, 768, Image.SCALE_FAST);
     }
 
+    public void pause() {
+        paused = !paused;
+    }
 
     @Override
     public void keyTyped(KeyEvent keyEvent) {

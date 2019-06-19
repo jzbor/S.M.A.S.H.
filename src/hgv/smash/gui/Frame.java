@@ -86,7 +86,11 @@ public class Frame extends JFrame {
         pauseItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                Panel comp = (Panel) getContentPane().getComponents()[0];
+                if (comp instanceof GamePanel) {
+                    GamePanel gamePanel = (GamePanel) comp;
+                    gamePanel.pause();
+                }
             }
         });
 
