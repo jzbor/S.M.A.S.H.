@@ -63,7 +63,7 @@ public class Player extends GameObject {
         this.xpos = new int[3];
         this.xpos[0] = xpos;
         this.ypos = new int[3];
-        this.ypos[0] = 50;
+        this.ypos[0] = -300;
         vx = new double[3];
         vx[0] = 0;
         vy = new double[3];

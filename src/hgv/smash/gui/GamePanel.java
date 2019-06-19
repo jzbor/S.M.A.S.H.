@@ -57,8 +57,9 @@ public class GamePanel extends Panel {
         // assign and create params
         running = true;
         GameloopThread gameloopThread = new GameloopThread(this);
-        player1 = new Player(a1, 200, map, 1);
-        player2 = new Player(a2, 300, map, 2);
+        int[] spawnPositions = map.getSpawnPositions();
+        player1 = new Player(a1, spawnPositions[0], map, 1);
+        player2 = new Player(a2, spawnPositions[1] - a1.getImage(Avatar.NORMAL).getWidth(), map, 2);
         players=new Player[2];
         players[0]=player1;
         players[1]=player2;

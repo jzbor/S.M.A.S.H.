@@ -56,6 +56,16 @@ public class LevelMap extends GameObject {
         return platformModels;
     }
 
+    public int[] getSpawnPositions() {
+        if (platformModels.length == 0)
+            return new int[]{0, 0};
+        Rectangle rect = platformModels[0];
+        return new int[]{
+                (int) rect.getX(),
+                (int) (rect.getX() + rect.getWidth())
+        };
+    }
+
     public boolean intersects(Shape model) {
         for (Rectangle platform :
                 platformModels) {
