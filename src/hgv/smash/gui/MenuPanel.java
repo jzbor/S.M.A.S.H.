@@ -36,7 +36,9 @@ public class MenuPanel extends Panel implements ActionListener {
         frame = Frame.getInstance();
         Frame.getInstance().currentpanel(0);
         if (Frame.getInstance().getMusic()) {
-            Music oldMusic = Music.getInstanceScoreMusic();
+            Music oldMusic = Music.getInstanceScoreMusicSowjet();
+            oldMusic.stop();
+            oldMusic=Music.getInstanceScoreMusicBavaria();
             oldMusic.stop();
             Music newMusic = Music.getInstanceMenuMusic();
             newMusic.play();
@@ -94,12 +96,12 @@ public class MenuPanel extends Panel implements ActionListener {
         buttonPlayer2.setFont(Design.getDefaultFont(buttonMap.getFont().getSize()));
         startButton.setFont(Design.getDefaultFont());
 
-        buttonMap.setBackground(Design.getPrimaryColor());
-        buttonMap.setForeground(Design.getSecondaryColor());
-        buttonPlayer1.setBackground(Design.getPrimaryColor());
-        buttonPlayer1.setForeground(Design.getSecondaryColor());
-        buttonPlayer2.setBackground(Design.getPrimaryColor());
-        buttonPlayer2.setForeground(Design.getSecondaryColor());
+//        buttonMap.setBackground(Design.getPrimaryColor());
+//        buttonMap.setForeground(Design.getSecondaryColor());
+//        buttonPlayer1.setBackground(Design.getPrimaryColor());
+//        buttonPlayer1.setForeground(Design.getSecondaryColor());
+//        buttonPlayer2.setBackground(Design.getPrimaryColor());
+//        buttonPlayer2.setForeground(Design.getSecondaryColor());
         startButton.setBackground(Design.getPrimaryColor());
         startButton.setForeground(Design.getSecondaryColor());
 

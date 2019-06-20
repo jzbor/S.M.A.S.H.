@@ -117,11 +117,13 @@ public class Frame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 Music menumusic = Music.getInstanceMenuMusic();
                 Music gamemusic = Music.getInstanceGameMusic();
-                Music scoremusic = Music.getInstanceScoreMusic();
+                Music scoremusicSowjet = Music.getInstanceScoreMusicSowjet();
+                Music scoremusicBavaria= Music.getInstanceScoreMusicBavaria();
                 if (playMusic) {
                     menumusic.stop();
                     gamemusic.stop();
-                    scoremusic.stop();
+                    scoremusicSowjet.stop();
+                    scoremusicBavaria.stop();
                     playMusic = false;
                 } else {
                     if (currentPanel == 0) {
@@ -131,7 +133,7 @@ public class Frame extends JFrame {
                         gamemusic.play();
                     }
                     if (currentPanel == 2) {
-                        scoremusic.play();
+                        scoremusicSowjet.play();
 
                     }
                     playMusic = true;

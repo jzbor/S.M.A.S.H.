@@ -29,7 +29,7 @@ public class ScorePanel extends Panel implements ActionListener {
         if (Frame.getInstance().getMusic()) {
             Music oldMusic = Music.getInstanceGameMusic();
             oldMusic.stop();
-            Music newMusic = Music.getInstanceScoreMusic();
+            Music newMusic = Music.getInstanceScoreMusicSowjet();
             newMusic.play();
         }
         Frame.getInstance().currentpanel(2);

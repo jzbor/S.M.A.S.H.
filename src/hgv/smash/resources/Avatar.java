@@ -199,4 +199,6 @@ public class Avatar {
     public void setLastSuperHit(long lastSuperHit) {
         this.lastSuperHit = lastSuperHit;
     }
+
+
 }
