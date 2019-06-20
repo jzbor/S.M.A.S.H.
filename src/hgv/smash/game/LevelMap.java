@@ -5,22 +5,19 @@ import hgv.smash.Main;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.File;
+import java.io.IOException;
 
 public class LevelMap extends GameObject {
 
-    public static final String[] MAP_NAMES = {"clouds", "space"};
-    private static final String MAP_PATH = "./resources/maps/";
+    public static final String[] MAP_NAMES = {"clouds","stars"};
+    public static final String MAP_PATH = "./resources/maps/";
     private BufferedImage backgroundImage;
     private Rectangle[] platformModels;
-    private boolean jumpThrough;     // @TODO change name
 
-    private LevelMap(BufferedImage backgroundImage, Rectangle[] platformModels, boolean jumpThrough) {
+    public LevelMap(BufferedImage backgroundImage, Rectangle[] platformModels) {
         this.backgroundImage = backgroundImage;
         this.platformModels = platformModels;
-        this.jumpThrough = jumpThrough;
     }
 
     public static LevelMap debugMap() throws IOException {
@@ -28,50 +25,14 @@ public class LevelMap extends GameObject {
     }
 
     public static LevelMap load(String name) throws IOException {
-        File bgFile = new File(MAP_PATH + name + "-bg.jpeg");
+        File bgFile = new File(name + "-bg.jpeg");
         BufferedImage bufferedImage = ImageIO.read(bgFile);
-        File mapFile = new File(MAP_PATH + name + ".map");
-
-        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(mapFile)));
-        List<String> lines = new ArrayList<>();
-        String line;
-        while ((line = br.readLine()) != null) {
-            lines.add(line);
-            System.out.println(line);
-        }
-
-        boolean jumpup = Boolean.parseBoolean(lines.get(0));
-
-        Rectangle[] rects = new Rectangle[lines.size() - 1];
-        for (int i = 1; i < lines.size(); i++) {
-            String[] svals = lines.get(i).split(" ");
-            int[] ivals = new int[svals.length];
-            for (int j = 0; j < svals.length; j++) {
-                ivals[j] = Integer.parseInt(svals[j]);
-            }
-            System.out.println(i + ": " + rects.length + " | " + ivals.length);
-            rects[i - 1] = new Rectangle(ivals[0], ivals[1], ivals[2], ivals[3]);
-        }
-
-        return new LevelMap(bufferedImage, rects, jumpup);
-    }
-
-    public boolean permeable() {
-        return jumpThrough;
+        Rectangle debugRect = new Rectangle(165, 545, 730, 20);
+        return new LevelMap(bufferedImage, new Rectangle[]{debugRect});
     }
 
     public Rectangle[] getPlatformModels() {
         return platformModels;
-    }
-
-    public int[] getSpawnPositions() {
-        if (platformModels.length == 0)
-            return new int[]{0, 0};
-        Rectangle rect = platformModels[0];
-        return new int[]{
-                (int) rect.getX(),
-                (int) (rect.getX() + rect.getWidth())
-        };
     }
 
     public boolean intersects(Shape model) {
@@ -81,10 +42,6 @@ public class LevelMap extends GameObject {
                 return true;
         }
         return false;
-    }
-
-    public BufferedImage getBackgroundImage() {
-        return backgroundImage;
     }
 
     @Override
