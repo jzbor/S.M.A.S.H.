@@ -1,7 +1,6 @@
 package hgv.smash.game;
 
 import hgv.smash.Main;
-import hgv.smash.gui.GamePanel;
 import hgv.smash.resources.Avatar;
 
 import java.awt.*;
@@ -22,9 +21,14 @@ public class Player extends GameObject {
 
     //acceleration and speed constants
     private static final double SPEED = 0.5; // speed of xpos movement (also used by jump())
-    private static final double HIT_SPEED = 0.5;//speed when hit by other player
-    private final double x_slowdown_acceleration = 9.81;//acceleration slows down jump
-
+    private static final double HIT_SPEED = 0.005;//speed when hit by other player
+    private static final long JUMP_COOLDOWN = 1000;//millis needed between two jumps
+    private final static long SUPER_PUNCH_COOLDOWN = 5000;//millis needed between two punches
+    private final static long PUNCH_COOLDOWN = 2000;//millis needed between two punches
+    private static final int[] DAMAGE_RANGE = new int[]{5, 15};
+    private static final int[] SUPER_DAMAGE_RANGE = new int[]{5, 60};
+    private static final int SUPER_MULTIPLIER = 10;
+    private static final double X_SLOWDOWN_ACCELERATION = 9.81;//acceleration slows down jump
     //size of model ?loaded automatically
     private int width = 95; // width of model
     private int height = 189; // height of model
@@ -38,7 +42,6 @@ public class Player extends GameObject {
     private int[] ypos; // position of player (usually upper left corner of model)
     private double[] vx;
     private double[] vy;
-
     //classes used for calculation and drawing
     private Avatar avatar; // avatar to display for player
     private Shape model; // model (mainly for collision detection)
@@ -57,16 +60,18 @@ public class Player extends GameObject {
     private long lastJump;//time since last jump in millis
 
     //punching
-    private boolean punch;//set to true when punch should be performed(performed in calc)
+    private boolean punch, superPunch;//set to true when punch should be performed(performed in calc)
     private double vx_punch,vy_punch; // speed of player because of punch
-    private final long punchCooldown=2000;//millis needed between two punches
     private long lastPunch;//time since last punch in millis
+    private long lastSuperPunch;
+    private int percentage = 15;
+    private int number; // number of player ( 1 or 2 )
 
-    public Player(Avatar avatar, int xpos, LevelMap levelMap) {
+    public Player(Avatar avatar, int xpos, LevelMap levelMap, int number) {
         this.xpos = new int[3];
         this.xpos[0] = xpos;
         this.ypos = new int[3];
-        this.ypos[0] = 50;
+        this.ypos[0] = -300;
         vx = new double[3];
         vx[0] = 0;
         vy = new double[3];
@@ -75,16 +80,10 @@ public class Player extends GameObject {
         this.model = new Rectangle(this.xpos[0], this.ypos[0], width, height);
         this.levelMap = levelMap;
         this.platformModels = levelMap.getPlatformModels();//platform does not move right now
-        jumped = false;
+        this.number = number;
         BufferedImage normalImage = avatar.getImage(Avatar.NORMAL);
         height = normalImage.getHeight();
         width = normalImage.getWidth();
-    }
-
-    //not needed right now
-    @Override
-    public void collide(GameObject go) {
-
     }
 
     @Override
@@ -93,17 +92,17 @@ public class Player extends GameObject {
 
 
         // falling
-        vy[1] = vy[0] + millis * 9.81 * factor+(vy_punch*2);
-        vy_punch=0;
+        vy[1] = vy[0] + millis * 9.81 * factor + (vy_punch * 2);
+        vy_punch = 0;
 
         //calc horizontal movement
         vx[1] = SPEED * movementDirection;
         //slow down x movement after hit, no infinite movement after hit
         factor *= 0.5;
-        if (vx_punch - (x_slowdown_acceleration *(millis * factor)) > 0 && vx_punch > 0) {
-            vx_punch = vx_punch - (x_slowdown_acceleration * millis * factor);
-        } else if ((vx_punch + (x_slowdown_acceleration * millis * factor) < 0 && vx_punch < 0)) {
-            vx_punch = vx_punch + (x_slowdown_acceleration * millis * factor);
+        if (vx_punch - (X_SLOWDOWN_ACCELERATION * (millis * factor)) > 0 && vx_punch > 0) {
+            vx_punch = vx_punch - (X_SLOWDOWN_ACCELERATION * millis * factor);
+        } else if ((vx_punch + (X_SLOWDOWN_ACCELERATION * millis * factor) < 0 && vx_punch < 0)) {
+            vx_punch = vx_punch + (X_SLOWDOWN_ACCELERATION * millis * factor);
         } else {
             vx_punch = 0;
         }
@@ -112,11 +111,17 @@ public class Player extends GameObject {
         //change speed if hit
         lastPunch+=millis;
         if (punch) {
-            punchOtherPlayer();
+            punchOtherPlayer(false);
+            avatar.setLastHit(System.currentTimeMillis());
             punch = false;
         }
+        if (superPunch) {
+            punchOtherPlayer(true);
+            avatar.setLastSuperHit(System.currentTimeMillis());
+            superPunch = false;
+        }
         //change speed if jumped
-        lastJump+=millis;
+        lastJump += millis;
         if (jumped) {
             vy[1] = -SPEED;
             jumped = false;
@@ -147,7 +152,7 @@ public class Player extends GameObject {
                 }
                 jumps = 2;
                 //todo instant jump if hit platform???
-                lastJump=jumpCooldown;
+                lastJump = JUMP_COOLDOWN;
             }
             //horizontal collision
             if ((platform.x + platform.width - xpos[1] >= 0 && xpos[1] + width - platform.x >= 0) && (ypos[0] + height >= platform.y && ypos[0] <= platform.y + platform.height)) {
@@ -164,7 +169,8 @@ public class Player extends GameObject {
                 }
                 //you can jump if you hit platform from side
                 jumps = 2;
-                lastJump=jumpCooldown;
+                //todo instant jump if hit platform???
+                lastJump = JUMP_COOLDOWN;
             }
             //safety if hit directly in corner
             if(platform.intersects((Rectangle2D) model)){
@@ -183,13 +189,19 @@ public class Player extends GameObject {
         }
     }
 
+    //not needed right now
+    @Override
+    public void collide(GameObject go) {
+
+    }
+
     public void changeMovement(int i) {
         switch (i) {
             case Movement.JUMP: {
-                if (jumps > 0&&lastJump>=jumpCooldown) {
+                if (jumps > 0 && lastJump >= JUMP_COOLDOWN) {
                     jumped = true;
                     jumps--;
-                    lastJump=0;
+                    lastJump = 0;
                 }
                 break;
             }
@@ -208,9 +220,17 @@ public class Player extends GameObject {
             }
             case Movement.NORMAL_HIT: {
                 //todo: cooldown
-                if(lastPunch>=punchCooldown){
+                if (System.currentTimeMillis() - lastPunch >= PUNCH_COOLDOWN) {
                     punch = true;
-                    lastPunch=0;
+                    lastPunch = System.currentTimeMillis();
+                }
+                break;
+            }
+            case Movement.SUPER_HIT: {
+                //todo: cooldown
+                if (System.currentTimeMillis() - lastSuperPunch >= SUPER_PUNCH_COOLDOWN) {
+                    superPunch = true;
+                    lastSuperPunch = System.currentTimeMillis();
                 }
                 break;
             }
@@ -220,20 +240,46 @@ public class Player extends GameObject {
         }
     }
 
-    private void punchOtherPlayer() {
+    private void punchOtherPlayer(boolean superdamage) {
         Shape hitbox = new Rectangle(xpos[0] - width / 2, ypos[0] - height / 3, width * 2, height * 5 / 3);
-        otherPlayer.hit(hitbox, xpos[0] + width / 2, ypos[0] + height / 2);
+        otherPlayer.hit(hitbox, xpos[0] + width / 2, ypos[0] + height / 2, superdamage);
     }
 
-    private void hit(Shape hitbox, int xCentre, int yCentre) {
+    private void hit(Shape hitbox, int xCentre, int yCentre, boolean superdamage) {
         if (hitbox.intersects((Rectangle2D) model)) {
             Vector2D punchVector = new Vector2D(xpos[0] + width / 2 - xCentre, ypos[0] + height / 2 - yCentre);
             //unit vector so that every punch results in same speed
             Vector2D unitPunchVector = punchVector.directionVector();
-            vx_punch = unitPunchVector.getX() * HIT_SPEED;
-            vy_punch = unitPunchVector.getY() * HIT_SPEED;
-            System.out.println(unitPunchVector.toString());
+            if (superdamage) {
+                vx_punch = unitPunchVector.getX() * HIT_SPEED * percentage * SUPER_MULTIPLIER;
+                vy_punch = unitPunchVector.getY() * HIT_SPEED * percentage * SUPER_MULTIPLIER;
+                System.out.println(unitPunchVector.toString());
+                percentage += Math.random() * (SUPER_DAMAGE_RANGE[1] - SUPER_DAMAGE_RANGE[0]) + SUPER_DAMAGE_RANGE[0];
+            } else {
+                vx_punch = unitPunchVector.getX() * HIT_SPEED * percentage;
+                vy_punch = unitPunchVector.getY() * HIT_SPEED * percentage;
+                System.out.println(unitPunchVector.toString());
+                percentage += Math.random() * (DAMAGE_RANGE[1] - DAMAGE_RANGE[0]) + DAMAGE_RANGE[0];
+            }
+
         }
+    }
+
+    public BufferedImage getSuperIcon() {
+        if (System.currentTimeMillis() - lastSuperPunch < SUPER_PUNCH_COOLDOWN) {
+            return avatar.getIcon(Avatar.SUPER_LOADING);
+        } else {
+            return avatar.getIcon(Avatar.SUPER_READY);
+        }
+    }
+
+    public void compensateCooldown(long l) {     // @TODO rename?
+        lastSuperPunch += l;
+        lastPunch += l;
+    }
+
+    public int getPercentage() {
+        return percentage;
     }
 
     public Player getOtherPlayer() {
@@ -253,13 +299,15 @@ public class Player extends GameObject {
         return ypos[0];
     }
 
-    public int getXPos(){
+    public int getXPos() {
         return xpos[0];
     }
-    public int getWidth(){
+
+    public int getWidth() {
         return width;
     }
-    public int getHeight(){
+
+    public int getHeight() {
         return height;
     }
 
@@ -268,12 +316,15 @@ public class Player extends GameObject {
     public void draw(Graphics2D graphics2D) {
         // @TODO change to drawing the avatar
 
-        if (Main.DEBUG) {
-            // for debugging purposes only:
-            graphics2D.setColor(Color.RED);
-            graphics2D.fillRect(xpos[0], ypos[0], width, height);
-        }
-
         avatar.draw(graphics2D, xpos[0], ypos[0], movementDirection);
+
+        if (Main.DEBUG) {
+            graphics2D.setColor(Color.RED);
+            graphics2D.draw(model);
+        }
     }
+    public String getName() {
+        return "Player " + number;
+    }
+
 }

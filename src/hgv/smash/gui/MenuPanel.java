@@ -34,12 +34,15 @@ public class MenuPanel extends Panel implements ActionListener {
 
     public MenuPanel() {
         frame = Frame.getInstance();
-
-        Music oldMusic = Music.getInstanceScoreMusic();
-        oldMusic.stop();
-        Music newMusic = Music.getInstanceMenuMusic();
-        newMusic.play();
-
+        Frame.getInstance().currentpanel(0);
+        if (Frame.getInstance().getMusic()) {
+            Music oldMusic = Music.getInstanceScoreMusicSowjet();
+            oldMusic.stop();
+            oldMusic=Music.getInstanceScoreMusicBavaria();
+            oldMusic.stop();
+            Music newMusic = Music.getInstanceMenuMusic();
+            newMusic.play();
+        }
         setLayout(null);
         //Einfuegen und Deklarieren der Hintergrundgraphik
         try {
@@ -77,7 +80,7 @@ public class MenuPanel extends Panel implements ActionListener {
         add(buttonMap);
 
         startButton = new JButton("Let's Fight");
-        startButton.setBounds(462, 400, 100, 50);
+        startButton.setBounds(412, 400, 200, 50);
         startButton.setBackground(Color.WHITE);
         startButton.addActionListener(this);
         add(startButton);
@@ -89,14 +92,21 @@ public class MenuPanel extends Panel implements ActionListener {
 
         // Add fonts
         buttonMap.setFont(Design.getDefaultFont(buttonMap.getFont().getSize()));
-        buttonPlayer1.setFont(Design.getDefaultFont(buttonPlayer1.getFont().getSize()));
-        buttonPlayer2.setFont(Design.getDefaultFont(buttonPlayer2.getFont().getSize()));
-        startButton.setFont(Design.getDefaultFont(startButton.getFont().getSize()));
+        buttonPlayer1.setFont(Design.getDefaultFont(buttonMap.getFont().getSize()));
+        buttonPlayer2.setFont(Design.getDefaultFont(buttonMap.getFont().getSize()));
+        startButton.setFont(Design.getDefaultFont());
+
+//        buttonMap.setBackground(Design.getPrimaryColor());
+//        buttonMap.setForeground(Design.getSecondaryColor());
+//        buttonPlayer1.setBackground(Design.getPrimaryColor());
+//        buttonPlayer1.setForeground(Design.getSecondaryColor());
+//        buttonPlayer2.setBackground(Design.getPrimaryColor());
+//        buttonPlayer2.setForeground(Design.getSecondaryColor());
+        startButton.setBackground(Design.getPrimaryColor());
+        startButton.setForeground(Design.getSecondaryColor());
 
         previewPlayer1 = null;
         previewPlayer2 = null;
-
-
     }
 
     @Override
@@ -145,28 +155,24 @@ public class MenuPanel extends Panel implements ActionListener {
                 }
             }
             if (variable > -1) {
+                levelMap = null;
                 try {
-                    backgroundImage = ImageIO.read(new File((LevelMap.MAP_PATH + LevelMap.MAP_NAMES[variable]) + "-bg.jpeg"));
+                    levelMap = LevelMap.load(LevelMap.MAP_NAMES[variable]);
+                    backgroundImage = levelMap.getBackgroundImage();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 repaint();
-                levelMap = null;
-                try {
-                    levelMap = LevelMap.load(LevelMap.MAP_PATH + LevelMap.MAP_NAMES[variable]);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    System.out.println("failed");
-                }
             }
         } else if (actionEvent.getSource() == startButton) {
             if (avatar1 != null && avatar2 != null && levelMap != null) {
-
-                Music oldMusic = Music.getInstanceMenuMusic();
-                oldMusic.stop();
-                Music newMusic = Music.getInstanceGameMusic();
-                newMusic.play();
-
+                if (Frame.getInstance().getMusic()) {
+                    Music oldMusic = Music.getInstanceMenuMusic();
+                    oldMusic.stop();
+                    Music newMusic = Music.getInstanceGameMusic();
+                    newMusic.play();
+                }
+                Frame.getInstance().currentpanel(1);
                 GamePanel gamePanel = new GamePanel(avatar1, avatar2, levelMap);
                 frame = Frame.getInstance();
                 System.out.println(frame);

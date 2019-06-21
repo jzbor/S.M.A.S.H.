@@ -7,45 +7,43 @@ import hgv.smash.game.Player;
 import hgv.smash.game.Vector2D;
 import hgv.smash.gui.ImageExtract;
 import hgv.smash.resources.Avatar;
-import hgv.smash.resources.GraphicalContent;
+import hgv.smash.resources.Design;
 import hgv.smash.resources.Music;
 import sun.nio.cs.ext.MacArabic;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
-import java.io.BufferedReader;
 import java.io.File;
 
 public class GamePanel extends Panel {
 
 
     private static final int FRAMERATE = 100;
+    private static final int[] FREEZE_COLOR = new int[]{126, 197, 252, 125};
+    // y coords defining a death
+    private static final int RANGE_OF_DEATH = 10000;
+    //size of triangle representing player out of map
+    private static final int TRIANGLE_SIZE = 150;
+    //keys for movement
+    private static long JUMP_COOLDOWN = 2000;
     //size of frame
     private double width;
     private double height;
 
     private boolean cameraRunning;
-
-    //private static long JUMP_COOLDOWN = 2000;
-    //size of triangle representing player out of map for debugging
-    private final int triangleSize = 150;
-    // y coords defining a death
-    private static int RANGE_OF_DEATH = 10000;
     //player1
-    private char[] keys_player_1 = {'w', 'a', 'd', 'f'};
-    private boolean[] booleans_player1 = {false, false, false, false};
+    private char[] keys_player_1 = {'w', 'a', 'd', 'f', 'r'};
+    private boolean[] booleans_player1 = {false, false, false, false, false};
     //player2
-    private char[] keys_player_2 = {'i', 'j', 'l', 'ö'};
-    private boolean[] booleans_player2 = {false, false, false, false};
+    private char[] keys_player_2 = {'i', 'j', 'l', 'ö', 'p'};
+    private boolean[] booleans_player2 = {false, false, false, false, false};
     //actions for keys in same order as keys
-    private int[] actions = {Player.Movement.JUMP, Player.Movement.MOVE_LEFT, Player.Movement.MOVE_RIGHT, Player.Movement.NORMAL_HIT};
+    private int[] actions = {Player.Movement.JUMP, Player.Movement.MOVE_LEFT, Player.Movement.MOVE_RIGHT,
+            Player.Movement.NORMAL_HIT, Player.Movement.SUPER_HIT};
     //last performed action by pressing
     private int lastChangePlayer1 = Player.Movement.STOP_MOVING;
     private int lastChangePlayer2 = Player.Movement.STOP_MOVING;
@@ -55,9 +53,9 @@ public class GamePanel extends Panel {
     private Player player2;
     private Player[] players;
     private LevelMap levelMap;
-    private BufferedImage frameBuffer;
-    //
+    private Image frameBuffer;
     private BufferedImage originalArrow;
+    private boolean paused;
 
     public GamePanel(Avatar a1, Avatar a2, LevelMap map) {
         height = Frame.getInstance().getHeight();
@@ -65,11 +63,12 @@ public class GamePanel extends Panel {
         // assign and create params
         running = true;
         GameloopThread gameloopThread = new GameloopThread(this);
-        player1 = new Player(a1, 200, map);
-        player2 = new Player(a2, 300, map);
-        players=new Player[2];
-        players[0]=player1;
-        players[1]=player2;
+        int[] spawnPositions = map.getSpawnPositions();
+        player1 = new Player(a1, spawnPositions[0], map, 1);
+        player2 = new Player(a2, spawnPositions[1] - a1.getImage(Avatar.NORMAL).getWidth(), map, 2);
+        players = new Player[2];
+        players[0] = player1;
+        players[1] = player2;
         player1.setOtherPlayer(player2);
         player2.setOtherPlayer(player1);
         levelMap = map;
@@ -99,9 +98,11 @@ public class GamePanel extends Panel {
             // detect death
             detectGameover();
 
-            player1.calc(timedelta);
-            player2.calc(timedelta);
-            levelMap.calc(timedelta);
+            if (!paused) {
+                player1.calc(timedelta);
+                player2.calc(timedelta);
+                levelMap.calc(timedelta);
+            }
 
 
             // buffer frame
@@ -131,19 +132,29 @@ public class GamePanel extends Panel {
                 graphics2D.drawString(currentFramerate + " FPS", 20, 20);
             }
 
+            if (paused) {
+                player1.compensateCooldown(timedelta);
+                player2.compensateCooldown(timedelta);
+                Color color = new Color(FREEZE_COLOR[0], FREEZE_COLOR[1], FREEZE_COLOR[2], FREEZE_COLOR[3]);
+                graphics2D.setColor(color);
+                graphics2D.fillRect(0, 0, (int) width, (int) height);
+            }
+
             // @TODO implement thread safety
             frameBuffer = bi;
 
             // request ui update
             updateUI();
 
-            // sleep
+            // sleep @TODO solve weird shit
             if ((System.currentTimeMillis() - thisFrame) < (1000.0 / FRAMERATE)) {
                 int sleep = (int) ((1000.0 / FRAMERATE) - (System.currentTimeMillis() - thisFrame));
-                try {
-                    Thread.sleep(sleep);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                if (sleep > 0) {
+                    try {
+                        Thread.sleep(sleep);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
             lastFrame = thisFrame;
@@ -162,6 +173,7 @@ public class GamePanel extends Panel {
         }
 
         if (gameover) {
+            System.out.println("Gameover");
             BufferedImage img = new BufferedImage(getHeight(), getWidth(), BufferedImage.TYPE_INT_ARGB_PRE);
             Graphics2D imageGraphics = img.createGraphics();
             printAll(imageGraphics);
@@ -178,6 +190,29 @@ public class GamePanel extends Panel {
         }
     }
 
+    private void afterDraw(Graphics2D graphics2D) {
+        graphics2D.drawImage(frameBuffer, 0, 0, this);
+        graphics2D.setColor(Design.getPrimaryColor());
+        graphics2D.setFont(Design.getDefaultFont(50));
+        FontMetrics fm = graphics2D.getFontMetrics();
+        int PADDING = 25;
+
+        String p1p = player1.getPercentage() + "%";
+        BufferedImage p1Icon = scaleImgToHeight(player1.getSuperIcon(), player1.getSuperIcon().getHeight()); // @TODO adjust height
+        graphics2D.drawImage(p1Icon, PADDING,
+                PADDING, null);
+        graphics2D.drawString(p1p, (PADDING + p1Icon.getWidth()) + PADDING,
+                PADDING + p1Icon.getHeight() / 2);
+
+        String p2p = player2.getPercentage() + "%";
+        BufferedImage p2Icon = scaleImgToHeight(player2.getSuperIcon(), player2.getSuperIcon().getHeight()); // @TODO adjust height
+        graphics2D.drawImage(p2Icon, (int) (width - PADDING - p2Icon.getWidth()),
+                PADDING, null);
+        graphics2D.drawString(p2p, (int) ((width - PADDING - p2Icon.getWidth()) - fm.stringWidth(p2p) - PADDING),
+                PADDING + p2Icon.getHeight() / 2);
+
+    }
+
     @Override
     protected void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
@@ -185,7 +220,7 @@ public class GamePanel extends Panel {
         // paint buffer
         Graphics2D graphics2D = (Graphics2D) graphics;
 
-        graphics2D.drawImage(frameBuffer, 0, 0, this);
+        afterDraw(graphics2D);
     }
 
     public ImageExtract claculateCamera(BufferedImage bufferedImage) {
@@ -298,8 +333,8 @@ public class GamePanel extends Panel {
 
 
         //coordinates for debugging arrows
-        int xPos[] = new int[3];
-        int yPos[] = new int[3];
+        int[] xPos = new int[3];
+        int[] yPos = new int[3];
 
         int xLeft =  imageExtract.getxOffset();
         int xRight = xLeft+imageExtract.getWidth();
@@ -308,9 +343,6 @@ public class GamePanel extends Panel {
         int xDiff = imageExtract.getWidth();
         int yDiff = imageExtract.getHeight();
 
-
-
-        double factor = 0.5;
 
         for(Player player:players) {
             transformedArrowImage = resizePicture(originalArrow, factor);
@@ -360,8 +392,8 @@ public class GamePanel extends Panel {
                 xArrow = 0;
                 yArrow = 0;
 
-                xPlayerIcon=0+halfArrowLength-playerIconWidth/2;
-                yPlayerIcon=0+halfArrowLength-playerIconHeight/2;
+                xPlayerIcon=halfArrowLength-playerIconWidth/2;
+                yPlayerIcon=halfArrowLength-playerIconHeight/2;
 
                 System.out.println("top left");
             }
@@ -435,8 +467,8 @@ public class GamePanel extends Panel {
             else if (xPlayerRight <  xLeft) {
                 if (Main.DEBUG) {
                     xPos[0] = 0;
-                    xPos[1] = (int) Math.sqrt(2 * Math.pow(triangleSize, 2)) / 2;
-                    xPos[2] = (int) Math.sqrt(2 * Math.pow(triangleSize, 2)) / 2;
+                    xPos[1] = (int) Math.sqrt(2 * Math.pow(TRIANGLE_SIZE, 2)) / 2;
+                    xPos[2] = (int) Math.sqrt(2 * Math.pow(TRIANGLE_SIZE, 2)) / 2;
                     yPos[0] = player.getYPos() - yTop + player.getHeight() / 2;
                     yPos[1] = player.getYPos() - yTop - (int) Math.sqrt(2 * Math.pow(triangleSize, 2)) / 2 + player.getHeight() / 2;
                     yPos[2] = player.getYPos() - yTop + (int) Math.sqrt(2 * Math.pow(triangleSize, 2)) / 2 + player.getHeight() / 2;
@@ -454,8 +486,8 @@ public class GamePanel extends Panel {
             else if (xPlayerLeft > xRight) {
                 if (Main.DEBUG) {
                     xPos[0] = xDiff;
-                    xPos[1] = xDiff - (int) Math.sqrt(2 * Math.pow(triangleSize, 2)) / 2;
-                    xPos[2] = xDiff - (int) Math.sqrt(2 * Math.pow(triangleSize, 2)) / 2;
+                    xPos[1] = xDiff - (int) Math.sqrt(2 * Math.pow(TRIANGLE_SIZE, 2)) / 2;
+                    xPos[2] = xDiff - (int) Math.sqrt(2 * Math.pow(TRIANGLE_SIZE, 2)) / 2;
                     yPos[0] = player.getYPos() - yTop + player.getHeight() / 2;
                     yPos[1] = player.getYPos() - yTop - (int) Math.sqrt(2 * Math.pow(triangleSize, 2)) / 2 + player.getHeight() / 2;
                     yPos[2] = player.getYPos() - yTop + (int) Math.sqrt(2 * Math.pow(triangleSize, 2)) / 2 + player.getHeight() / 2;
@@ -473,11 +505,11 @@ public class GamePanel extends Panel {
             else if (yPlayerBottom < yTop) {
                 if (Main.DEBUG) {
                     xPos[0] = player.getXPos() + player.getWidth() / 2;
-                    xPos[1] = player.getXPos() + player.getWidth() / 2 - (int) Math.sqrt(2 * Math.pow(triangleSize, 2)) / 2;
-                    xPos[2] = player.getXPos() + player.getWidth() / 2 + (int) Math.sqrt(2 * Math.pow(triangleSize, 2)) / 2;
+                    xPos[1] = player.getXPos() + player.getWidth() / 2 - (int) Math.sqrt(2 * Math.pow(TRIANGLE_SIZE, 2)) / 2;
+                    xPos[2] = player.getXPos() + player.getWidth() / 2 + (int) Math.sqrt(2 * Math.pow(TRIANGLE_SIZE, 2)) / 2;
                     yPos[0] = 0;
-                    yPos[1] = (int) Math.sqrt(2 * Math.pow(triangleSize, 2)) / 2;
-                    yPos[2] = (int) Math.sqrt(2 * Math.pow(triangleSize, 2)) / 2;
+                    yPos[1] = (int) Math.sqrt(2 * Math.pow(TRIANGLE_SIZE, 2)) / 2;
+                    yPos[2] = (int) Math.sqrt(2 * Math.pow(TRIANGLE_SIZE, 2)) / 2;
                 }
                 theta = Math.PI * 1.5;
 
@@ -485,7 +517,7 @@ public class GamePanel extends Panel {
                 yArrow = 0;
 
                 xPlayerIcon=xPlayerMiddle-playerIconWidth/2;
-                yPlayerIcon=0+halfArrowLength-playerIconHeight/2;
+                yPlayerIcon=halfArrowLength-playerIconHeight/2;
 
                 System.out.println("top side");
             }
@@ -493,11 +525,11 @@ public class GamePanel extends Panel {
             else if (yPlayerTop > yBottom) {
                 if (Main.DEBUG) {
                     xPos[0] = player.getXPos() + player.getWidth() / 2;
-                    xPos[1] = player.getXPos() + player.getWidth() / 2 - (int) Math.sqrt(2 * Math.pow(triangleSize, 2)) / 2;
-                    xPos[2] = player.getXPos() + player.getWidth() / 2 + (int) Math.sqrt(2 * Math.pow(triangleSize, 2)) / 2;
+                    xPos[1] = player.getXPos() + player.getWidth() / 2 - (int) Math.sqrt(2 * Math.pow(TRIANGLE_SIZE, 2)) / 2;
+                    xPos[2] = player.getXPos() + player.getWidth() / 2 + (int) Math.sqrt(2 * Math.pow(TRIANGLE_SIZE, 2)) / 2;
                     yPos[0] = yDiff;
-                    yPos[1] = yDiff - (int) Math.sqrt(2 * Math.pow(triangleSize, 2)) / 2;
-                    yPos[2] = yDiff - (int) Math.sqrt(2 * Math.pow(triangleSize, 2)) / 2;
+                    yPos[1] = yDiff - (int) Math.sqrt(2 * Math.pow(TRIANGLE_SIZE, 2)) / 2;
+                    yPos[2] = yDiff - (int) Math.sqrt(2 * Math.pow(TRIANGLE_SIZE, 2)) / 2;
                 }
                 theta = Math.PI * 0.5;
                 xArrow = xPlayerMiddle - halfArrowLength;
@@ -529,6 +561,9 @@ public class GamePanel extends Panel {
         return imageExtract;
     }
 
+    public void pause() {
+        paused = !paused;
+    }
 
     @Override
     public void keyTyped(KeyEvent keyEvent) {
@@ -538,14 +573,16 @@ public class GamePanel extends Panel {
     public void keyPressed(KeyEvent keyEvent) {
         char key = keyEvent.getKeyChar();
 
-        for (int i = 0; i < keys_player_1.length; i++) {
-            if (key == keys_player_1[i] && !booleans_player1[i]) {
-                player1.changeMovement(actions[i]);
-                booleans_player1[i] = true;
-            }
-            if (key == keys_player_2[i] && !booleans_player2[i]) {
-                player2.changeMovement(actions[i]);
-                booleans_player2[i] = true;
+        if (!paused) {
+            for (int i = 0; i < keys_player_1.length; i++) {
+                if (key == keys_player_1[i] && !booleans_player1[i]) {
+                    player1.changeMovement(actions[i]);
+                    booleans_player1[i] = true;
+                }
+                if (key == keys_player_2[i] && !booleans_player2[i]) {
+                    player2.changeMovement(actions[i]);
+                    booleans_player2[i] = true;
+                }
             }
         }
     }
