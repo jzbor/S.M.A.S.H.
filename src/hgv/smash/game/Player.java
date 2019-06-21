@@ -132,23 +132,45 @@ public class Player extends GameObject {
         //detect collision, reset [1] params if collision detected
         //@todo set coordinates to coordinats of platfrom(no early stop of movement)
         for (Rectangle platform : platformModels) {
-            if (platform.x + platform.width - xpos[1] >= 0 && xpos[1] + width - platform.x >= 0 && (ypos[1] + height >= platform.y && ypos[1] <= platform.y + platform.height)) {
-                vx[1] = 0;
-                xpos[1] = xpos[0];
-                //you can jump if you hit platform from side
-                //last_jump = 0;
+
+            if (platform.y + platform.height - ypos[1] >= 0 && ypos[1] + height - platform.y >= 0 && (xpos[0] + width >= platform.x && xpos[0] <= platform.x + platform.width)) {
+                vy[1] = 0;
+                //hit at bottom
+                if(platform.y-(ypos[1]+height)<ypos[1]-(platform.y+height)){
+                    System.out.println("bottom");
+                    ypos[1]=platform.y+platform.height+1;
+                }
+                //hit at top
+                else {
+                    System.out.println("top");
+                    ypos[1]=platform.y-height-1;
+                }
                 jumps = 2;
                 //todo instant jump if hit platform???
                 lastJump=jumpCooldown;
             }
-            if (platform.y + platform.height - ypos[1] >= 0 && ypos[1] + height - platform.y >= 0 && (xpos[1] + width >= platform.x && xpos[1] <= platform.x + platform.width)) {
-                vy[1] = 0;
-                ypos[1] = ypos[0];
-                //Attention bug(or not) if you hit platform from below you can instantly jump again
-                //last_jump = 0;
+            //horizontal collision
+            if ((platform.x + platform.width - xpos[1] >= 0 && xpos[1] + width - platform.x >= 0) && (ypos[0] + height >= platform.y && ypos[0] <= platform.y + platform.height)) {
+                vx[1] = 0;
+                System.out.println("side");
+
+                //hit left
+                if(platform.x-(xpos[1]+width)>(xpos[1]-(platform.x+platform.width))){
+                    xpos[1]=platform.x-width-1;
+                }
+                //hit right
+                else {
+                    xpos[1]=platform.x+platform.width+1;
+                }
+                //you can jump if you hit platform from side
                 jumps = 2;
-                //todo instant jump if hit platform???
                 lastJump=jumpCooldown;
+            }
+            //safety if hit directly in corner
+            if(platform.intersects((Rectangle2D) model)){
+                xpos[1]=xpos[0];
+                ypos[1]=ypos[0];
+                vy[1]=0;
             }
         }
 
