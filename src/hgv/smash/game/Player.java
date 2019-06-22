@@ -17,6 +17,7 @@ public class Player extends GameObject {
         public static final int STOP_MOVING = 0;
         public static final int JUMP = 2;
         public static final int NORMAL_HIT = 3;
+        public static final int SUPER_HIT = 4;
     }
 
     //acceleration and speed constants
