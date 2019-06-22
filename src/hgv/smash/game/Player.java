@@ -2,6 +2,7 @@ package hgv.smash.game;
 
 import hgv.smash.Main;
 import hgv.smash.resources.Avatar;
+import hgv.smash.resources.Sound;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
@@ -47,7 +48,9 @@ public class Player extends GameObject {
     //classes used for calculation and drawing
     private Avatar avatar; // avatar to display for player
     private Shape model; // model (mainly for collision detection)
-
+    //sounds
+    private Sound punchSound=Sound.getInstanceSoundHit();
+    private Sound jumpSound=Sound.getInstanceSoundJump();
 
     //other objects
     private Player otherPlayer;//other player (for punches)
@@ -121,7 +124,7 @@ public class Player extends GameObject {
         //change speed if hit
         lastPunch += millis;
         if (punch) {
-
+            punchSound.play();
             punchOtherPlayer(false,hitDirection);
             avatar.setLastHit(System.currentTimeMillis());
             punch = false;
@@ -135,6 +138,7 @@ public class Player extends GameObject {
         //change speed if jumped
         lastJump += millis;
         if (jumped) {
+            jumpSound.play();
             vy[1] = -SPEED;
             jumped = false;
         }
