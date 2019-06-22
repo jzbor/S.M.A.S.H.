@@ -177,7 +177,7 @@ public class GamePanel extends Panel {
             printAll(imageGraphics);
             imageGraphics.dispose();
 
-            Panel panel = new ScorePanel(p, p.getOtherPlayer(), img);
+            Panel panel = new ScorePanel(p, p.getOtherPlayer(), levelMap);
             Frame.getInstance().getContentPane().removeAll();
             Frame.getInstance().getContentPane().add(panel);
             Frame.getInstance().repaint();

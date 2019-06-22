@@ -312,6 +312,9 @@ public class Player extends GameObject {
         return height;
     }
 
+    public int getNumber() {
+        return number;
+    }
 
     @Override
     public void draw(Graphics2D graphics2D) {

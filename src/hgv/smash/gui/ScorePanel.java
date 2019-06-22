@@ -1,6 +1,7 @@
 package hgv.smash.gui;
 
 import hgv.smash.Main;
+import hgv.smash.game.LevelMap;
 import hgv.smash.game.Player;
 import hgv.smash.resources.Avatar;
 import hgv.smash.resources.Design;
@@ -19,12 +20,17 @@ public class ScorePanel extends Panel implements ActionListener {
 
     private int biggestWidth;
     private JButton nextButton;
+    private JButton playButton;
     private JButton storyButton;
     private Player winner;
+    private Player looser;
+    private LevelMap levelMap;
 
-    public ScorePanel(Player winner, Player looser, BufferedImage lastFrame) {
+    public ScorePanel(Player winner, Player looser, LevelMap levelMap) {
 
         this.winner = winner;
+        this.looser = looser;
+        this.levelMap = levelMap;
 
         if (Frame.getInstance().getMusic()) {
             Music oldMusic = Music.getInstanceGameMusic();
@@ -53,11 +59,13 @@ public class ScorePanel extends Panel implements ActionListener {
         JLabel lScoreLabel = new JLabel("Looser");
         storyButton = new JButton("Winner-Story");
         nextButton = new JButton("Next");
+        playButton = new JButton("Play again");
 
         JPanel scorePanel = new JPanel();
         JPanel p1Panel = new JPanel();
         JPanel nameStoryPanel = new JPanel();
         JPanel p2Panel = new JPanel();
+        JPanel buttonPanel = new JPanel();
 
 
         // Configure elements
@@ -83,11 +91,16 @@ public class ScorePanel extends Panel implements ActionListener {
         nextButton.setFont(Design.getDefaultFont(24));
         nextButton.setBorder(paddingBorder);
         nextButton.addActionListener(this);
+        playButton.setFont(Design.getDefaultFont(24));
+        playButton.setBorder(paddingBorder);
+        playButton.addActionListener(this);
+
 
         scorePanel.setLayout(new BoxLayout(scorePanel, BoxLayout.PAGE_AXIS));
         p1Panel.setLayout(new BorderLayout());
         nameStoryPanel.setLayout(new BorderLayout());
         p2Panel.setLayout(new BorderLayout());
+        buttonPanel.setLayout(new GridLayout());
 
 
         setBackground(Design.getPrimaryColor());
@@ -95,6 +108,7 @@ public class ScorePanel extends Panel implements ActionListener {
         p1Panel.setBackground(Design.getPrimaryColor());
         nameStoryPanel.setBackground(Design.getPrimaryColor());
         p2Panel.setBackground(Design.getPrimaryColor());
+        buttonPanel.setBackground(Design.getSecondaryColor());
         gameoverLabel.setForeground(Design.getSecondaryColor());
         wNameLabel.setForeground(Design.getSecondaryColor());
         wScoreLabel.setForeground(Design.getSecondaryColor());
@@ -104,6 +118,8 @@ public class ScorePanel extends Panel implements ActionListener {
         storyButton.setForeground(Design.getSecondaryColor());
         nextButton.setBackground(Design.getPrimaryColor());
         nextButton.setForeground(Design.getSecondaryColor());
+        playButton.setBackground(Design.getPrimaryColor());
+        playButton.setForeground(Design.getSecondaryColor());
 
         // Compose layout
         setLayout(new BorderLayout());
@@ -121,10 +137,13 @@ public class ScorePanel extends Panel implements ActionListener {
         scorePanel.add(p1Panel);
         scorePanel.add(p2Panel);
 
+        buttonPanel.add(playButton);
+        buttonPanel.add(nextButton);
+
 
         add(gameoverLabel, BorderLayout.NORTH);
         add(scorePanel, BorderLayout.CENTER);
-        add(nextButton, BorderLayout.SOUTH);
+        add(buttonPanel, BorderLayout.SOUTH);
         setSize(Frame.getInstance().getContentPane().getSize());
         setPreferredSize(getSize());
 
@@ -157,8 +176,22 @@ public class ScorePanel extends Panel implements ActionListener {
             ((JPanel) Frame.getInstance().getContentPane().add(panel)).updateUI();
         }
         if (src == storyButton) {
-            JDialog dialog = new TextDialog(winner.getAvatar().getStory(), (Frame) SwingUtilities.getWindowAncestor(this));
+            new TextDialog(winner.getAvatar().getStory(), (Frame) SwingUtilities.getWindowAncestor(this));
+        }
+        if (src == playButton) {
+            GamePanel gamePanel;
+            if (winner.getNumber() < looser.getNumber()) {
+                gamePanel = new GamePanel(winner.getAvatar(), looser.getAvatar(), levelMap);
+            } else {
+                gamePanel = new GamePanel(looser.getAvatar(), winner.getAvatar(), levelMap);
+            }
 
+            Frame.getInstance().currentpanel(1);
+            Frame frame = Frame.getInstance();
+            System.out.println(frame);
+            frame.getContentPane().removeAll();
+            frame.getContentPane().add(gamePanel);
+            ((JPanel) (frame.getContentPane())).updateUI();
         }
     }
 
