@@ -1,18 +1,21 @@
 package hgv.smash.gui;
 
 import hgv.smash.resources.Design;
+import hgv.smash.resources.KeyBoardLayout;
 import hgv.smash.resources.Music;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.*;
 
 public class Frame extends JFrame {
 
     private static final String TITLE = "S.M.A.S.H.";
-    private static final Dimension FINAL_SIZE = new Dimension(1024, 768+53);
+    private static final Dimension FINAL_SIZE = new Dimension(1024, 768 + 53);
     private static final Dimension DEBUG_SIZE = new Dimension(1366, 768);
+    private static final String KEYBOARD_LAYOUT_FILE="./resources/keyboard/keyboardLayout.ser";
     private static final Frame ourInstance = new Frame();
     private boolean playMusic;
     private int currentPanel;
@@ -88,6 +91,8 @@ public class Frame extends JFrame {
     private void addGameMenuItems(JMenu gameMenu) {
         JMenuItem pauseItem = new JMenuItem("Pause Game");
         gameMenu.add(pauseItem);
+        JMenuItem cameraItem = new JMenuItem("Kamera an/aus");
+        gameMenu.add(cameraItem);
         pauseItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -95,6 +100,16 @@ public class Frame extends JFrame {
                 if (comp instanceof GamePanel) {
                     GamePanel gamePanel = (GamePanel) comp;
                     gamePanel.pause();
+                }
+            }
+        });
+        cameraItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Panel comp = (Panel) getContentPane().getComponents()[0];
+                if (comp instanceof GamePanel) {
+                    GamePanel gamePanel = (GamePanel) comp;
+                    gamePanel.changeCameraRunning();
                 }
             }
         });
@@ -110,7 +125,12 @@ public class Frame extends JFrame {
         prefItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                KeySetPanel keySetPanel=new KeySetPanel();
+                keySetPanel.setOriganalContentPane(Frame.getInstance().getContentPane().getComponents()[0]);
+                Frame.getInstance().getContentPane().removeAll();
+                Frame.getInstance().getContentPane().add(keySetPanel);
+                ((JPanel) Frame.getInstance().getContentPane()).updateUI();
+                //@todo set number for frame ZBORIL??
             }
         });
         musicItem.addActionListener(new ActionListener() {
@@ -119,7 +139,7 @@ public class Frame extends JFrame {
                 Music menumusic = Music.getInstanceMenuMusic();
                 Music gamemusic = Music.getInstanceGameMusic();
                 Music scoremusicSowjet = Music.getInstanceScoreMusicSowjet();
-                Music scoremusicBavaria= Music.getInstanceScoreMusicBavaria();
+                Music scoremusicBavaria = Music.getInstanceScoreMusicBavaria();
                 if (playMusic) {
                     menumusic.stop();
                     gamemusic.stop();

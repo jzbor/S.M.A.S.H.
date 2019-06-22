@@ -30,6 +30,7 @@ public class Player extends GameObject {
     private static final int[] SUPER_DAMAGE_RANGE = new int[]{5, 60};
     private static final int SUPER_MULTIPLIER = 10;
     private static final double X_SLOWDOWN_ACCELERATION = 9.81;//acceleration slows down jump
+    private static final int MAX_HEIGHT=-1500;//max height
     //size of model loaded automatically
     private int width; // width of model
     private int height; // height of model
@@ -46,6 +47,7 @@ public class Player extends GameObject {
     //classes used for calculation and drawing
     private Avatar avatar; // avatar to display for player
     private Shape model; // model (mainly for collision detection)
+
 
     //other objects
     private Player otherPlayer;//other player (for punches)
@@ -100,7 +102,6 @@ public class Player extends GameObject {
 
         // falling
         vy[1] = vy[0] + millis * 9.81 * factor + (vy_punch);
-        System.out.println("ypunch" + vy_punch);
         vy_punch = 0;
 
         //calc horizontal movement
@@ -115,7 +116,6 @@ public class Player extends GameObject {
             vx_punch = 0;
         }
         vx[1] += vx_punch;
-        System.out.println("xpunch" + vx_punch);
 
 
         //change speed if hit
@@ -142,6 +142,12 @@ public class Player extends GameObject {
         // calc position by velocity
         ypos[1] = (int) (ypos[0] + vy[0] * millis);
         xpos[1] = (int) (xpos[0] + vx[0] * millis);
+
+        //detect if player is higher than max high
+        if(ypos[1]<MAX_HEIGHT){
+            vy[1]=0;
+            ypos[1]=MAX_HEIGHT;
+        }
 
         // update model
         this.model = new Rectangle(xpos[0], ypos[0], width, height);

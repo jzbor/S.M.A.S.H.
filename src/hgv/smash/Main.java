@@ -11,7 +11,7 @@ public class Main {
     public static final boolean DEBUG = false;
 
     public static void main(String[] args) {
-        JPanel panel = new KeySetPanel();
+        JPanel panel = new MenuPanel();
         panel.setSize(Frame.getInstance().getContentPane().getSize());
         Frame.getInstance().getContentPane().add(panel);
         ((JPanel) Frame.getInstance().getContentPane()).updateUI();

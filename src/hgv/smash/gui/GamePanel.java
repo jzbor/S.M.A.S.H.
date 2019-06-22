@@ -8,6 +8,7 @@ import hgv.smash.game.Vector2D;
 import hgv.smash.gui.ImageExtract;
 import hgv.smash.resources.Avatar;
 import hgv.smash.resources.Design;
+import hgv.smash.resources.KeyBoardLayout;
 import hgv.smash.resources.Music;
 
 import javax.imageio.ImageIO;
@@ -24,7 +25,7 @@ public class GamePanel extends Panel {
     private static final int FRAMERATE = 100;
     private static final int[] FREEZE_COLOR = new int[]{126, 197, 252, 125};
     // y coords defining a death
-    private static final int RANGE_OF_DEATH = 10000;
+    private static final int RANGE_OF_DEATH = 1000;
     //size of triangle representing player out of map
     private static final int TRIANGLE_SIZE = 150;
     //keys for movement
@@ -35,10 +36,10 @@ public class GamePanel extends Panel {
 
     private boolean cameraRunning;
     //player1
-    private char[] keys_player_1 = {'w', 'a', 'd', 'f', 'r'};
+    private char[] keys_player_1 ;
     private boolean[] booleans_player1 = {false, false, false, false, false};
     //player2
-    private char[] keys_player_2 = {'i', 'j', 'l', 'ö', 'p'};
+    private char[] keys_player_2 ;
     private boolean[] booleans_player2 = {false, false, false, false, false};
     //actions for keys in same order as keys
     private int[] actions = {Player.Movement.JUMP, Player.Movement.MOVE_LEFT, Player.Movement.MOVE_RIGHT,
@@ -57,6 +58,8 @@ public class GamePanel extends Panel {
     private boolean paused;
 
     public GamePanel(Avatar a1, Avatar a2, LevelMap map) {
+        updateKeys();
+
         height = map.getBackgroundImage().getHeight();
         width = map.getBackgroundImage().getWidth();
         // assign and create params
@@ -508,7 +511,7 @@ public class GamePanel extends Panel {
         paused = !paused;
     }
 
-    public void setCameraRunning(){
+    public void changeCameraRunning(){
         cameraRunning=!cameraRunning;
     }
 
@@ -564,6 +567,12 @@ public class GamePanel extends Panel {
         } else if (booleans_player2[1] && !booleans_player2[2]) {
             player2.changeMovement(actions[1]);
         }
+    }
+
+    public void updateKeys(){
+        KeyBoardLayout keyBoardLayout=KeySetPanel.getKeyBoardLayoutFromFile();
+        keys_player_1=keyBoardLayout.getPlayer1Keys();
+        keys_player_2=keyBoardLayout.getPlayer2Keys();
     }
 
     private BufferedImage resizePicture(BufferedImage bufferedImage, double factor) {
