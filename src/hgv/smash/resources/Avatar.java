@@ -130,17 +130,24 @@ public class Avatar {
         return story;
     }
 
-    public void draw(Graphics2D graphics2D, int x, int y, int state) {
+    public void draw(Graphics2D graphics2D, int x, int y, int state,int hitDirection) {
         boolean hit = (System.currentTimeMillis() - lastHit < HIT_ANIMATION_LENGTH);
         boolean superhit = (System.currentTimeMillis() - lastSuperHit < HIT_ANIMATION_LENGTH);
 
         if (state == Player.Movement.STOP_MOVING) {
+            BufferedImage image;
             if (hit)
-                graphics2D.drawImage(regularImages[HIT], x, y, null);
+                image=regularImages[HIT];
             else if (superhit)
-                graphics2D.drawImage(regularImages[SUPER], x, y, null);
+                image=regularImages[SUPER];
             else
-                graphics2D.drawImage(regularImages[NORMAL], x, y, null);
+                image=regularImages[NORMAL];
+            //start
+            if(hitDirection==1){
+                image = flipImage(image);
+            }
+                //stop
+            graphics2D.drawImage(image, x, y, null);
         } else if (state == Player.Movement.MOVE_LEFT) {
             BufferedImage image;
 

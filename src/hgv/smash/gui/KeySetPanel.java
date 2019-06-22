@@ -8,8 +8,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 public class KeySetPanel extends Panel implements MouseListener {
-    private char[] player1Keys = {'W', 'F', 'A', 'S', 'D'};
-    private char[] player2Keys = {'I', 'Ö', 'J', 'K', 'L'};
+    private char[] player1Keys =new char[] {'w', 'f', 'a', 'd','r'};
+    private char[] player2Keys =new char[] {'i', 'ö', 'j', 'l','p'};
 
     private JLabel[] player1Label;
     private JLabel[] player2Label;
@@ -17,7 +17,7 @@ public class KeySetPanel extends Panel implements MouseListener {
     private ImageIcon keyNormal;
     private ImageIcon keyPressed;
 
-    private static final int[][] KEY_POSITION = {{1, 0}, {2, 0}, {0, 1}, {1, 1}, {2, 1}};
+    private static final int[][] KEY_POSITION = {{1, 0}, {3, 1}, {0, 1}, {2, 1},{3,0}};
 
     private JLabel selectedKey;
 
@@ -40,15 +40,15 @@ public class KeySetPanel extends Panel implements MouseListener {
             GridBagConstraints gbc1 = new GridBagConstraints();
             gbc1.gridx = KEY_POSITION[i][0];
             gbc1.gridy = KEY_POSITION[i][1];
-            gbc1.ipadx = 70;
-            gbc1.ipady = 70;
+            gbc1.ipadx = 50;
+            gbc1.ipady = 50;
             gbc1.insets = new Insets(5, 5, 5, 5);
-            player1Label[i] = new JLabel(Character.toString(player1Keys[i]));
+            player1Label[i] = new JLabel(Character.toString(Character.toUpperCase(player1Keys[i])));
             player1Label[i].setIcon(keyNormal);
             player1Label[i].setIconTextGap(-keyNormal.getIconWidth() / 2);
             player1Label[i].setHorizontalAlignment(JLabel.CENTER);
             player1Label[i].addMouseListener(this);
-            player1Label[i].setPreferredSize(new Dimension(50, 50));
+            player1Label[i].setSize(new Dimension(50, 50));
             player1Label[i].setBorder(BorderFactory.createLineBorder(new Color(255, 0, 0), 2, false));
             leftPlayerKeySet.add(player1Label[i], gbc1);
 
@@ -59,12 +59,12 @@ public class KeySetPanel extends Panel implements MouseListener {
             gbc2.ipadx = 70;
             gbc2.ipady = 70;
             gbc2.insets = new Insets(5, 5, 5, 5);
-            player2Label[i] = new JLabel(Character.toString(player2Keys[i]));
+            player2Label[i] = new JLabel(Character.toString(Character.toUpperCase(player2Keys[i])));
             player2Label[i].setIcon(keyNormal);
             player2Label[i].setIconTextGap(-keyNormal.getIconWidth() / 2);
             player2Label[i].setHorizontalAlignment(JLabel.CENTER);
             player2Label[i].addMouseListener(this);
-            player2Label[i].setPreferredSize(new Dimension(50, 50));
+            player2Label[i].setPreferredSize(new Dimension(30, 30));
             player2Label[i].setBorder(BorderFactory.createLineBorder(new Color(255, 0, 0), 2, false));
             rightPlayerKeySet.add(player2Label[i], gbc2);
         }
