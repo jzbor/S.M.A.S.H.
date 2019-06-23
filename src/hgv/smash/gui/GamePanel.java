@@ -77,7 +77,7 @@ public class GamePanel extends Panel {
         cameraRunning=true;
 
         try {
-            originalArrow = ImageIO.read(new File("./resources/icons/arrow6.png"));
+            originalArrow = ImageIO.read(new File("./resources/icons/arrow.png"));
         } catch (Exception e) {
             e.printStackTrace();
         }

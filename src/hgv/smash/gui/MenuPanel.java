@@ -53,8 +53,8 @@ public class MenuPanel extends Panel implements ActionListener {
         try {
             backgroundImage = ImageIO.read(new File("./resources/menu/background.png"));
             origBackImg = backgroundImage;
-            transparentBackground = ImageIO.read(new File("./resources/menu/background_transparent.png"));
-            platformImage = ImageIO.read(new File("./resources/menu/platform2.png"));
+            transparentBackground = ImageIO.read(new File("./resources/menu/background_logo.png"));
+            platformImage = ImageIO.read(new File("./resources/menu/platform.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
