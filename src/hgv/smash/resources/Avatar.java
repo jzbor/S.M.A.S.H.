@@ -213,4 +213,14 @@ public class Avatar {
     public String getName() {
         return name;
     }
+    public int getIndex (){
+        int n=-1;
+        for (int i=0; i<AVATAR_NAMES.length; i++) {
+            if (AVATAR_NAMES[i]==name){
+                n=i;
+            }
+
+        }
+        return n;
+    }
 }
