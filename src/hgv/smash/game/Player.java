@@ -144,6 +144,9 @@ public class Player extends GameObject {
         //change speed if jumped
         lastJump += millis;
         if (jumped) {
+             if (Frame.getInstance().getSound()) {
+                jumpSound.play();
+            }
             vy[1] = -SPEED;
             jumped = false;
         }
