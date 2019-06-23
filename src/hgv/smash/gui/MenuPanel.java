@@ -27,7 +27,6 @@ public class MenuPanel extends Panel implements ActionListener {
     private BufferedImage previewPlayer2;
     private JButton startButton;
     private JButton disclaimerButton;
-    private JLabel labelGameTitel;
     private JFrame frame;
     private Avatar avatar1;
     private Avatar avatar2;
@@ -47,7 +46,7 @@ public class MenuPanel extends Panel implements ActionListener {
         setLayout(null);
         //Einfuegen und Deklarieren der Hintergrundgraphik
         try {
-            backgroundImage = ImageIO.read(new File("./resources/HintergrundMenü/neu.png"));
+            backgroundImage = ImageIO.read(new File("./resources/menu/background.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -62,9 +61,9 @@ public class MenuPanel extends Panel implements ActionListener {
         buttonPlayer2.addActionListener(this);
         buttonMap.addActionListener(this);
 
-        buttonPlayer1.setBounds(1024 / 4 - 100, 230, 200, 50);
-        buttonPlayer2.setBounds(1024 / 4 * 3 - 100, 230, 200, 50);
-        buttonMap.setBounds(1024 / 2 - 75, 230, 150, 50);
+        buttonPlayer1.setBounds(1024 / 4 - 100, 280, 200, 50);
+        buttonPlayer2.setBounds(1024 / 4 * 3 - 100, 280, 200, 50);
+        buttonMap.setBounds(1024 / 2 - 75, 280, 150, 50);
         buttonPlayer1.setRenderer(new MyComboBoxRenderer("  Ersten Avatar wählen"));
         buttonPlayer1.setSelectedIndex(-1);
         buttonPlayer2.setRenderer(new MyComboBoxRenderer("  Zweiten Avatar wählen"));
@@ -91,11 +90,6 @@ public class MenuPanel extends Panel implements ActionListener {
         disclaimerButton.setBackground(Color.WHITE);
         disclaimerButton.addActionListener(this);
         add(disclaimerButton);
-
-        labelGameTitel = new JLabel("S.M.A.S.H");
-        labelGameTitel.setBounds(15, -70, 400, 200);
-        labelGameTitel.setFont(Design.getTitleFont(45));
-        add(labelGameTitel);
 
         // Add fonts
         buttonMap.setFont(Design.getDefaultFont(buttonMap.getFont().getSize()));
@@ -213,8 +207,8 @@ public class MenuPanel extends Panel implements ActionListener {
         super.paintComponent(g);
         Graphics2D graphics2D = (Graphics2D) g;
         graphics2D.drawImage(backgroundImage, 0, 0, null);
-        graphics2D.drawImage(previewPlayer1, 210, 320, null);
-        graphics2D.drawImage(previewPlayer2, 723, 320, null);
+        graphics2D.drawImage(previewPlayer1, 210, 370, null);
+        graphics2D.drawImage(previewPlayer2, 723, 370, null);
     }
 
     @Override

@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Avatar {
-    public static final String[] AVATAR_NAMES = {"Georg", "Genosse Geist"};
+    public static final String[] AVATAR_NAMES = {"Schorsch", "Gespenst d.K."};
     public static final int NORMAL = 0;
     public static final int STANDING = 1;
     public static final int SUPER_LOADING = 0;
