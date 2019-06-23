@@ -3,7 +3,6 @@ package hgv.smash.gui;
 
 import hgv.smash.resources.Design;
 import hgv.smash.resources.KeyBoardLayout;
-import sun.security.krb5.internal.crypto.Des;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -13,6 +12,11 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.*;
 import java.util.EventListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
+
+//import sun.security.krb5.internal.crypto.Des;
 
 public class KeySetPanel extends Panel implements MouseListener {
 

@@ -123,9 +123,6 @@ public class GamePanel extends Panel {
             else {
                 imageExtract=new ImageExtract(0,0,(int)width,(int)height,bi);
             }
-            //calculate arrows
-            imageExtract=calculateArrows(imageExtract);
-            bi=imageExtract.getImage();
 
             if (Main.DEBUG) {
                 // draw fps
@@ -133,13 +130,9 @@ public class GamePanel extends Panel {
                 graphics2D.drawString(currentFramerate + " FPS", 20, 20);
             }
 
-            if (paused) {
-                player1.compensateCooldown(timedelta);
-                player2.compensateCooldown(timedelta);
-                Color color = new Color(FREEZE_COLOR[0], FREEZE_COLOR[1], FREEZE_COLOR[2], FREEZE_COLOR[3]);
-                graphics2D.setColor(color);
-                graphics2D.fillRect(0, 0, (int) width, (int) height);
-            }
+            //calculate arrows
+            imageExtract = calculateArrows(imageExtract);
+            bi = imageExtract.getImage();
 
             // @TODO implement thread safety
             frameBuffer = bi;
@@ -211,6 +204,12 @@ public class GamePanel extends Panel {
                 PADDING, null);
         graphics2D.drawString(p2p, (int) ((width - PADDING - p2Icon.getWidth()) - fm.stringWidth(p2p) - PADDING),
                 PADDING + p2Icon.getHeight() / 2);
+
+        if (paused) {
+            Color color = new Color(FREEZE_COLOR[0], FREEZE_COLOR[1], FREEZE_COLOR[2], FREEZE_COLOR[3]);
+            graphics2D.setColor(color);
+            graphics2D.fillRect(0, 0, (int) width, (int) height);
+        }
 
     }
 
@@ -320,7 +319,7 @@ public class GamePanel extends Panel {
         try{
             subimage= bufferedImage.getSubimage((int) xLeft, (int) yTop, (int) xDiff, (int) yDiff );
         }catch (Exception e){
-            System.out.println("Linux error");
+            //System.out.println("Linux error");
             subimage=bufferedImage.getSubimage((int) xLeft, (int) yTop, (int) xDiff-2, (int) yDiff-2);
         }
         subimage=resizePicture(subimage,width/xDiff);

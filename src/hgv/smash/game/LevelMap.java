@@ -12,12 +12,13 @@ import java.util.List;
 public class LevelMap extends GameObject {
 
 
-    public static final String[] MAP_NAMES = {"clouds", "space", "Schmierzettel"};
+    public static final String[] MAP_NAMES = {"Clouds", "Space", "Schmierzettel"};
+    public static final String[] MAP_FILES = {"clouds", "space", "scratchpad"};
     private static final String MAP_PATH = "./resources/maps/";
 
     private BufferedImage backgroundImage;
     private Rectangle[] platformModels;
-    private boolean jumpThrough;     // @TODO change name
+    private boolean jumpThrough;
 
     private LevelMap(BufferedImage backgroundImage, Rectangle[] platformModels, boolean jumpThrough) {
         this.backgroundImage = backgroundImage;
@@ -30,9 +31,19 @@ public class LevelMap extends GameObject {
     }
 
     public static LevelMap load(String name) throws IOException {
-        File bgFile = new File(MAP_PATH + name + "-bg.jpeg");
+        int index = -1;
+        for (int i = 0; i < MAP_NAMES.length; i++) {
+            if (MAP_NAMES[i].equals(name)) {
+                index = i;
+                break;
+            }
+        }
+
+        String id = MAP_FILES[index];
+
+        File bgFile = new File(MAP_PATH + id + "-bg.jpeg");
         BufferedImage bufferedImage = ImageIO.read(bgFile);
-        File mapFile = new File(MAP_PATH + name + ".map");
+        File mapFile = new File(MAP_PATH + id + ".map");
 
         BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(mapFile)));
         List<String> lines = new ArrayList<>();

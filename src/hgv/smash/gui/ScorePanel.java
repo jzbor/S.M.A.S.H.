@@ -53,13 +53,13 @@ public class ScorePanel extends Panel implements ActionListener {
         JLabel gameoverLabel = new JLabel("Game Over");
         JLabel wIconLabel = new JLabel(new ImageIcon(scaleAvatar(winner.getAvatar())));
         JLabel wNameLabel = new JLabel(winner.getName());
-        JLabel wScoreLabel = new JLabel("Winner");
+        JLabel wScoreLabel = new JLabel("Sieger");
         JLabel lIconLabel = new JLabel(new ImageIcon(scaleAvatar(looser.getAvatar())));
         JLabel lNameLabel = new JLabel(looser.getName());
-        JLabel lScoreLabel = new JLabel("Looser");
-        storyButton = new JButton("Winner-Story");
-        nextButton = new JButton("Next");
-        playButton = new JButton("Play again");
+        JLabel lScoreLabel = new JLabel("Opfer");
+        storyButton = new JButton("Hintergrund-Geschichte");
+        nextButton = new JButton("Hauptmenü");
+        playButton = new JButton("Nochmal spielen");
 
         JPanel scorePanel = new JPanel();
         JPanel p1Panel = new JPanel();

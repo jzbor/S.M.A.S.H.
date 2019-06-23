@@ -12,11 +12,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 //Klasse für das Start- und Hauptmenü:
 
@@ -26,7 +26,7 @@ public class MenuPanel extends Panel implements ActionListener {
     private BufferedImage previewPlayer1;
     private BufferedImage previewPlayer2;
     private JButton startButton;
-    private JLabel labelGameTitel;
+    private JButton disclaimerButton;
     private JFrame frame;
     private Avatar avatar1;
     private Avatar avatar2;
@@ -46,7 +46,7 @@ public class MenuPanel extends Panel implements ActionListener {
         setLayout(null);
         //Einfuegen und Deklarieren der Hintergrundgraphik
         try {
-            backgroundImage = ImageIO.read(new File("./resources/HintergrundMenü/neu.png"));
+            backgroundImage = ImageIO.read(new File("./resources/menu/background.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -61,14 +61,14 @@ public class MenuPanel extends Panel implements ActionListener {
         buttonPlayer2.addActionListener(this);
         buttonMap.addActionListener(this);
 
-        buttonPlayer1.setBounds(1024 / 4 - 75, 230, 150, 50);
-        buttonPlayer2.setBounds(1024 / 4 * 3 - 75, 230, 150, 50);
-        buttonMap.setBounds(1024 / 2 - 75, 230, 150, 50);
-        buttonPlayer1.setRenderer(new MyComboBoxRenderer("Choose Avatar one"));
+        buttonPlayer1.setBounds(1024 / 4 - 100, 280, 200, 50);
+        buttonPlayer2.setBounds(1024 / 4 * 3 - 100, 280, 200, 50);
+        buttonMap.setBounds(1024 / 2 - 75, 280, 150, 50);
+        buttonPlayer1.setRenderer(new MyComboBoxRenderer("  Ersten Avatar wählen"));
         buttonPlayer1.setSelectedIndex(-1);
-        buttonPlayer2.setRenderer(new MyComboBoxRenderer("Choose Avatar two"));
+        buttonPlayer2.setRenderer(new MyComboBoxRenderer("  Zweiten Avatar wählen"));
         buttonPlayer2.setSelectedIndex(-1);
-        buttonMap.setRenderer(new MyComboBoxRenderer("Choose your map"));
+        buttonMap.setRenderer(new MyComboBoxRenderer("  Map auswählen"));
         buttonMap.setSelectedIndex(-1);
 
         buttonPlayer1.setBackground(Color.WHITE);
@@ -79,31 +79,35 @@ public class MenuPanel extends Panel implements ActionListener {
         add(buttonPlayer2);
         add(buttonMap);
 
-        startButton = new JButton("Let's Fight");
+        startButton = new JButton("Lass uns boxen");
         startButton.setBounds(412, 400, 200, 50);
         startButton.setBackground(Color.WHITE);
         startButton.addActionListener(this);
         add(startButton);
 
-        labelGameTitel = new JLabel("S.M.A.S.H");
-        labelGameTitel.setBounds(15, -70, 400, 200);
-        labelGameTitel.setFont(Design.getTitleFont(45));
-        add(labelGameTitel);
+        disclaimerButton = new JButton("Dementi");
+        disclaimerButton.setBounds(412 - 50, 600, 300, 50);
+        disclaimerButton.setBackground(Color.WHITE);
+        disclaimerButton.addActionListener(this);
+        add(disclaimerButton);
 
         // Add fonts
         buttonMap.setFont(Design.getDefaultFont(buttonMap.getFont().getSize()));
         buttonPlayer1.setFont(Design.getDefaultFont(buttonMap.getFont().getSize()));
         buttonPlayer2.setFont(Design.getDefaultFont(buttonMap.getFont().getSize()));
         startButton.setFont(Design.getDefaultFont());
-
-//        buttonMap.setBackground(Design.getPrimaryColor());
-//        buttonMap.setForeground(Design.getSecondaryColor());
-//        buttonPlayer1.setBackground(Design.getPrimaryColor());
-//        buttonPlayer1.setForeground(Design.getSecondaryColor());
-//        buttonPlayer2.setBackground(Design.getPrimaryColor());
-//        buttonPlayer2.setForeground(Design.getSecondaryColor());
         startButton.setBackground(Design.getPrimaryColor());
         startButton.setForeground(Design.getSecondaryColor());
+        disclaimerButton.setFont(Design.getDefaultFont());
+        disclaimerButton.setBackground(Design.getPrimaryColor());
+        disclaimerButton.setForeground(Design.getSecondaryColor());
+
+        buttonMap.setBackground(Design.getPrimaryColor());
+        buttonMap.setForeground(Design.getSecondaryColor());
+        buttonPlayer1.setBackground(Design.getPrimaryColor());
+        buttonPlayer1.setForeground(Design.getSecondaryColor());
+        buttonPlayer2.setBackground(Design.getPrimaryColor());
+        buttonPlayer2.setForeground(Design.getSecondaryColor());
 
         previewPlayer1 = null;
         previewPlayer2 = null;
@@ -180,6 +184,20 @@ public class MenuPanel extends Panel implements ActionListener {
                 frame.getContentPane().add(gamePanel);
                 ((JPanel) (frame.getContentPane())).updateUI();
             }
+        } else if (actionEvent.getSource() == disclaimerButton) {
+            File currentFile = new File("./resources/disclaimer/disclaimer.txt");
+            String disclaimer = "";
+            try {
+                InputStreamReader isr = new InputStreamReader(new FileInputStream(currentFile));
+                int i;
+                while ((i = isr.read()) != -1) {
+                    disclaimer += (char) i;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            new TextDialog(disclaimer, (Frame) SwingUtilities.getWindowAncestor(this),
+                    "Haftungsausschluss", new Dimension(700, 400));
         }
     }
 
@@ -189,27 +207,8 @@ public class MenuPanel extends Panel implements ActionListener {
         super.paintComponent(g);
         Graphics2D graphics2D = (Graphics2D) g;
         graphics2D.drawImage(backgroundImage, 0, 0, null);
-        graphics2D.drawImage(previewPlayer1, 210, 320, null);
-        graphics2D.drawImage(previewPlayer2, 723, 320, null);
-
-        Ellipse2D cloud = new Ellipse2D.Double(100, 220, 300, 120);
-        graphics2D.setColor(new Color(102, 51, 0));
-
-        //graphics2D.fill(cloud);
-
-
-        graphics2D.setColor(new Color(255, 204, 51));
-        Rectangle2D floor = new Rectangle2D.Double(165, 528, 180, 15);
-        graphics2D.fill(floor);
-        Rectangle2D floor2 = new Rectangle2D.Double(670, 528, 180, 15);
-        graphics2D.fill(floor2);
-        graphics2D.setColor(Color.YELLOW);
-        Rectangle2D throne = new Rectangle2D.Double(690, 508, 140, 20);
-        graphics2D.fill(throne);
-        Rectangle2D throne2 = new Rectangle2D.Double(185, 508, 140, 20);
-        graphics2D.fill(throne2);
-
-
+        graphics2D.drawImage(previewPlayer1, 210, 370, null);
+        graphics2D.drawImage(previewPlayer2, 723, 370, null);
     }
 
     @Override
