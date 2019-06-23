@@ -12,6 +12,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.*;
+import java.util.EventListener;
 
 public class KeySetPanel extends Panel implements MouseListener {
 
@@ -26,6 +27,7 @@ public class KeySetPanel extends Panel implements MouseListener {
     private JLabel[] player2Label;
     private JButton saveButton;
     private JButton restoreDefaultButton;
+    private JButton abortButton;
 
     private final Border loweredBorder = BorderFactory.createLoweredBevelBorder();
     private final Border raisedBorder = BorderFactory.createRaisedBevelBorder();
@@ -51,12 +53,20 @@ public class KeySetPanel extends Panel implements MouseListener {
         JPanel leftPlayerKeySet = new JPanel();
         JPanel rightPlayerKeySet = new JPanel();
 
-        wholePanel.setLayout(new BoxLayout(wholePanel, BoxLayout.PAGE_AXIS));
-        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.LINE_AXIS));
+        wholePanel.setLayout(new BorderLayout()/*new BoxLayout(wholePanel, BoxLayout.PAGE_AXIS)*/);
+        wholePanel.setBackground(Design.getPrimaryColor());
+        wholePanel.setPreferredSize(Frame.getInstance().getContentPane().getSize());
+        buttonPanel.setLayout(/*new GridLayout());*/new BoxLayout(buttonPanel, BoxLayout.LINE_AXIS));
+        buttonPanel.setBackground(Design.getPrimaryColor());
+        buttonPanel.setSize(Frame.getInstance().getContentPane().getWidth(),40);
         keySetPanel.setLayout(new BoxLayout(keySetPanel, BoxLayout.LINE_AXIS));
+        keySetPanel.setBackground(Design.getPrimaryColor());
         labelPanel.setLayout(new BoxLayout(labelPanel,BoxLayout.LINE_AXIS));
+        labelPanel.setBackground(Design.getPrimaryColor());
         leftPlayerKeySet.setLayout(new GridBagLayout());
+        leftPlayerKeySet.setBackground(Design.getPrimaryColor());
         rightPlayerKeySet.setLayout(new GridBagLayout());
+        rightPlayerKeySet.setBackground(Design.getPrimaryColor());
 
         player1Label = new JLabel[5];
         player2Label = new JLabel[5];
@@ -97,28 +107,43 @@ public class KeySetPanel extends Panel implements MouseListener {
         player1Label.setFont(Design.getDefaultFont(50));
         player2Label.setFont(Design.getDefaultFont(50));
         labelPanel.add(player1Label);
-        labelPanel.add(Box.createHorizontalStrut(60));
+        labelPanel.add(Box.createHorizontalStrut(200));
         labelPanel.add(player2Label);
 
+      //  keySetPanel.add(Box.createHorizontalStrut(100));
         keySetPanel.add(leftPlayerKeySet);
-        keySetPanel.add(Box.createHorizontalStrut(30));
+        keySetPanel.add(Box.createHorizontalStrut(40));
         keySetPanel.add(rightPlayerKeySet);
-        wholePanel.add(labelPanel);
-        wholePanel.add(keySetPanel);
+      //  keySetPanel.add(Box.createHorizontalStrut(20));
+        //  wholePanel.add(Box.createVerticalStrut(10));
 
         saveButton = new JButton("Speichern");
         saveButton.setFont(Design.getDefaultFont(20));
         saveButton.addMouseListener(this);
+        saveButton.setBackground(Design.getPrimaryColor());
         buttonPanel.add(saveButton);
+     //   buttonPanel.setPreferredSize(new Dimension(Frame.getInstance().getWidth(),50));
 
-        buttonPanel.add(Box.createHorizontalStrut(10));
-        restoreDefaultButton = new JButton("Standard Belegung wiederherstellen");
+
+        restoreDefaultButton = new JButton("Wiederherstellen");
         restoreDefaultButton.setFont(Design.getDefaultFont(20));
         restoreDefaultButton.addMouseListener(this);
+        restoreDefaultButton.setBackground(Design.getPrimaryColor());
         buttonPanel.add(restoreDefaultButton);
 
-        wholePanel.add(Box.createVerticalStrut(50));
-        wholePanel.add(buttonPanel);
+
+        abortButton=new JButton("Abbrechen");
+        abortButton.setFont(Design.getDefaultFont(20));
+        abortButton.addMouseListener(this);
+        abortButton.setBackground(Design.getPrimaryColor());
+        buttonPanel.add(abortButton);
+
+       // wholePanel.add(Box.createVerticalStrut(10));
+
+        wholePanel.add(labelPanel,BorderLayout.NORTH);
+        //     wholePanel.add(Box.createVerticalStrut(10));
+        wholePanel.add(keySetPanel,BorderLayout.CENTER);
+        wholePanel.add(buttonPanel,BorderLayout.SOUTH);
 
         add(wholePanel);
 
@@ -234,6 +259,10 @@ public class KeySetPanel extends Panel implements MouseListener {
                     player1Label[i].setText(Character.toString(Character.toUpperCase(player1Keys[i])));
                     player2Label[i].setText(Character.toString(Character.toUpperCase(player2Keys[i])));
                 }
+            }else if(e.getSource().equals(abortButton)){
+                Frame.getInstance().getContentPane().removeAll();
+                Frame.getInstance().getContentPane().add(originalContentPane);
+                ((JPanel) Frame.getInstance().getContentPane()).updateUI();
             }
         }
     }
