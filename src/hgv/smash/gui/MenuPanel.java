@@ -65,11 +65,11 @@ public class MenuPanel extends Panel implements ActionListener {
         buttonPlayer1.setBounds(1024 / 4 - 100, 230, 200, 50);
         buttonPlayer2.setBounds(1024 / 4 * 3 - 100, 230, 200, 50);
         buttonMap.setBounds(1024 / 2 - 75, 230, 150, 50);
-        buttonPlayer1.setRenderer(new MyComboBoxRenderer("Ersten Avatar wählen"));
+        buttonPlayer1.setRenderer(new MyComboBoxRenderer("  Ersten Avatar wählen"));
         buttonPlayer1.setSelectedIndex(-1);
-        buttonPlayer2.setRenderer(new MyComboBoxRenderer("Zweiten Avatar wählen"));
+        buttonPlayer2.setRenderer(new MyComboBoxRenderer("  Zweiten Avatar wählen"));
         buttonPlayer2.setSelectedIndex(-1);
-        buttonMap.setRenderer(new MyComboBoxRenderer("Map auswählen"));
+        buttonMap.setRenderer(new MyComboBoxRenderer("  Map auswählen"));
         buttonMap.setSelectedIndex(-1);
 
         buttonPlayer1.setBackground(Color.WHITE);
