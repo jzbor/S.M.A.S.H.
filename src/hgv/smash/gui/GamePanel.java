@@ -575,6 +575,12 @@ public class GamePanel extends Panel {
         keys_player_2=keyBoardLayout.getPlayer2Keys();
     }
 
+    public void setPanelActive(){
+        Frame.getInstance().getContentPane().removeAll();
+        Frame.getInstance().getContentPane().add(this);
+        OurKeyListener.getInstance().setPanel(this);
+    }
+
     private BufferedImage resizePicture(BufferedImage bufferedImage, double factor) {
         int width = bufferedImage.getWidth();
         int height =bufferedImage.getHeight();

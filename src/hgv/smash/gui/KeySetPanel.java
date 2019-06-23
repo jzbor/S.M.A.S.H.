@@ -208,6 +208,7 @@ public class KeySetPanel extends Panel implements MouseListener {
                 Frame.getInstance().getContentPane().add(originalContentPane);
                 if(originalContentPane instanceof GamePanel){
                     ((GamePanel)originalContentPane).updateKeys();
+                    ((GamePanel)originalContentPane).setPanelActive();
                 }
                 ((JPanel) Frame.getInstance().getContentPane()).updateUI();
             } else if (e.getSource().equals(restoreDefaultButton)) {
