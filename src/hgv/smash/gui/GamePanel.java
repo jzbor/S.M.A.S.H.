@@ -315,7 +315,14 @@ public class GamePanel extends Panel {
         }
 
         //create subimage and return upscaled one
-        BufferedImage subimage = bufferedImage.getSubimage((int) xLeft, (int) yTop, (int) xDiff - 2, (int) yDiff - 2);
+        BufferedImage subimage;
+        //linux bug
+        try{
+            subimage= bufferedImage.getSubimage((int) xLeft, (int) yTop, (int) xDiff, (int) yDiff );
+        }catch (Exception e){
+            System.out.println("Linux error");
+            subimage=bufferedImage.getSubimage((int) xLeft, (int) yTop, (int) xDiff-2, (int) yDiff-2);
+        }
         subimage=resizePicture(subimage,width/xDiff);
 
         return new ImageExtract((int) xLeft,(int)yTop,(int)xDiff,(int)yDiff,subimage);
@@ -389,8 +396,6 @@ public class GamePanel extends Panel {
 
                 xPlayerIcon=halfArrowLength-playerIconWidth/2;
                 yPlayerIcon=halfArrowLength-playerIconHeight/2;
-
-                System.out.println("top left");
             }
             //bottom left corner
             else if (xPlayerMiddle < xLeft + halfArrowLength && yPlayerTop > yBottom || xPlayerRight < xLeft && yPlayerMiddle > yBottom - halfArrowLength) {
@@ -403,7 +408,6 @@ public class GamePanel extends Panel {
                 xPlayerIcon=halfArrowLength-playerIconWidth/2;
                 yPlayerIcon=(int)height-halfArrowLength-playerIconHeight/2;
 
-                System.out.println("bottom left");
             }
             //top right corner
             else if (xPlayerMiddle > xRight - halfArrowLength && yPlayerBottom < yTop || xPlayerLeft > xRight && yPlayerMiddle< yTop + halfArrowLength) {
@@ -417,7 +421,6 @@ public class GamePanel extends Panel {
                 xPlayerIcon=(int)width-halfArrowLength-playerIconWidth/2;
                 yPlayerIcon=halfArrowLength-playerIconHeight/2;
 
-                System.out.println("top right");
             }
             //bottom right corner
             else if (xPlayerMiddle > xRight - halfArrowLength && yPlayerTop > yBottom || xPlayerLeft > xRight && yPlayerMiddle > yBottom - halfArrowLength) {
@@ -431,7 +434,6 @@ public class GamePanel extends Panel {
                 xPlayerIcon=(int)width-halfArrowLength-playerIconWidth/2;
                 yPlayerIcon=(int)height-halfArrowLength-playerIconHeight/2;
 
-                System.out.println("bottom right");
             }
 
             //side
@@ -447,7 +449,6 @@ public class GamePanel extends Panel {
                 xPlayerIcon=halfArrowLength-playerIconWidth/2;
                 yPlayerIcon=yPlayerMiddle-playerIconHeight/2;
 
-                System.out.println("left side");
             }
             //right side
             else if (xPlayerLeft > xRight) {
@@ -458,7 +459,6 @@ public class GamePanel extends Panel {
                 xPlayerIcon=(int)width-halfArrowLength-playerIconWidth/2;
                 yPlayerIcon=yPlayerMiddle-playerIconHeight/2;
 
-                System.out.println("right side");
             }
             //top side
             else if (yPlayerBottom < yTop) {
@@ -471,7 +471,6 @@ public class GamePanel extends Panel {
                 xPlayerIcon=xPlayerMiddle-playerIconWidth/2;
                 yPlayerIcon=halfArrowLength-playerIconHeight/2;
 
-                System.out.println("top side");
             }
             //bottom side
             else if (yPlayerTop > yBottom) {
@@ -483,7 +482,6 @@ public class GamePanel extends Panel {
                 xPlayerIcon=xPlayerMiddle-playerIconWidth/2;
                 yPlayerIcon=(int)height-halfArrowLength-playerIconHeight/2;
 
-                System.out.println("bottom side");
             }
             //not out of map
             else {
