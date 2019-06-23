@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Avatar {
-    public static final String[] AVATAR_NAMES = {"Schorsch", "Gespenst d.K."};
+    public static final String[] AVATAR_NAMES = {"Schorsch", "Gespenst d.K.", "Pfabio"};
     public static final int NORMAL = 0;
     public static final int STANDING = 1;
     public static final int SUPER_LOADING = 0;
@@ -27,7 +27,7 @@ public class Avatar {
     private static final String[] ICON_FILENAMES = {"superloading.png", "superready.png"};
     private static final String ANIMATION_FILENAMES = "walk%d.png";
     private static final String STORY_FILENAME = "story.txt";
-    private static final String[] AVATAR_FILES = {"georg/", "ghost/"};
+    private static final String[] AVATAR_FILES = {"georg/", "ghost/", "scootie/"};
     private static final int HIT_ANIMATION_LENGTH = 400;
     private BufferedImage[] regularImages;
     private BufferedImage[] animationImages;
