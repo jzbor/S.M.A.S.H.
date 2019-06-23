@@ -5,7 +5,6 @@ import hgv.smash.game.GameloopThread;
 import hgv.smash.game.LevelMap;
 import hgv.smash.game.Player;
 import hgv.smash.game.Vector2D;
-import hgv.smash.gui.ImageExtract;
 import hgv.smash.resources.Avatar;
 import hgv.smash.resources.Design;
 import hgv.smash.resources.KeyBoardLayout;
@@ -316,7 +315,7 @@ public class GamePanel extends Panel {
         }
 
         //create subimage and return upscaled one
-        BufferedImage subimage = bufferedImage.getSubimage((int) xLeft, (int) yTop, (int) xDiff, (int) yDiff);
+        BufferedImage subimage = bufferedImage.getSubimage((int) xLeft, (int) yTop, (int) xDiff - 2, (int) yDiff - 2);
         subimage=resizePicture(subimage,width/xDiff);
 
         return new ImageExtract((int) xLeft,(int)yTop,(int)xDiff,(int)yDiff,subimage);
