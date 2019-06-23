@@ -1,6 +1,5 @@
 package hgv.smash.game;
 
-import hgv.smash.Main;
 import hgv.smash.gui.Frame;
 import hgv.smash.resources.Avatar;
 import hgv.smash.resources.Sound;
@@ -322,11 +321,6 @@ public class Player extends GameObject {
     public void draw(Graphics2D graphics2D) {
 
         avatar.draw(graphics2D, xpos[0], ypos[0], movementDirection, hitDirection);
-
-        if (Main.DEBUG) {
-            graphics2D.setColor(Color.RED);
-            graphics2D.draw(model);
-        }
     }
 
     public String getName() {

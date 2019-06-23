@@ -1,7 +1,5 @@
 package hgv.smash.game;
 
-import hgv.smash.Main;
-
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -89,15 +87,6 @@ public class LevelMap extends GameObject {
 
     public void draw(Graphics2D graphics2D) {
         graphics2D.drawImage(backgroundImage, 0, 0, null);
-
-        if (Main.DEBUG) {
-            // @DEBUG
-            graphics2D.setColor(Color.MAGENTA);
-            for (Rectangle rect :
-                    platformModels) {
-                graphics2D.fill(rect);
-            }
-        }
     }
 
 }

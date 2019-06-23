@@ -1,6 +1,5 @@
 package hgv.smash.gui;
 
-import hgv.smash.Main;
 import hgv.smash.game.LevelMap;
 import hgv.smash.game.Player;
 import hgv.smash.resources.Avatar;
@@ -158,13 +157,6 @@ public class ScorePanel extends Panel implements ActionListener {
         add(buttonPanel, BorderLayout.SOUTH);
         setSize(Frame.getInstance().getContentPane().getSize());
         setPreferredSize(getSize());
-
-
-        // debugging
-        if (Main.DEBUG) {
-            setBorder(BorderFactory.createLineBorder(Color.RED)); // debugging purposes
-            updateUI();
-        }
         System.out.println(gameoverLabel);
     }
 

@@ -1,6 +1,5 @@
 package hgv.smash.gui;
 
-import hgv.smash.Main;
 import hgv.smash.game.GameloopThread;
 import hgv.smash.game.LevelMap;
 import hgv.smash.game.Player;
@@ -113,12 +112,6 @@ public class GamePanel extends Panel {
                 imageExtract = calculateCamera(bi);
             } else {
                 imageExtract = new ImageExtract(0, 0, (int) width, (int) height, bi);
-            }
-
-            if (Main.DEBUG) {
-                // draw fps
-                graphics2D.setColor(Color.BLACK);
-                graphics2D.drawString(currentFramerate + " FPS", 20, 20);
             }
 
             //calculate arrows
