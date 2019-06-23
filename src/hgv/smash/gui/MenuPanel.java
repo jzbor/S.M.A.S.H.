@@ -14,7 +14,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 //Klasse für das Start- und Hauptmenü:
 
@@ -24,6 +26,7 @@ public class MenuPanel extends Panel implements ActionListener {
     private BufferedImage previewPlayer1;
     private BufferedImage previewPlayer2;
     private JButton startButton;
+    private JButton disclaimerButton;
     private JLabel labelGameTitel;
     private JFrame frame;
     private Avatar avatar1;
@@ -83,6 +86,12 @@ public class MenuPanel extends Panel implements ActionListener {
         startButton.addActionListener(this);
         add(startButton);
 
+        disclaimerButton = new JButton("Dementi");
+        disclaimerButton.setBounds(412 - 50, 600, 300, 50);
+        disclaimerButton.setBackground(Color.WHITE);
+        disclaimerButton.addActionListener(this);
+        add(disclaimerButton);
+
         labelGameTitel = new JLabel("S.M.A.S.H");
         labelGameTitel.setBounds(15, -70, 400, 200);
         labelGameTitel.setFont(Design.getTitleFont(45));
@@ -93,6 +102,11 @@ public class MenuPanel extends Panel implements ActionListener {
         buttonPlayer1.setFont(Design.getDefaultFont(buttonMap.getFont().getSize()));
         buttonPlayer2.setFont(Design.getDefaultFont(buttonMap.getFont().getSize()));
         startButton.setFont(Design.getDefaultFont());
+        startButton.setBackground(Design.getPrimaryColor());
+        startButton.setForeground(Design.getSecondaryColor());
+        disclaimerButton.setFont(Design.getDefaultFont());
+        disclaimerButton.setBackground(Design.getPrimaryColor());
+        disclaimerButton.setForeground(Design.getSecondaryColor());
 
 //        buttonMap.setBackground(Design.getPrimaryColor());
 //        buttonMap.setForeground(Design.getSecondaryColor());
@@ -100,8 +114,6 @@ public class MenuPanel extends Panel implements ActionListener {
 //        buttonPlayer1.setForeground(Design.getSecondaryColor());
 //        buttonPlayer2.setBackground(Design.getPrimaryColor());
 //        buttonPlayer2.setForeground(Design.getSecondaryColor());
-        startButton.setBackground(Design.getPrimaryColor());
-        startButton.setForeground(Design.getSecondaryColor());
 
         previewPlayer1 = null;
         previewPlayer2 = null;
@@ -178,6 +190,20 @@ public class MenuPanel extends Panel implements ActionListener {
                 frame.getContentPane().add(gamePanel);
                 ((JPanel) (frame.getContentPane())).updateUI();
             }
+        } else if (actionEvent.getSource() == disclaimerButton) {
+            File currentFile = new File("./resources/disclaimer/disclaimer.txt");
+            String disclaimer = "";
+            try {
+                InputStreamReader isr = new InputStreamReader(new FileInputStream(currentFile));
+                int i;
+                while ((i = isr.read()) != -1) {
+                    disclaimer += (char) i;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            new TextDialog(disclaimer, (Frame) SwingUtilities.getWindowAncestor(this),
+                    "Haftungsausschluss", new Dimension(700, 400));
         }
     }
 

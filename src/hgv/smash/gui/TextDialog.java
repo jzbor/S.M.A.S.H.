@@ -18,22 +18,28 @@ public class TextDialog extends JDialog implements ActionListener {
     public TextDialog(String content, Frame owner) {
         super(owner, "", true);
         this.content = content;
-        init();
+        init(new Dimension(300, 400));
     }
 
     public TextDialog(String content, Frame owner, String title) {
         super(owner, title, true);
         this.content = content;
-        init();
+        init(new Dimension(300, 400));
+    }
+
+    public TextDialog(String content, Frame owner, String title, Dimension size) {
+        super(owner, title, true);
+        this.content = content;
+        init(size);
     }
 
     public TextDialog(String content, Frame owner, String title, boolean modal) {
         super(owner, title, modal);
         this.content = content;
-        init();
+        init(new Dimension(300, 400));
     }
 
-    private void init() {
+    private void init(Dimension size) {
         okButton = new JButton("Ok");
         JPanel rootPanel = new JPanel();
         JTextArea textArea = new JTextArea(content);
@@ -62,7 +68,7 @@ public class TextDialog extends JDialog implements ActionListener {
         rootPanel.add(okButton, BorderLayout.SOUTH);
         getContentPane().add(rootPanel);
 
-        setMinimumSize(new Dimension(300, 400));
+        setMinimumSize(size);
         pack();
         setVisible(true);
     }
