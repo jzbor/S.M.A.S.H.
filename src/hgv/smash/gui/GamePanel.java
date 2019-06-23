@@ -118,13 +118,12 @@ public class GamePanel extends Panel {
             imageExtract = calculateArrows(imageExtract);
             bi = imageExtract.getImage();
 
-            // @TODO implement thread safety
             frameBuffer = bi;
 
             // request ui update
             updateUI();
 
-            // sleep @TODO solve weird shit
+            // sleep
             if ((System.currentTimeMillis() - thisFrame) < (1000.0 / FRAMERATE)) {
                 int sleep = (int) ((1000.0 / FRAMERATE) - (System.currentTimeMillis() - thisFrame));
                 if (sleep > 0) {
@@ -176,14 +175,14 @@ public class GamePanel extends Panel {
         int PADDING = 25;
 
         String p1p = player1.getPercentage() + "%";
-        BufferedImage p1Icon = scaleImgToHeight(player1.getSuperIcon(), player1.getSuperIcon().getHeight()); // @TODO adjust height
+        BufferedImage p1Icon = scaleImgToHeight(player1.getSuperIcon(), player1.getSuperIcon().getHeight());
         graphics2D.drawImage(p1Icon, PADDING,
                 PADDING, null);
         graphics2D.drawString(p1p, (PADDING + p1Icon.getWidth()) + PADDING,
                 PADDING + p1Icon.getHeight() / 2);
 
         String p2p = player2.getPercentage() + "%";
-        BufferedImage p2Icon = scaleImgToHeight(player2.getSuperIcon(), player2.getSuperIcon().getHeight()); // @TODO adjust height
+        BufferedImage p2Icon = scaleImgToHeight(player2.getSuperIcon(), player2.getSuperIcon().getHeight());
         graphics2D.drawImage(p2Icon, (int) (width - PADDING - p2Icon.getWidth()),
                 PADDING, null);
         graphics2D.drawString(p2p, (int) ((width - PADDING - p2Icon.getWidth()) - fm.stringWidth(p2p) - PADDING),

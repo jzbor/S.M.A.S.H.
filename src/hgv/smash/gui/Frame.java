@@ -116,7 +116,6 @@ public class Frame extends JFrame {
             Frame.getInstance().getContentPane().removeAll();
             Frame.getInstance().getContentPane().add(keySetPanel);
             ((JPanel) Frame.getInstance().getContentPane()).updateUI();
-            //@todo set number for frame ZBORIL??
         });
         musicItem.addActionListener(e -> {
             Music menumusic = Music.getInstanceMenuMusic();
