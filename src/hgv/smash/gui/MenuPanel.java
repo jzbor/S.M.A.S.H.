@@ -213,8 +213,8 @@ public class MenuPanel extends Panel implements ActionListener {
         super.paintComponent(g);
         Graphics2D graphics2D = (Graphics2D) g;
         graphics2D.drawImage(backgroundImage, 0, 0, null);
-        graphics2D.drawImage(previewPlayer1, 210, 320, null);
-        graphics2D.drawImage(previewPlayer2, 723, 320, null);
+        graphics2D.drawImage(previewPlayer1, 210, 360, null);
+        graphics2D.drawImage(previewPlayer2, 723, 360, null);
     }
 
     @Override
