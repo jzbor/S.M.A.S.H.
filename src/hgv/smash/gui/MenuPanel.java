@@ -77,10 +77,6 @@ public class MenuPanel extends Panel implements ActionListener {
         buttonMap.setRenderer(new MyComboBoxRenderer("Map auswählen"));
         buttonMap.setSelectedIndex(-1);
 
-        buttonPlayer1.setBackground(Color.WHITE);
-        buttonPlayer2.setBackground(Color.WHITE);
-        buttonMap.setBackground(Color.WHITE);
-
         add(buttonPlayer1);
         add(buttonPlayer2);
         add(buttonMap);
@@ -157,6 +153,7 @@ public class MenuPanel extends Panel implements ActionListener {
                 repaint();
             }
         } else if (actionEvent.getSource() == buttonMap) {
+            buttonMap.setBackground(Design.getPrimaryColor());
             String s = (String) buttonMap.getSelectedItem();
             int variable = -1;
             for (int i = 0; i < LevelMap.MAP_NAMES.length; i++) {
