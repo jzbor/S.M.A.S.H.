@@ -25,14 +25,15 @@ public class Player extends GameObject {
     //acceleration and speed constants
     private static final double SPEED = 0.5; // speed of xpos movement (also used by jump())
     private static final double HIT_SPEED = 0.005;//speed when hit by other player
-    private static final long JUMP_COOLDOWN = 1000;//millis needed between two jumps
+    private static final long JUMP_COOLDOWN = 1900;//millis needed between two jumps
     private final static long SUPER_PUNCH_COOLDOWN = 5000;//millis needed between two punches
     private final static long PUNCH_COOLDOWN = 2000;//millis needed between two punches
+    private final static int NUMBER_JUMPS=2;
     private static final int[] DAMAGE_RANGE = new int[]{5, 15};
     private static final int[] SUPER_DAMAGE_RANGE = new int[]{5, 60};
     private static final int SUPER_MULTIPLIER = 10;
     private static final double X_SLOWDOWN_ACCELERATION = 9.81;//acceleration slows down jump
-    private static final int MAX_HEIGHT=-1500;//max height
+    private static final int MAX_HEIGHT = -1500;//max height
     //size of model loaded automatically
     private int width; // width of model
     private int height; // height of model
@@ -50,8 +51,8 @@ public class Player extends GameObject {
     private Avatar avatar; // avatar to display for player
     private Shape model; // model (mainly for collision detection)
     //sounds
-    private Sound punchSound=Sound.getInstanceSoundHit();
-    private Sound jumpSound=Sound.getInstanceSoundJump();
+    private Sound punchSound;
+    private Sound jumpSound;
 
     //other objects
     private Player otherPlayer;//other player (for punches)
@@ -74,11 +75,17 @@ public class Player extends GameObject {
     private int percentage = 15;
     private int number; // number of player ( 1 or 2 )
     private int hitDirection = -1;//direction of punch
-    private int normalHitboxWidth,normalHitboxHeight;//dimesion of hitbox
+    private int normalHitboxWidth, normalHitboxHeight;//dimesion of hitbox
 
     public Player(Avatar avatar, int xpos, LevelMap levelMap, int number) {
+        //punches directly available
         lastPunch = PUNCH_COOLDOWN;
         lastSuperPunch = SUPER_PUNCH_COOLDOWN;
+
+        //load sounds
+        punchSound = new Sound(Sound.HIT_SOUND);
+        jumpSound = new Sound(Sound.JUMP_SOUND);
+
         this.xpos = new int[3];
         this.xpos[0] = xpos;
         this.ypos = new int[3];
@@ -95,7 +102,7 @@ public class Player extends GameObject {
         BufferedImage normalImage = avatar.getImage(Avatar.NORMAL);
         height = normalImage.getHeight();
         width = normalImage.getWidth();
-        normalHitboxHeight=height*2;
+        normalHitboxHeight = height * 2;
         normalHitboxWidth = width;
     }
 
@@ -126,15 +133,19 @@ public class Player extends GameObject {
         lastPunch += millis;
         if (punch) {
             if (Frame.getInstance().getSound()) {
+                punchSound.stop();
                 punchSound.play();
             }
-            punchOtherPlayer(false,hitDirection);
+            punchOtherPlayer(false, hitDirection);
             avatar.setLastHit(System.currentTimeMillis());
             punch = false;
         }
         lastSuperPunch += millis;
         if (superPunch) {
-            punchOtherPlayer(true,hitDirection);
+            if (Frame.getInstance().getSound()) {
+                punchSound.play();
+            }
+            punchOtherPlayer(true, hitDirection);
             avatar.setLastSuperHit(System.currentTimeMillis());
             superPunch = false;
         }
@@ -153,9 +164,9 @@ public class Player extends GameObject {
         xpos[1] = (int) (xpos[0] + vx[0] * millis);
 
         //detect if player is higher than max high
-        if(ypos[1]<MAX_HEIGHT){
-            vy[1]=0;
-            ypos[1]=MAX_HEIGHT;
+        if (ypos[1] < MAX_HEIGHT) {
+            vy[1] = 0;
+            ypos[1] = MAX_HEIGHT;
         }
 
         // update model
@@ -165,7 +176,20 @@ public class Player extends GameObject {
         //@todo set coordinates to coordinats of platfrom(no early stop of movement)
         for (Rectangle platform : platformModels) {
 
-            if (platform.y + platform.height - ypos[1] >= 0 && ypos[1] + height - platform.y >= 0 && (xpos[0] + width >= platform.x && xpos[0] <= platform.x + platform.width)) {
+            if ((platform.x + platform.width - xpos[1] >= 0 && xpos[1] + width - platform.x >= 0) && (ypos[0] + height >= platform.y && ypos[0] <= platform.y + platform.height)) {
+                xpos[1]=xpos[0];
+                lastJump=JUMP_COOLDOWN;
+                jumps=NUMBER_JUMPS;
+            }
+            if (platform.y + platform.height - ypos[1] >= 0 && ypos[1] + height - platform.y >= 0 && (xpos[1] + width >= platform.x && xpos[1] <= platform.x + platform.width)) {
+                ypos[1]=ypos[0];
+                vy[1]=0;
+                lastJump=JUMP_COOLDOWN;
+                jumps=NUMBER_JUMPS;
+            }
+
+
+            /*if (platform.y + platform.height - ypos[1] >= 0 && ypos[1] + height - platform.y >= 0 && (xpos[1] + width >= platform.x && xpos[1] <= platform.x + platform.width)) {
                 vy[1] = 0;
                 //hit at bottom
                 if (platform.y - (ypos[1] + height) < ypos[1] - (platform.y + height)) {
@@ -204,7 +228,7 @@ public class Player extends GameObject {
                 xpos[1] = xpos[0];
                 ypos[1] = ypos[0];
                 vy[1] = 0;
-            }
+            }*/
         }
 
         //shift to new frame
@@ -226,9 +250,9 @@ public class Player extends GameObject {
         switch (i) {
             case Movement.JUMP: {
                 if (jumps > 0 && lastJump >= JUMP_COOLDOWN) {
+                    lastJump = 0;
                     jumped = true;
                     jumps--;
-                    lastJump = 0;
                 }
                 break;
             }
@@ -250,20 +274,20 @@ public class Player extends GameObject {
             case Movement.NORMAL_HIT: {
                 //todo: cooldown
                 if (lastPunch > PUNCH_COOLDOWN) {
-                    punch = true;
                     lastPunch = 0;
                     //not both punches directly after each other but cooldown only as long as  @todo change?
-                    lastSuperPunch=SUPER_PUNCH_COOLDOWN-PUNCH_COOLDOWN;
+                    lastSuperPunch = SUPER_PUNCH_COOLDOWN - PUNCH_COOLDOWN;
+                    punch = true;
                 }
                 break;
             }
             case Movement.SUPER_HIT: {
                 //todo: cooldown
                 if (lastSuperPunch > SUPER_PUNCH_COOLDOWN) {
-                    superPunch = true;
                     lastSuperPunch = 0;
                     //not both punches directly after each other @todo change?
-                    lastPunch=0;
+                    lastPunch = 0;
+                    superPunch = true;
                 }
                 break;
             }
@@ -273,31 +297,27 @@ public class Player extends GameObject {
         }
     }
 
-    private void punchOtherPlayer(boolean superdamage,int direction) {
-        if(!superdamage){
-            if(direction==-1) {
-                Shape hitbox = new Rectangle(xpos[0] + width / 2-normalHitboxWidth, ypos[0] + height / 2-normalHitboxHeight/2, normalHitboxWidth, normalHitboxHeight);
+    private void punchOtherPlayer(boolean superdamage, int direction) {
+        if (!superdamage) {
+            if (direction == -1) {
+                Shape hitbox = new Rectangle(xpos[0] + width / 2 - normalHitboxWidth, ypos[0] + height / 2 - normalHitboxHeight / 2, normalHitboxWidth, normalHitboxHeight);
                 otherPlayer.hit(hitbox, xpos[0] + width / 2, ypos[0] + height / 2, superdamage);
-            }
-            else if(direction==1){
-                Shape hitbox = new Rectangle(xpos[0] + width / 2, ypos[0] +height / 2-normalHitboxHeight/2, normalHitboxWidth, normalHitboxHeight);
+            } else if (direction == 1) {
+                Shape hitbox = new Rectangle(xpos[0] + width / 2, ypos[0] + height / 2 - normalHitboxHeight / 2, normalHitboxWidth, normalHitboxHeight);
                 otherPlayer.hit(hitbox, xpos[0] + width / 2, ypos[0] + height / 2, superdamage);
-            }
-            else {
+            } else {
                 System.err.println("unresolved hit direction");
             }
         }
         //@todo smaller hitbox
-        else{
-            if(direction==-1) {
-                Shape hitbox = new Rectangle(xpos[0] + width / 2-normalHitboxWidth, ypos[0] + height / 2-normalHitboxHeight/2, normalHitboxWidth, normalHitboxHeight);
+        else {
+            if (direction == -1) {
+                Shape hitbox = new Rectangle(xpos[0] + width / 2 - normalHitboxWidth, ypos[0] + height / 2 - normalHitboxHeight / 2, normalHitboxWidth, normalHitboxHeight);
                 otherPlayer.hit(hitbox, xpos[0] + width / 2, ypos[0] + height / 2, superdamage);
-            }
-            else if(direction==1){
-                Shape hitbox = new Rectangle(xpos[0] + width / 2, ypos[0] +height / 2-normalHitboxHeight/2, normalHitboxWidth, normalHitboxHeight);
+            } else if (direction == 1) {
+                Shape hitbox = new Rectangle(xpos[0] + width / 2, ypos[0] + height / 2 - normalHitboxHeight / 2, normalHitboxWidth, normalHitboxHeight);
                 otherPlayer.hit(hitbox, xpos[0] + width / 2, ypos[0] + height / 2, superdamage);
-            }
-            else {
+            } else {
                 System.err.println("unresolved hit direction");
             }
         }
@@ -377,7 +397,7 @@ public class Player extends GameObject {
     public void draw(Graphics2D graphics2D) {
         // @TODO change to drawing the avatar
 
-        avatar.draw(graphics2D, xpos[0], ypos[0], movementDirection,hitDirection);
+        avatar.draw(graphics2D, xpos[0], ypos[0], movementDirection, hitDirection);
 
         if (Main.DEBUG) {
             graphics2D.setColor(Color.RED);

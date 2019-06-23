@@ -9,10 +9,8 @@ import java.io.IOException;
 
 public class Sound {
 
-
-    //diese drei verschiedenen Objekte können erzeugt werden und von jeder anderen Klasse aufgerufen werden
-    private static Sound ourInstanceSoundHit = new Sound("Hit");
-    private static Sound ourInstanceSoundJump = new Sound("Jump");
+    public static final int HIT_SOUND=0;
+    public static final int JUMP_SOUND=1;
 
     //Files von den verschiedenen Sounds
     private File fileHit;
@@ -23,17 +21,17 @@ public class Sound {
     //auf den Clip wird der sound geladen und der Clip kann dann auch abgespielt werden.
     private Clip clip;
 
-        private Sound(String musicYouNeed) {
+        public Sound(int sound) {
 
         fileHit = new File("./resources/Sounds_and_Music/hit2.wav");
         fileJump = new File("./resources/Sounds_and_Music/jump.wav");
 
         //hier wird entschieden welcher File dann geladen wird
-        switch (musicYouNeed) {
-            case "Hit":
+        switch (sound) {
+            case HIT_SOUND:
                 chosenSound = fileHit;
                 break;
-            case "Jump":
+            case JUMP_SOUND:
                 chosenSound = fileJump;
                 break;
 
@@ -51,28 +49,14 @@ public class Sound {
         }
     }
 
-
-    public static Sound getInstanceSoundHit() {
-        return ourInstanceSoundHit;
-    }
-    public static Sound getInstanceSoundJump() {
-        return ourInstanceSoundJump;
-    }
     public void play() {
-        clip.close();
-        try {
-
-            clip.open(AudioSystem.getAudioInputStream(chosenSound));
-
-        } catch (LineUnavailableException | UnsupportedAudioFileException | IOException e) {
-            e.printStackTrace();
-        }
+        clip.stop();
+        clip.setFramePosition(0);
         clip.start();
     }
 
     public void stop() {
         clip.stop();
-
     }
 }
 

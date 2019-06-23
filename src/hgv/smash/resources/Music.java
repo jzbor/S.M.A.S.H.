@@ -77,15 +77,14 @@ public class Music {
         return ourInstanceScoreMusicBavaria;
     }
     public void play() {
-            clip.close();
+        clip.close();
         try {
-
             clip.open(AudioSystem.getAudioInputStream(chosenMusic));
 
         } catch (LineUnavailableException | UnsupportedAudioFileException | IOException e) {
             e.printStackTrace();
         }
-        clip.start();
+        clip.loop(Clip.LOOP_CONTINUOUSLY);
     }
 
     public void stop() {
