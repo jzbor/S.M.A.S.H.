@@ -60,8 +60,8 @@ public class GamePanel extends Panel {
     public GamePanel(Avatar a1, Avatar a2, LevelMap map) {
         updateKeys();
 
-        height = map.getBackgroundImage().getHeight();
-        width = map.getBackgroundImage().getWidth();
+        height = Frame.getInstance().getContentPane().getHeight()+2/*map.getBackgroundImage().getHeight()*/;
+        width = Frame.getInstance().getContentPane().getWidth()+2/*map.getBackgroundImage().getWidth()*/;
         // assign and create params
         running = true;
         GameloopThread gameloopThread = new GameloopThread(this);

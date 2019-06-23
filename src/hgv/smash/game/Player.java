@@ -24,14 +24,14 @@ public class Player extends GameObject {
 
     //acceleration and speed constants
     private static final double SPEED = 0.5; // speed of xpos movement (also used by jump())
-    private static final double HIT_SPEED = 0.005;//speed when hit by other player
+    private static final double HIT_SPEED = 0.05;//speed when hit by other player
     private static final long JUMP_COOLDOWN = 1900;//millis needed between two jumps
     private final static long SUPER_PUNCH_COOLDOWN = 5000;//millis needed between two punches
     private final static long PUNCH_COOLDOWN = 2000;//millis needed between two punches
     private final static int NUMBER_JUMPS=2;
     private static final int[] DAMAGE_RANGE = new int[]{5, 15};
-    private static final int[] SUPER_DAMAGE_RANGE = new int[]{5, 60};
-    private static final int SUPER_MULTIPLIER = 10;
+    private static final int[] SUPER_DAMAGE_RANGE = new int[]{5, 40};
+    private static final int SUPER_MULTIPLIER = 2;
     private static final double X_SLOWDOWN_ACCELERATION = 9.81;//acceleration slows down jump
     private static final int MAX_HEIGHT = -1500;//max height
     //size of model loaded automatically
@@ -53,6 +53,7 @@ public class Player extends GameObject {
     //sounds
     private Sound punchSound;
     private Sound jumpSound;
+    private Sound superPuchSound;
 
     //other objects
     private Player otherPlayer;//other player (for punches)
@@ -85,6 +86,7 @@ public class Player extends GameObject {
         //load sounds
         punchSound = new Sound(Sound.HIT_SOUND);
         jumpSound = new Sound(Sound.JUMP_SOUND);
+        superPuchSound = new Sound(Sound.SUPER_HIT_SOUND);
 
         this.xpos = new int[3];
         this.xpos[0] = xpos;
@@ -102,7 +104,7 @@ public class Player extends GameObject {
         BufferedImage normalImage = avatar.getImage(Avatar.NORMAL);
         height = normalImage.getHeight();
         width = normalImage.getWidth();
-        normalHitboxHeight = height * 2;
+        normalHitboxHeight = height;
         normalHitboxWidth = width;
     }
 
@@ -142,7 +144,7 @@ public class Player extends GameObject {
         lastSuperPunch += millis;
         if (superPunch) {
             if (Frame.getInstance().getSound()) {
-                punchSound.play();
+                superPuchSound.play();
             }
             punchOtherPlayer(true, hitDirection);
             avatar.setLastSuperHit(System.currentTimeMillis());
@@ -323,20 +325,20 @@ public class Player extends GameObject {
     }
 
     private void hit(Shape hitbox, int xCentre, int yCentre, boolean superdamage) {
+        double hitMuliplyer=percentage/5;
         if (hitbox.intersects((Rectangle2D) model)) {
+            percentage += Math.random() * (SUPER_DAMAGE_RANGE[1] - SUPER_DAMAGE_RANGE[0]) + SUPER_DAMAGE_RANGE[0];
             Vector2D punchVector = new Vector2D(xpos[0] + width / 2 - xCentre, ypos[0] + height / 2 - yCentre);
             //unit vector so that every punch results in same speed
             Vector2D unitPunchVector = punchVector.directionVector();
             if (superdamage) {
-                vx_punch = unitPunchVector.getX() * HIT_SPEED * percentage * SUPER_MULTIPLIER;
-                vy_punch = unitPunchVector.getY() * HIT_SPEED * percentage * SUPER_MULTIPLIER;
+                vx_punch = unitPunchVector.getX() * HIT_SPEED * hitMuliplyer * SUPER_MULTIPLIER;
+                vy_punch = unitPunchVector.getY() * HIT_SPEED * hitMuliplyer * SUPER_MULTIPLIER;
                 System.out.println(unitPunchVector.toString());
-                percentage += Math.random() * (SUPER_DAMAGE_RANGE[1] - SUPER_DAMAGE_RANGE[0]) + SUPER_DAMAGE_RANGE[0];
             } else {
-                vx_punch = unitPunchVector.getX() * HIT_SPEED * percentage;
-                vy_punch = unitPunchVector.getY() * HIT_SPEED * percentage;
+                vx_punch = unitPunchVector.getX() * HIT_SPEED * hitMuliplyer;
+                vy_punch = unitPunchVector.getY() * HIT_SPEED * hitMuliplyer;
                 System.out.println(unitPunchVector.toString());
-                percentage += Math.random() * (DAMAGE_RANGE[1] - DAMAGE_RANGE[0]) + DAMAGE_RANGE[0];
             }
 
         }

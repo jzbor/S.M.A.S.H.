@@ -11,7 +11,7 @@ import java.awt.event.ActionListener;
 public class Frame extends JFrame {
 
     private static final String TITLE = "S.M.A.S.H.";
-    private static final Dimension FINAL_SIZE = new Dimension(1024, 768 + 53);
+    private static final Dimension FINAL_SIZE = new Dimension(1024, 768);
     private static final Dimension DEBUG_SIZE = new Dimension(1366, 768);
     private static final String KEYBOARD_LAYOUT_FILE="./resources/keyboard/keyboardLayout.ser";
     private static final Frame ourInstance = new Frame();
