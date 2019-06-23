@@ -134,6 +134,9 @@ public class Player extends GameObject {
         }
         lastSuperPunch += millis;
         if (superPunch) {
+            if (Frame.getInstance().getSound()) {
+                punchSound.play();
+            }
             punchOtherPlayer(true,hitDirection);
             avatar.setLastSuperHit(System.currentTimeMillis());
             superPunch = false;
@@ -141,9 +144,6 @@ public class Player extends GameObject {
         //change speed if jumped
         lastJump += millis;
         if (jumped) {
-            if (Frame.getInstance().getSound()) {
-                jumpSound.play();
-            }
             vy[1] = -SPEED;
             jumped = false;
         }
