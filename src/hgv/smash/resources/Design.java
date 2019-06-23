@@ -75,7 +75,11 @@ public class Design {
                 "ComboBox.background",
                 "ComboBox.buttonBackground",
                 "ComboBox.selectionForeground",
-                "OptionPane.background"
+                "OptionPane.background",
+                "MenuBar.selectionForeground",
+                "MenuItem.selectionForeground",
+                "MenuBar.background",
+                "Menu.selectionForeground"
         };
         for (int i = 0; i < bgKeys.length; i++) {
             UIManager.put(bgKeys[i], getPrimaryColor());
@@ -89,7 +93,12 @@ public class Design {
                 "OptionPane.foreground",
                 "OptionPane.messageForeground",
                 "OptionPane.buttonForeground",
-                "Panel.foreground"
+                "Panel.foreground",
+                "MenuBar.selectionBackground",
+                "MenuItem.selectionBackground",
+                "MenuBar.highlight",
+                "MenuBar.foreground",
+                "Menu.selectionBackground"
         };
         for (int i = 0; i < fgKeys.length; i++) {
             UIManager.put(fgKeys[i], getSecondaryColor());
@@ -102,6 +111,15 @@ public class Design {
         };
         for (int i = 0; i < fontKeys.length; i++) {
             UIManager.put(fontKeys[i], getDefaultFont());
+        }
+
+        String[] borderKeys = new String[]{
+                "MenuBar.border",
+                "MenuItem.border",
+                "Menu.border"
+        };
+        for (int i = 0; i < borderKeys.length; i++) {
+            UIManager.put(borderKeys[i], BorderFactory.createEmptyBorder());
         }
     }
 }
