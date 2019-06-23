@@ -43,9 +43,9 @@ public class Frame extends JFrame {
     private void createMenu() {
         JMenuBar menuBar = new JMenuBar();
         this.setJMenuBar(menuBar);
-        JMenu fileMenu = new JMenu("File");
-        JMenu prefMenu = new JMenu("Preferences");
-        JMenu gameMenu = new JMenu("Game");
+        JMenu fileMenu = new JMenu("Programm");
+        JMenu prefMenu = new JMenu("Einstellungen");
+        JMenu gameMenu = new JMenu("Spiel");
         menuBar.add(fileMenu);
         menuBar.add(gameMenu);
         menuBar.add(prefMenu);
@@ -78,7 +78,7 @@ public class Frame extends JFrame {
     }
 
     private void addFileMenuItems(JMenu fileMenu) {
-        JMenuItem quitItem = new JMenuItem("Quit");
+        JMenuItem quitItem = new JMenuItem("Beenden");
         fileMenu.add(quitItem);
         quitItem.addActionListener(new ActionListener() {
             @Override
@@ -89,7 +89,7 @@ public class Frame extends JFrame {
     }
 
     private void addGameMenuItems(JMenu gameMenu) {
-        JMenuItem pauseItem = new JMenuItem("Pause Game");
+        JMenuItem pauseItem = new JMenuItem("Spiel pausieren");
         gameMenu.add(pauseItem);
         JMenuItem cameraItem = new JMenuItem("Kamera an/aus");
         gameMenu.add(cameraItem);
@@ -118,11 +118,11 @@ public class Frame extends JFrame {
 
     private void addPrefMenuItems(JMenu prefMenu) {
 
-        JMenuItem musicItem = new JMenuItem("Musik");
+        JMenuItem musicItem = new JMenuItem("Musik an/aus");
         prefMenu.add(musicItem);
-        JMenuItem prefItem = new JMenuItem("Keyboard Preferences");
+        JMenuItem prefItem = new JMenuItem("Tastenbelegung");
         prefMenu.add(prefItem);
-        JMenuItem soundItem = new JMenuItem("Sound");
+        JMenuItem soundItem = new JMenuItem("Geräusche an/aus");
         prefMenu.add(soundItem);
         soundItem.addActionListener(new ActionListener() {
             @Override
