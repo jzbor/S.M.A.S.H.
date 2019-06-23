@@ -192,6 +192,12 @@ public class ScorePanel extends Panel implements ActionListener {
             frame.getContentPane().removeAll();
             frame.getContentPane().add(gamePanel);
             ((JPanel) (frame.getContentPane())).updateUI();
+            Music oldmusic=Music.getInstanceScoreMusicSowjet();
+            oldmusic.stop();
+            oldmusic=Music.getInstanceScoreMusicBavaria();
+            oldmusic.stop();
+            Music newmusic=Music.getInstanceGameMusic();
+            newmusic.play();
         }
     }
 

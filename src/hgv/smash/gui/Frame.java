@@ -1,14 +1,12 @@
 package hgv.smash.gui;
 
 import hgv.smash.resources.Design;
-import hgv.smash.resources.KeyBoardLayout;
 import hgv.smash.resources.Music;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.*;
 
 public class Frame extends JFrame {
 
@@ -19,12 +17,14 @@ public class Frame extends JFrame {
     private static final Frame ourInstance = new Frame();
     private boolean playMusic;
     private int currentPanel;
+    private boolean playSound;
 
     // 0=Menu; 1=Game; 2= Score;
     private Frame() {
         super(TITLE);
         this.setResizable(false);
         playMusic = true;
+        playSound = true;
         createMenu();
         // Init Frame
         setVisible(true);
@@ -122,6 +122,14 @@ public class Frame extends JFrame {
         prefMenu.add(musicItem);
         JMenuItem prefItem = new JMenuItem("Keyboard Preferences");
         prefMenu.add(prefItem);
+        JMenuItem soundItem = new JMenuItem("Sound");
+        prefMenu.add(soundItem);
+        soundItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                playSound = !playSound;
+            }
+        });
         prefItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -171,5 +179,9 @@ public class Frame extends JFrame {
 
     public boolean getMusic() {
         return playMusic;
+    }
+
+    public boolean getSound() {
+        return playSound;
     }
 }

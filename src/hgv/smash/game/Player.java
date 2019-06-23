@@ -1,6 +1,7 @@
 package hgv.smash.game;
 
 import hgv.smash.Main;
+import hgv.smash.gui.Frame;
 import hgv.smash.resources.Avatar;
 import hgv.smash.resources.Sound;
 
@@ -95,7 +96,7 @@ public class Player extends GameObject {
         height = normalImage.getHeight();
         width = normalImage.getWidth();
         normalHitboxHeight=height*2;
-        normalHitboxWidth=(int)(width);
+        normalHitboxWidth = width;
     }
 
     @Override
@@ -124,14 +125,15 @@ public class Player extends GameObject {
         //change speed if hit
         lastPunch += millis;
         if (punch) {
-            punchSound.play();
+            if (Frame.getInstance().getSound()) {
+                punchSound.play();
+            }
             punchOtherPlayer(false,hitDirection);
             avatar.setLastHit(System.currentTimeMillis());
             punch = false;
         }
         lastSuperPunch += millis;
         if (superPunch) {
-            punchSound.play();
             punchOtherPlayer(true,hitDirection);
             avatar.setLastSuperHit(System.currentTimeMillis());
             superPunch = false;
@@ -139,7 +141,9 @@ public class Player extends GameObject {
         //change speed if jumped
         lastJump += millis;
         if (jumped) {
-            //jumpSound.play();
+            if (Frame.getInstance().getSound()) {
+                jumpSound.play();
+            }
             vy[1] = -SPEED;
             jumped = false;
         }
