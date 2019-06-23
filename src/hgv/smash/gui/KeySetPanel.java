@@ -270,12 +270,17 @@ public class KeySetPanel extends Panel implements MouseListener {
                 for (int i = 0; i < player2Keys.length; i++) {
                     allKeys[i + player1Keys.length - 1] = player2Keys[i];
                 }
+                boolean noSameKeys=true;
                 for (int i = 0; i < allKeys.length - 1; i++) {
                     for (int j = 1 + i; j < allKeys.length - 1; j++) {
                         if (allKeys[i] == allKeys[j]) {
                             saveable = false;
+                            noSameKeys=false;
                         }
                     }
+                }
+                if(!noSameKeys){
+                    JOptionPane.showMessageDialog(this,"Jede Taste darf nur einmal benutzt werden!","Fehler",JOptionPane.ERROR_MESSAGE);
                 }
 
 
