@@ -1,6 +1,8 @@
 package hgv.smash.gui;
 
 
+import hgv.smash.resources.Design;
+
 import javax.swing.*;
 import java.awt.*;
 

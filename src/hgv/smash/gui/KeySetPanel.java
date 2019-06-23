@@ -22,7 +22,6 @@ public class KeySetPanel extends Panel implements MouseListener {
     private static final String PATH = "./resources/keyboard/keyboardLayout.ser";
 
 
-
     private char[] player1Keys;
     private char[] player2Keys;
 
@@ -35,7 +34,7 @@ public class KeySetPanel extends Panel implements MouseListener {
     private final Border loweredBorder = BorderFactory.createLoweredBevelBorder();
     private final Border raisedBorder = BorderFactory.createRaisedBevelBorder();
 
-    private static final int[][] KEY_POSITION = {{1, 0},{0, 1}, {2, 1},{3, 1}, {3, 0}};
+    private static final int[][] KEY_POSITION = {{1, 0}, {0, 1}, {2, 1}, {3, 1}, {3, 0}};
 
     private JLabel selectedKey;
 
@@ -111,8 +110,8 @@ public class KeySetPanel extends Panel implements MouseListener {
             rightPlayerKeySet.add(player2KeyLabels[i], gbc2);
         }
 
-        JLabel player1Label=new JLabel("Spieler 1");
-        JLabel player2Label=new JLabel("Spieler 2");
+        JLabel player1Label = new JLabel("Spieler 1");
+        JLabel player2Label = new JLabel("Spieler 2");
         player1Label.setFont(Design.getDefaultFont(50));
         player2Label.setFont(Design.getDefaultFont(50));
 
@@ -121,7 +120,7 @@ public class KeySetPanel extends Panel implements MouseListener {
         saveButton.addMouseListener(this);
         saveButton.setBackground(Design.getPrimaryColor());
         buttonPanel.add(saveButton);
-     //   buttonPanel.setPreferredSize(new Dimension(Frame.getInstance().getWidth(),50));
+        //   buttonPanel.setPreferredSize(new Dimension(Frame.getInstance().getWidth(),50));
 
 
         restoreDefaultButton = new JButton("Wiederherstellen");
@@ -131,7 +130,7 @@ public class KeySetPanel extends Panel implements MouseListener {
         buttonPanel.add(restoreDefaultButton);
 
 
-        abortButton=new JButton("Abbrechen");
+        abortButton = new JButton("Abbrechen");
         abortButton.setFont(Design.getDefaultFont(20));
         abortButton.addMouseListener(this);
         abortButton.setBackground(Design.getPrimaryColor());
@@ -163,8 +162,8 @@ public class KeySetPanel extends Panel implements MouseListener {
             fileInputStream = new FileInputStream(file);
             objectInputStream = new ObjectInputStream(fileInputStream);
             Object object = objectInputStream.readObject();
-            if(object instanceof KeyBoardLayout){
-                keyBoardLayout=(KeyBoardLayout)object;
+            if (object instanceof KeyBoardLayout) {
+                keyBoardLayout = (KeyBoardLayout) object;
             }
         } catch (Exception exception) {
             exception.printStackTrace();
@@ -198,15 +197,28 @@ public class KeySetPanel extends Panel implements MouseListener {
     @Override
     public void keyTyped(KeyEvent e) {
         if (selectedKey != null) {
-            for (int i = 0; i < player1KeyLabels.length; i++) {
-                if (player1KeyLabels[i].equals(selectedKey)) {
-                    player1Keys[i] = Character.toLowerCase(e.getKeyChar());
-                }
-                if (player2KeyLabels[i].equals(selectedKey)) {
-                    player2Keys[i] = Character.toLowerCase(e.getKeyChar());
-                }
+            boolean isButtonAvailable = true;
+            char key = e.getKeyChar();
+
+            if (!(((int) key >= 65 && (int) key <= 90) || ((int) key >= 97 && (int) key <= 122) || key == 'ö' || key == 'ä' || key == 'ü')) {
+                isButtonAvailable = false;
             }
-            selectedKey.setText(Character.toString(Character.toUpperCase(e.getKeyChar())));
+            if (!(((int) key >= 65 && (int) key <= 90) || ((int) key >= 97 && (int) key <= 122) || key == 'ö' || key == 'ä' || key == 'ü')) {
+                isButtonAvailable = false;
+            }
+            if (isButtonAvailable) {
+                for (int i = 0; i < player1KeyLabels.length; i++) {
+                    if (player1KeyLabels[i].equals(selectedKey)) {
+                        player1Keys[i] = Character.toLowerCase(e.getKeyChar());
+                    }
+                    if (player2KeyLabels[i].equals(selectedKey)) {
+                        player2Keys[i] = Character.toLowerCase(e.getKeyChar());
+                    }
+                }
+                selectedKey.setText(Character.toString(Character.toUpperCase(e.getKeyChar())));
+            }else{
+                JOptionPane.showMessageDialog(this,"Es sind nur Buchstaben erlaubt!","Fehler",JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 
@@ -239,16 +251,46 @@ public class KeySetPanel extends Panel implements MouseListener {
             selectedKey.setBorder(loweredBorder);
         } else if (e.getSource() instanceof JButton) {
             if (e.getSource().equals(saveButton)) {
-                keyBoardLayout.setKeysForPlayer1(player1Keys);
-                keyBoardLayout.setKeysForPlayer2(player2Keys);
-                keyBoardLayout.serialize();
-                Frame.getInstance().getContentPane().removeAll();
-                Frame.getInstance().getContentPane().add(originalContentPane);
-                if(originalContentPane instanceof GamePanel){
-                    ((GamePanel)originalContentPane).updateKeys();
-                    ((GamePanel)originalContentPane).setPanelActive();
+                boolean saveable = true;
+                System.out.println((int) 'ö');
+                for (int i = 0; i < player1Keys.length; i++) {
+                    if (!(((int) player1Keys[i] >= 65 && (int) player1Keys[i] <= 90) || ((int) player1Keys[i] >= 97 && (int) player1Keys[i] <= 122) || player1Keys[i] == 'ö' || player1Keys[i] == 'ä' || player1Keys[i] == 'ü')) {
+                        saveable = false;
+                        System.out.println(player1Keys[i]);
+                    }
+                    if (!(((int) player2Keys[i] >= 65 && (int) player2Keys[i] <= 90) || ((int) player2Keys[i] >= 97 && (int) player2Keys[i] <= 122) || player2Keys[i] == 'ö' || player2Keys[i] == 'ä' || player2Keys[i] == 'ü')) {
+                        saveable = false;
+                        System.out.println(player2Keys[i]);
+                    }
                 }
-                ((JPanel) Frame.getInstance().getContentPane()).updateUI();
+                char[] allKeys = new char[player1Keys.length + player2Keys.length];
+                for (int i = 0; i < player1Keys.length; i++) {
+                    allKeys[i] = player1Keys[i];
+                }
+                for (int i = 0; i < player2Keys.length; i++) {
+                    allKeys[i + player1Keys.length - 1] = player2Keys[i];
+                }
+                for (int i = 0; i < allKeys.length - 1; i++) {
+                    for (int j = 1 + i; j < allKeys.length - 1; j++) {
+                        if (allKeys[i] == allKeys[j]) {
+                            saveable = false;
+                        }
+                    }
+                }
+
+
+                if (saveable) {
+                    keyBoardLayout.setKeysForPlayer1(player1Keys);
+                    keyBoardLayout.setKeysForPlayer2(player2Keys);
+                    keyBoardLayout.serialize();
+                    Frame.getInstance().getContentPane().removeAll();
+                    Frame.getInstance().getContentPane().add(originalContentPane);
+                    if (originalContentPane instanceof GamePanel) {
+                        ((GamePanel) originalContentPane).updateKeys();
+                        ((GamePanel) originalContentPane).setPanelActive();
+                    }
+                    ((JPanel) Frame.getInstance().getContentPane()).updateUI();
+                }
             } else if (e.getSource().equals(restoreDefaultButton)) {
                 player1Keys = KeyBoardLayout.getPlayer1DefaultKeys();
                 player2Keys = KeyBoardLayout.getPlayer2DefaultKeys();
@@ -260,7 +302,7 @@ public class KeySetPanel extends Panel implements MouseListener {
                     player1KeyLabels[i].setText(Character.toString(Character.toUpperCase(player1Keys[i])));
                     player2KeyLabels[i].setText(Character.toString(Character.toUpperCase(player2Keys[i])));
                 }
-            }else if(e.getSource().equals(abortButton)){
+            } else if (e.getSource().equals(abortButton)) {
                 Frame.getInstance().getContentPane().removeAll();
                 Frame.getInstance().getContentPane().add(originalContentPane);
                 ((JPanel) Frame.getInstance().getContentPane()).updateUI();
