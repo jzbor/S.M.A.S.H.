@@ -57,7 +57,7 @@ public class ScorePanel extends Panel implements ActionListener {
         JLabel lIconLabel = new JLabel(new ImageIcon(scaleAvatar(looser.getAvatar())));
         JLabel lNameLabel = new JLabel(looser.getName());
         JLabel lScoreLabel = new JLabel("Opfer");
-        storyButton = new JButton("Hintergrund-Geschichte");
+        storyButton = new JButton("Hintergrund-Geschichte anzeigen");
         nextButton = new JButton("Hauptmenü");
         playButton = new JButton("Nochmal spielen");
 
