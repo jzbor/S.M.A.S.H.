@@ -36,6 +36,7 @@ public class Avatar {
     private long lastHit;
     private long lastSuperHit;
     private String story;
+    private String name;
 
     private Avatar(String name) throws AvatarNotAvailableException {
         int index = -1;
@@ -67,6 +68,8 @@ public class Avatar {
         if (index < 0 || index >= AVATAR_FILES.length) {
             throw new AvatarNotAvailableException("Index " + index + "not available");
         }
+
+        name = AVATAR_NAMES[index];
 
         story = "";
 
@@ -207,5 +210,7 @@ public class Avatar {
         this.lastSuperHit = lastSuperHit;
     }
 
-
+    public String getName() {
+        return name;
+    }
 }

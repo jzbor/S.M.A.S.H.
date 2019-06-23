@@ -358,7 +358,7 @@ public class Player extends GameObject {
     }
 
     public String getName() {
-        return "Player " + number;
+        return "Spieler " + number + " (" + avatar.getName() + ")";
     }
 
 }
