@@ -28,7 +28,8 @@ public class Player extends GameObject {
     private static final long JUMP_COOLDOWN = 1900;//millis needed between two jumps
     private final static long SUPER_PUNCH_COOLDOWN = 10000;//millis needed between two punches
     private final static long PUNCH_COOLDOWN = 2000;//millis needed between two punches
-    private final static int NUMBER_JUMPS=2;
+    private final static long GENERAL_PUNCH_COOLDOWN = PUNCH_COOLDOWN;//always between whatever punch performed
+    private final static int NUMBER_JUMPS = 2;
     private static final int[] DAMAGE_RANGE = new int[]{5, 15};
     private static final int[] SUPER_DAMAGE_RANGE = new int[]{5, 40};
     private static final int SUPER_MULTIPLIER = 2;
@@ -53,7 +54,7 @@ public class Player extends GameObject {
     //sounds
     private Sound punchSound;
     private Sound jumpSound;
-    private Sound superPuchSound;
+    private Sound superPunchSound;
 
     //other objects
     private Player otherPlayer;//other player (for punches)
@@ -65,6 +66,7 @@ public class Player extends GameObject {
     //jumping
     private boolean jumped;//set true be changeMovement(); performs a jump in calc()
     private int jumps = 2; // jumps left
+
     private long jumpCooldown = 2000;//millis needed between two jumps
     private long lastJump;//time since last jump in millis
 
@@ -73,6 +75,7 @@ public class Player extends GameObject {
     private double vx_punch, vy_punch; // speed of player because of punch
     private long lastPunch;//time since last punch in millis
     private long lastSuperPunch;
+    private long lastGeneralPunch;
     private int percentage = 15;
     private int number; // number of player ( 1 or 2 )
     private int hitDirection = -1;//direction of punch
@@ -82,11 +85,12 @@ public class Player extends GameObject {
         //punches directly available
         lastPunch = PUNCH_COOLDOWN;
         lastSuperPunch = SUPER_PUNCH_COOLDOWN;
+        lastGeneralPunch = PUNCH_COOLDOWN;
 
         //load sounds
         punchSound = new Sound(Sound.HIT_SOUND);
         jumpSound = new Sound(Sound.JUMP_SOUND);
-        superPuchSound = new Sound(Sound.SUPER_HIT_SOUND);
+        superPunchSound = new Sound(Sound.SUPER_HIT_SOUND);
 
         this.xpos = new int[3];
         this.xpos[0] = xpos;
@@ -133,27 +137,28 @@ public class Player extends GameObject {
 
         //change speed if hit
         lastPunch += millis;
-        if (punch) {
-            if (Frame.getInstance().getSound()) {
-                punchSound.play();
-            }
-            punchOtherPlayer(false, hitDirection);
-            avatar.setLastHit(System.currentTimeMillis());
-            punch = false;
-        }
         lastSuperPunch += millis;
-        if (superPunch) {
-            if (Frame.getInstance().getSound()) {
-                superPuchSound.play();
+        lastGeneralPunch += millis;
+            if (punch) {
+                if (Frame.getInstance().getSound()) {
+                    punchSound.play();
+                }
+                punchOtherPlayer(false, hitDirection);
+                avatar.setLastHit(System.currentTimeMillis());
+                punch = false;
             }
-            punchOtherPlayer(true, hitDirection);
-            avatar.setLastSuperHit(System.currentTimeMillis());
-            superPunch = false;
-        }
+            if (superPunch) {
+                if (Frame.getInstance().getSound()) {
+                    superPunchSound.play();
+                }
+                punchOtherPlayer(true, hitDirection);
+                avatar.setLastSuperHit(System.currentTimeMillis());
+                superPunch = false;
+            }
         //change speed if jumped
         lastJump += millis;
         if (jumped) {
-             if (Frame.getInstance().getSound()) {
+            if (Frame.getInstance().getSound()) {
                 jumpSound.play();
             }
             vy[1] = -SPEED;
@@ -177,15 +182,15 @@ public class Player extends GameObject {
         for (Rectangle platform : platformModels) {
 
             if ((platform.x + platform.width - xpos[1] >= 0 && xpos[1] + width - platform.x >= 0) && (ypos[0] + height >= platform.y && ypos[0] <= platform.y + platform.height)) {
-                xpos[1]=xpos[0];
-                lastJump=JUMP_COOLDOWN;
-                jumps=NUMBER_JUMPS;
+                xpos[1] = xpos[0];
+                lastJump = JUMP_COOLDOWN;
+                jumps = NUMBER_JUMPS;
             }
             if (platform.y + platform.height - ypos[1] >= 0 && ypos[1] + height - platform.y >= 0 && (xpos[1] + width >= platform.x && xpos[1] <= platform.x + platform.width)) {
-                ypos[1]=ypos[0];
-                vy[1]=0;
-                lastJump=JUMP_COOLDOWN;
-                jumps=NUMBER_JUMPS;
+                ypos[1] = ypos[0];
+                vy[1] = 0;
+                lastJump = JUMP_COOLDOWN;
+                jumps = NUMBER_JUMPS;
             }
         }
 
@@ -230,17 +235,17 @@ public class Player extends GameObject {
                 break;
             }
             case Movement.NORMAL_HIT: {
-                if (lastPunch > PUNCH_COOLDOWN) {
+                if (lastPunch > PUNCH_COOLDOWN&&lastGeneralPunch>GENERAL_PUNCH_COOLDOWN) {
                     lastPunch = 0;
-                    lastSuperPunch = SUPER_PUNCH_COOLDOWN - PUNCH_COOLDOWN;
+                    lastGeneralPunch = 0;
                     punch = true;
                 }
                 break;
             }
             case Movement.SUPER_HIT: {
-                if (lastSuperPunch > SUPER_PUNCH_COOLDOWN) {
+                if (lastSuperPunch > SUPER_PUNCH_COOLDOWN&&lastGeneralPunch>GENERAL_PUNCH_COOLDOWN) {
                     lastSuperPunch = 0;
-                    lastPunch = 0;
+                    lastGeneralPunch = 0;
                     superPunch = true;
                 }
                 break;
@@ -277,7 +282,7 @@ public class Player extends GameObject {
     }
 
     private void hit(Shape hitbox, int xCentre, int yCentre, boolean superdamage) {
-        double hitMuliplyer=percentage/5;
+        double hitMuliplyer = percentage / 5;
         if (hitbox.intersects((Rectangle2D) model)) {
             percentage += Math.random() * (SUPER_DAMAGE_RANGE[1] - SUPER_DAMAGE_RANGE[0]) + SUPER_DAMAGE_RANGE[0];
             Vector2D punchVector = new Vector2D(xpos[0] + width / 2 - xCentre, ypos[0] + height / 2 - yCentre);
