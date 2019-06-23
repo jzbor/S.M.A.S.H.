@@ -41,9 +41,9 @@ public class MenuPanel extends Panel implements ActionListener {
         if (Frame.getInstance().getMusic()) {
             Music oldMusic = Music.getInstanceScoreMusicSowjet();
             oldMusic.stop();
-            oldMusic=Music.getInstanceScoreMusicBavaria();
+            oldMusic = Music.getInstanceScoreMusicBavaria();
             oldMusic.stop();
-            oldMusic=Music.getInstanceScoreMusicScout();
+            oldMusic = Music.getInstanceScoreMusicScout();
             oldMusic.stop();
             Music newMusic = Music.getInstanceMenuMusic();
             newMusic.play();
@@ -193,17 +193,17 @@ public class MenuPanel extends Panel implements ActionListener {
             }
         } else if (actionEvent.getSource() == disclaimerButton) {
             File currentFile = new File("./resources/disclaimer/disclaimer.txt");
-            String disclaimer = "";
+            StringBuilder disclaimer = new StringBuilder();
             try {
                 InputStreamReader isr = new InputStreamReader(new FileInputStream(currentFile));
                 int i;
                 while ((i = isr.read()) != -1) {
-                    disclaimer += (char) i;
+                    disclaimer.append((char) i);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            new TextDialog(disclaimer, (Frame) SwingUtilities.getWindowAncestor(this),
+            new TextDialog(disclaimer.toString(), (Frame) SwingUtilities.getWindowAncestor(this),
                     "Haftungsausschluss", new Dimension(700, 400));
         }
     }

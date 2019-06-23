@@ -11,18 +11,11 @@ import java.awt.event.ActionListener;
 
 public class TextDialog extends JDialog implements ActionListener {
 
-    private JButton okButton;
     private String content;
 
 
     public TextDialog(String content, Frame owner) {
         super(owner, "", true);
-        this.content = content;
-        init(new Dimension(400, 500));
-    }
-
-    public TextDialog(String content, Frame owner, String title) {
-        super(owner, title, true);
         this.content = content;
         init(new Dimension(400, 500));
     }
@@ -33,14 +26,8 @@ public class TextDialog extends JDialog implements ActionListener {
         init(size);
     }
 
-    public TextDialog(String content, Frame owner, String title, boolean modal) {
-        super(owner, title, modal);
-        this.content = content;
-        init(new Dimension(400, 500));
-    }
-
     private void init(Dimension size) {
-        okButton = new JButton("Ok");
+        JButton okButton = new JButton("Ok");
         JPanel rootPanel = new JPanel();
         JTextArea textArea = new JTextArea(content);
 

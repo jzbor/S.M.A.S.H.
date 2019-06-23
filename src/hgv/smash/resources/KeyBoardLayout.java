@@ -1,7 +1,4 @@
-
 package hgv.smash.resources;
-
-import hgv.smash.gui.KeySetPanel;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -9,40 +6,39 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 public class KeyBoardLayout implements Serializable {
-    private final String PATH = "./resources/keyboard/keyboardLayout.ser";
-
-    private static char[] player1DefaultKeys =new char[] {'w', 'a', 'd', 'f','r'};
-    private static char[] player2DefaultKeys= new char[]{'i', 'j', 'l', 'ö','p'};
-
+    private final static String PATH = "./resources/keyboard/keyboardLayout.ser";
+    private static char[] player1DefaultKeys = new char[]{'w', 'a', 'd', 'f', 'r'};
+    private static char[] player2DefaultKeys = new char[]{'i', 'j', 'l', 'ö', 'p'};
     private char[] player1Keys;
     private char[] player2Keys;
 
-    public KeyBoardLayout(){
+    public KeyBoardLayout() {
         player1Keys = player1DefaultKeys.clone();
         player2Keys = player2DefaultKeys.clone();
     }
-    public void setKeysForPlayer1(char[] keys){
-        player1Keys=keys;
-    }
 
-    public void setKeysForPlayer2(char[] keys){
-        player2Keys=keys;
-    }
-
-    public char[] getPlayer1Keys(){
-        return player1Keys.clone();
-    }
-
-    public char[] getPlayer2Keys(){
-        return player2Keys.clone();
-    }
-
-    public static char[] getPlayer1DefaultKeys(){
+    public static char[] getPlayer1DefaultKeys() {
         return player1DefaultKeys.clone();
     }
 
-    public static char[] getPlayer2DefaultKeys(){
+    public static char[] getPlayer2DefaultKeys() {
         return player2DefaultKeys.clone();
+    }
+
+    public void setKeysForPlayer1(char[] keys) {
+        player1Keys = keys;
+    }
+
+    public void setKeysForPlayer2(char[] keys) {
+        player2Keys = keys;
+    }
+
+    public char[] getPlayer1Keys() {
+        return player1Keys.clone();
+    }
+
+    public char[] getPlayer2Keys() {
+        return player2Keys.clone();
     }
 
     public void serialize() {

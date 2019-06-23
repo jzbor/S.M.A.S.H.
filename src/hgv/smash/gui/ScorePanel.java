@@ -35,23 +35,20 @@ public class ScorePanel extends Panel implements ActionListener {
         if (Frame.getInstance().getMusic()) {
             Music oldMusic = Music.getInstanceGameMusic();
             oldMusic.stop();
-            Music newMusic=null;
-            if (winner.getAvatar().getIndex()==0) {
+            Music newMusic = null;
+            if (winner.getAvatar().getIndex() == 0) {
                 newMusic = Music.getInstanceScoreMusicBavaria();
 
-            }
-            else if (winner.getAvatar().getIndex()==2) {
+            } else if (winner.getAvatar().getIndex() == 2) {
                 newMusic = Music.getInstanceScoreMusicScout();
 
-            }
-            else if(winner.getAvatar().getIndex()==1){
-                newMusic=Music.getInstanceScoreMusicSowjet();
+            } else if (winner.getAvatar().getIndex() == 1) {
+                newMusic = Music.getInstanceScoreMusicSowjet();
 
             }
             try {
                 newMusic.play();
-            }
-            catch (Exception e){
+            } catch (Exception e) {
                 System.out.println("kein lied");
             }
         }
@@ -209,13 +206,13 @@ public class ScorePanel extends Panel implements ActionListener {
             frame.getContentPane().removeAll();
             frame.getContentPane().add(gamePanel);
             ((JPanel) (frame.getContentPane())).updateUI();
-            Music oldmusic=Music.getInstanceScoreMusicSowjet();
+            Music oldmusic = Music.getInstanceScoreMusicSowjet();
             oldmusic.stop();
-            oldmusic=Music.getInstanceScoreMusicBavaria();
+            oldmusic = Music.getInstanceScoreMusicBavaria();
             oldmusic.stop();
-            oldmusic=Music.getInstanceScoreMusicScout();
+            oldmusic = Music.getInstanceScoreMusicScout();
             oldmusic.stop();
-            Music newmusic=Music.getInstanceGameMusic();
+            Music newmusic = Music.getInstanceGameMusic();
             newmusic.play();
         }
     }

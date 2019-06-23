@@ -20,22 +20,16 @@ import java.io.ObjectInputStream;
 public class KeySetPanel extends Panel implements MouseListener {
 
     private static final String PATH = "./resources/keyboard/keyboardLayout.ser";
-
-
+    private static final int[][] KEY_POSITION = {{1, 0}, {0, 1}, {2, 1}, {3, 1}, {3, 0}};
+    private final Border loweredBorder = BorderFactory.createLoweredBevelBorder();
+    private final Border raisedBorder = BorderFactory.createRaisedBevelBorder();
     private char[] player1Keys;
     private char[] player2Keys;
-
     private JLabel[] player1KeyLabels;
     private JLabel[] player2KeyLabels;
     private JButton saveButton;
     private JButton restoreDefaultButton;
     private JButton abortButton;
-
-    private final Border loweredBorder = BorderFactory.createLoweredBevelBorder();
-    private final Border raisedBorder = BorderFactory.createRaisedBevelBorder();
-
-    private static final int[][] KEY_POSITION = {{1, 0}, {0, 1}, {2, 1}, {3, 1}, {3, 0}};
-
     private JLabel selectedKey;
 
     private KeyBoardLayout keyBoardLayout = null;
@@ -216,8 +210,8 @@ public class KeySetPanel extends Panel implements MouseListener {
                     }
                 }
                 selectedKey.setText(Character.toString(Character.toUpperCase(e.getKeyChar())));
-            }else{
-                JOptionPane.showMessageDialog(this,"Es sind nur Buchstaben erlaubt!","Fehler",JOptionPane.ERROR_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Es sind nur Buchstaben erlaubt!", "Fehler", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -264,23 +258,19 @@ public class KeySetPanel extends Panel implements MouseListener {
                     }
                 }
                 char[] allKeys = new char[player1Keys.length + player2Keys.length];
-                for (int i = 0; i < player1Keys.length; i++) {
-                    allKeys[i] = player1Keys[i];
-                }
-                for (int i = 0; i < player2Keys.length; i++) {
-                    allKeys[i + player1Keys.length - 1] = player2Keys[i];
-                }
-                boolean noSameKeys=true;
+                System.arraycopy(player1Keys, 0, allKeys, 0, player1Keys.length);
+                System.arraycopy(player2Keys, 0, allKeys, 0 + player1Keys.length - 1, player2Keys.length);
+                boolean noSameKeys = true;
                 for (int i = 0; i < allKeys.length - 1; i++) {
                     for (int j = 1 + i; j < allKeys.length - 1; j++) {
                         if (allKeys[i] == allKeys[j]) {
                             saveable = false;
-                            noSameKeys=false;
+                            noSameKeys = false;
                         }
                     }
                 }
-                if(!noSameKeys){
-                    JOptionPane.showMessageDialog(this,"Jede Taste darf nur einmal benutzt werden!","Fehler",JOptionPane.ERROR_MESSAGE);
+                if (!noSameKeys) {
+                    JOptionPane.showMessageDialog(this, "Jede Taste darf nur einmal benutzt werden!", "Fehler", JOptionPane.ERROR_MESSAGE);
                 }
 
 

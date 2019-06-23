@@ -32,18 +32,6 @@ public class Design {
         }
     }
 
-    public static Font getTitleFont() {
-        return getFont(FONT_DIR + TITLE_FONT, Font.BOLD, 24);
-    }
-
-    public static Font getTitleFont(float size) {
-        return getFont(FONT_DIR + TITLE_FONT, Font.BOLD, size);
-    }
-
-    public static Font getTitleFont(int type, float size) {
-        return getFont(FONT_DIR + TITLE_FONT, type, size);
-    }
-
     public static Font getDefaultFont() {
         return getFont(FONT_DIR + DEFAULT_FONT, Font.PLAIN, 15);
     }
@@ -52,20 +40,8 @@ public class Design {
         return getFont(FONT_DIR + DEFAULT_FONT, Font.PLAIN, size);
     }
 
-    public static Font getDefaultFont(int type, float size) {
-        return getFont(FONT_DIR + DEFAULT_FONT, type, size);
-    }
-
-    public static Font getGameoverFont() {
-        return getFont(FONT_DIR + GAMEOVER_FONT, Font.PLAIN, 18);
-    }
-
     public static Font getGameoverFont(float size) {
         return getFont(FONT_DIR + GAMEOVER_FONT, Font.PLAIN, size);
-    }
-
-    public static Font getGameoverFont(int type, float size) {
-        return getFont(FONT_DIR + GAMEOVER_FONT, type, size);
     }
 
     public static void init() {

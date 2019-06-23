@@ -17,7 +17,6 @@ import java.util.List;
 public class Avatar {
     public static final String[] AVATAR_NAMES = {"Schorsch", "Gespenst d.K.", "Pfabio"};
     public static final int NORMAL = 0;
-    public static final int STANDING = 1;
     public static final int SUPER_LOADING = 0;
     public static final int SUPER_READY = 1;
     private static final int HIT = 2;
@@ -32,7 +31,6 @@ public class Avatar {
     private BufferedImage[] regularImages;
     private BufferedImage[] animationImages;
     private BufferedImage[] icons;
-    private int[] lastAnimation = new int[2];
     private long lastHit;
     private long lastSuperHit;
     private String story;
@@ -53,15 +51,6 @@ public class Avatar {
 
     public Avatar(int index) throws AvatarNotAvailableException {
         init(index);
-    }
-
-    public static Avatar debugAvatar() {
-        try {
-            return new Avatar("Georg");
-        } catch (AvatarNotAvailableException e) {
-            e.printStackTrace();
-            return null;
-        }
     }
 
     private void init(int index) throws AvatarNotAvailableException {
@@ -133,23 +122,23 @@ public class Avatar {
         return story;
     }
 
-    public void draw(Graphics2D graphics2D, int x, int y, int state,int hitDirection) {
+    public void draw(Graphics2D graphics2D, int x, int y, int state, int hitDirection) {
         boolean hit = (System.currentTimeMillis() - lastHit < HIT_ANIMATION_LENGTH);
         boolean superhit = (System.currentTimeMillis() - lastSuperHit < HIT_ANIMATION_LENGTH);
 
         if (state == Player.Movement.STOP_MOVING) {
             BufferedImage image;
             if (hit)
-                image=regularImages[HIT];
+                image = regularImages[HIT];
             else if (superhit)
-                image=regularImages[SUPER];
+                image = regularImages[SUPER];
             else
-                image=regularImages[NORMAL];
+                image = regularImages[NORMAL];
             //start
-            if(hitDirection==1){
+            if (hitDirection == 1) {
                 image = flipImage(image);
             }
-                //stop
+            //stop
             graphics2D.drawImage(image, x, y, null);
         } else if (state == Player.Movement.MOVE_LEFT) {
             BufferedImage image;
@@ -213,11 +202,12 @@ public class Avatar {
     public String getName() {
         return name;
     }
-    public int getIndex (){
-        int n=-1;
-        for (int i=0; i<AVATAR_NAMES.length; i++) {
-            if (AVATAR_NAMES[i]==name){
-                n=i;
+
+    public int getIndex() {
+        int n = -1;
+        for (int i = 0; i < AVATAR_NAMES.length; i++) {
+            if (AVATAR_NAMES[i] == name) {
+                n = i;
             }
 
         }

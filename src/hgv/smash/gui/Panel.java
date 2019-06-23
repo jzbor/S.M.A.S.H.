@@ -10,7 +10,7 @@ public abstract class Panel extends JPanel {
         super();
     }
 
-    public static BufferedImage scaleImage(BufferedImage img, int width, int height) {
+    private static BufferedImage scaleImage(BufferedImage img, int width, int height) {
         BufferedImage newImg = new BufferedImage(width, height, img.getType());
         Graphics2D graphics2D = newImg.createGraphics();
         graphics2D.drawImage(img, 0, 0, width, height, null);
@@ -20,10 +20,6 @@ public abstract class Panel extends JPanel {
 
     public static BufferedImage scaleImgToHeight(BufferedImage img, int height) {
         return scaleImage(img, img.getWidth() / img.getHeight() * height, height);
-    }
-
-    public static BufferedImage scaleImgToWidth(BufferedImage img, int width) {
-        return scaleImage(img, width, img.getHeight() / img.getWidth() * width);
     }
 
     public abstract void keyTyped(KeyEvent keyEvent);

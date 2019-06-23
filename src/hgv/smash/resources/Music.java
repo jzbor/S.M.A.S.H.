@@ -33,8 +33,8 @@ public class Music {
         fileGameMusic = new File("./resources/Sounds_and_Music/Sandstorm.wav");
         fileMenuMusic = new File("./resources/Sounds_and_Music/Jeopardy.wav");
         fileScoreMusicSowjet = new File("./resources/Sounds_and_Music/National_Anthem_Sowjet.wav");
-        fileScoreMusicBavaria=new File("./resources/Sounds_and_Music/Rede.wav");
-        fileScoreMusicScout=new File("./resources/Sounds_and_Music/downUnder.wav");
+        fileScoreMusicBavaria = new File("./resources/Sounds_and_Music/Rede.wav");
+        fileScoreMusicScout = new File("./resources/Sounds_and_Music/downUnder.wav");
         //hier wird entschieden welcher File dann geladen wird
         switch (musicYouNeed) {
             case "GameMusic":
@@ -47,10 +47,10 @@ public class Music {
                 chosenMusic = fileScoreMusicSowjet;
                 break;
             case "ScoreMusicBavaria":
-                chosenMusic=fileScoreMusicBavaria;
+                chosenMusic = fileScoreMusicBavaria;
                 break;
             case "ScoreMusicScout":
-                chosenMusic=fileScoreMusicScout;
+                chosenMusic = fileScoreMusicScout;
                 break;
             default:
                 break;
@@ -84,9 +84,11 @@ public class Music {
     public static Music getInstanceScoreMusicScout() {
         return ourInstanceScoreMusicScout;
     }
+
     public static Music getInstanceScoreMusicBavaria() {
         return ourInstanceScoreMusicBavaria;
     }
+
     public void play() {
         clip.close();
         try {

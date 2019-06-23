@@ -1,6 +1,5 @@
 package hgv.smash.gui;
 
-import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class ImageExtract {
@@ -9,12 +8,13 @@ public class ImageExtract {
     private int width;
     private int height;
     private BufferedImage image;
-    public ImageExtract(int xOffset,int yOffset,int width,int height,BufferedImage image){
-        this.xOffset=xOffset;
-        this.yOffset=yOffset;
-        this.width=width;
-        this.height=height;
-        this.image=image;
+
+    public ImageExtract(int xOffset, int yOffset, int width, int height, BufferedImage image) {
+        this.xOffset = xOffset;
+        this.yOffset = yOffset;
+        this.width = width;
+        this.height = height;
+        this.image = image;
     }
 
     public int getxOffset() {
@@ -36,7 +36,5 @@ public class ImageExtract {
     public BufferedImage getImage() {
         return image;
     }
-    public void setImage(BufferedImage image){
-        this.image=image;
-    }
+
 }

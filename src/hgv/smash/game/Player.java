@@ -12,16 +12,6 @@ import java.awt.image.BufferedImage;
 public class Player extends GameObject {
 
 
-    //class representing all possible movements
-    public static class Movement {
-        public static final int MOVE_LEFT = -1;
-        public static final int MOVE_RIGHT = 1;
-        public static final int STOP_MOVING = 0;
-        public static final int JUMP = 2;
-        public static final int NORMAL_HIT = 3;
-        public static final int SUPER_HIT = 4;
-    }
-
     //acceleration and speed constants
     private static final double SPEED = 0.5; // speed of xpos movement (also used by jump())
     private static final double HIT_SPEED = 0.05;//speed when hit by other player
@@ -30,7 +20,6 @@ public class Player extends GameObject {
     private final static long PUNCH_COOLDOWN = 2000;//millis needed between two punches
     private final static long GENERAL_PUNCH_COOLDOWN = PUNCH_COOLDOWN;//always between whatever punch performed
     private final static int NUMBER_JUMPS = 2;
-    private static final int[] DAMAGE_RANGE = new int[]{5, 15};
     private static final int[] SUPER_DAMAGE_RANGE = new int[]{5, 40};
     private static final int SUPER_MULTIPLIER = 2;
     private static final double X_SLOWDOWN_ACCELERATION = 9.81;//acceleration slows down jump
@@ -38,7 +27,6 @@ public class Player extends GameObject {
     //size of model loaded automatically
     private int width; // width of model
     private int height; // height of model
-
     //speed and position of player
     //arrays of size 3:
     // [0] recent frame parameters
@@ -55,21 +43,14 @@ public class Player extends GameObject {
     private Sound punchSound;
     private Sound jumpSound;
     private Sound superPunchSound;
-
     //other objects
     private Player otherPlayer;//other player (for punches)
-    private LevelMap levelMap;//Map on which players are
     private Rectangle[] platformModels;//get all models from platform
-
     private int movementDirection;//gives direction of movement
-
     //jumping
     private boolean jumped;//set true be changeMovement(); performs a jump in calc()
     private int jumps = 2; // jumps left
-
-    private long jumpCooldown = 2000;//millis needed between two jumps
     private long lastJump;//time since last jump in millis
-
     //punching
     private boolean punch, superPunch;//set to true when punch should be performed(performed in calc)
     private double vx_punch, vy_punch; // speed of player because of punch
@@ -102,7 +83,7 @@ public class Player extends GameObject {
         vy[0] = 0;
         this.avatar = avatar;
         this.model = new Rectangle(this.xpos[0], this.ypos[0], width, height);
-        this.levelMap = levelMap;
+        //Map on which players are
         this.platformModels = levelMap.getPlatformModels();//platform does not move right now
         this.number = number;
         BufferedImage normalImage = avatar.getImage(Avatar.NORMAL);
@@ -112,7 +93,6 @@ public class Player extends GameObject {
         normalHitboxWidth = width;
     }
 
-    @Override
     public void calc(long millis) {
         double factor = 0.00004;
 
@@ -139,22 +119,22 @@ public class Player extends GameObject {
         lastPunch += millis;
         lastSuperPunch += millis;
         lastGeneralPunch += millis;
-            if (punch) {
-                if (Frame.getInstance().getSound()) {
-                    punchSound.play();
-                }
-                punchOtherPlayer(false, hitDirection);
-                avatar.setLastHit(System.currentTimeMillis());
-                punch = false;
+        if (punch) {
+            if (Frame.getInstance().getSound()) {
+                punchSound.play();
             }
-            if (superPunch) {
-                if (Frame.getInstance().getSound()) {
-                    superPunchSound.play();
-                }
-                punchOtherPlayer(true, hitDirection);
-                avatar.setLastSuperHit(System.currentTimeMillis());
-                superPunch = false;
+            punchOtherPlayer(false, hitDirection);
+            avatar.setLastHit(System.currentTimeMillis());
+            punch = false;
+        }
+        if (superPunch) {
+            if (Frame.getInstance().getSound()) {
+                superPunchSound.play();
             }
+            punchOtherPlayer(true, hitDirection);
+            avatar.setLastSuperHit(System.currentTimeMillis());
+            superPunch = false;
+        }
         //change speed if jumped
         lastJump += millis;
         if (jumped) {
@@ -203,12 +183,6 @@ public class Player extends GameObject {
         }
     }
 
-    //not needed right now
-    @Override
-    public void collide(GameObject go) {
-
-    }
-
     public void changeMovement(int i) {
         switch (i) {
             case Movement.JUMP: {
@@ -235,7 +209,7 @@ public class Player extends GameObject {
                 break;
             }
             case Movement.NORMAL_HIT: {
-                if (lastPunch > PUNCH_COOLDOWN&&lastGeneralPunch>GENERAL_PUNCH_COOLDOWN) {
+                if (lastPunch > PUNCH_COOLDOWN && lastGeneralPunch > GENERAL_PUNCH_COOLDOWN) {
                     lastPunch = 0;
                     lastGeneralPunch = 0;
                     punch = true;
@@ -243,7 +217,7 @@ public class Player extends GameObject {
                 break;
             }
             case Movement.SUPER_HIT: {
-                if (lastSuperPunch > SUPER_PUNCH_COOLDOWN&&lastGeneralPunch>GENERAL_PUNCH_COOLDOWN) {
+                if (lastSuperPunch > SUPER_PUNCH_COOLDOWN && lastGeneralPunch > GENERAL_PUNCH_COOLDOWN) {
                     lastSuperPunch = 0;
                     lastGeneralPunch = 0;
                     superPunch = true;
@@ -267,8 +241,7 @@ public class Player extends GameObject {
             } else {
                 System.err.println("unresolved hit direction");
             }
-        }
-        else {
+        } else {
             if (direction == -1) {
                 Shape hitbox = new Rectangle(xpos[0] + width / 2 - normalHitboxWidth, ypos[0] + height / 2 - normalHitboxHeight / 2, normalHitboxWidth, normalHitboxHeight);
                 otherPlayer.hit(hitbox, xpos[0] + width / 2, ypos[0] + height / 2, superdamage);
@@ -309,11 +282,6 @@ public class Player extends GameObject {
         }
     }
 
-    public void compensateCooldown(long l) {     // @TODO rename?
-        lastSuperPunch += l;
-        lastPunch += l;
-    }
-
     public int getPercentage() {
         return percentage;
     }
@@ -351,7 +319,6 @@ public class Player extends GameObject {
         return number;
     }
 
-    @Override
     public void draw(Graphics2D graphics2D) {
 
         avatar.draw(graphics2D, xpos[0], ypos[0], movementDirection, hitDirection);
@@ -364,6 +331,16 @@ public class Player extends GameObject {
 
     public String getName() {
         return "Spieler " + number + " (" + avatar.getName() + ")";
+    }
+
+    //class representing all possible movements
+    public static class Movement {
+        public static final int MOVE_LEFT = -1;
+        public static final int MOVE_RIGHT = 1;
+        public static final int STOP_MOVING = 0;
+        public static final int JUMP = 2;
+        public static final int NORMAL_HIT = 3;
+        public static final int SUPER_HIT = 4;
     }
 
 }

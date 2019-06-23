@@ -25,10 +25,6 @@ public class GamePanel extends Panel {
     private static final int[] FREEZE_COLOR = new int[]{126, 197, 252, 125};
     // y coords defining a death
     private static final int RANGE_OF_DEATH = 1000;
-    //size of triangle representing player out of map
-    private static final int TRIANGLE_SIZE = 150;
-    //keys for movement
-    private static long JUMP_COOLDOWN = 2000;
     //size of frame
     private double width;
     private double height;
@@ -43,11 +39,7 @@ public class GamePanel extends Panel {
     //actions for keys in same order as keys
     private int[] actions = {Player.Movement.JUMP, Player.Movement.MOVE_LEFT, Player.Movement.MOVE_RIGHT,
             Player.Movement.NORMAL_HIT, Player.Movement.SUPER_HIT};
-    //last performed action by pressing
-    private int lastChangePlayer1 = Player.Movement.STOP_MOVING;
-    private int lastChangePlayer2 = Player.Movement.STOP_MOVING;
     private boolean running;
-    private int currentFramerate;
     private Player player1;
     private Player player2;
     private Player[] players;
@@ -59,8 +51,8 @@ public class GamePanel extends Panel {
     public GamePanel(Avatar a1, Avatar a2, LevelMap map) {
         updateKeys();
 
-        height = Frame.getInstance().getContentPane().getHeight()+2/*map.getBackgroundImage().getHeight()*/;
-        width = Frame.getInstance().getContentPane().getWidth()+2/*map.getBackgroundImage().getWidth()*/;
+        height = Frame.getInstance().getContentPane().getHeight() + 2/*map.getBackgroundImage().getHeight()*/;
+        width = Frame.getInstance().getContentPane().getWidth() + 2/*map.getBackgroundImage().getWidth()*/;
         // assign and create params
         running = true;
         GameloopThread gameloopThread = new GameloopThread(this);
@@ -74,7 +66,7 @@ public class GamePanel extends Panel {
         player2.setOtherPlayer(player1);
         levelMap = map;
 
-        cameraRunning=true;
+        cameraRunning = true;
 
         try {
             originalArrow = ImageIO.read(new File("./resources/icons/arrow.png"));
@@ -94,7 +86,7 @@ public class GamePanel extends Panel {
             // get time for the physics to calculate
             long thisFrame = System.currentTimeMillis();
             long timedelta = thisFrame - lastFrame;
-            currentFramerate = (int) (1000 / timedelta);
+            int currentFramerate = (int) (1000 / timedelta);
 
             // detect death
             detectGameover();
@@ -116,12 +108,11 @@ public class GamePanel extends Panel {
             player2.draw(graphics2D);
 
             //calculate camera
-            ImageExtract imageExtract=null;
-            if(cameraRunning) {
-                imageExtract = claculateCamera(bi);
-            }
-            else {
-                imageExtract=new ImageExtract(0,0,(int)width,(int)height,bi);
+            ImageExtract imageExtract = null;
+            if (cameraRunning) {
+                imageExtract = calculateCamera(bi);
+            } else {
+                imageExtract = new ImageExtract(0, 0, (int) width, (int) height, bi);
             }
 
             if (Main.DEBUG) {
@@ -223,7 +214,7 @@ public class GamePanel extends Panel {
         afterDraw(graphics2D);
     }
 
-    public ImageExtract claculateCamera(BufferedImage bufferedImage) {
+    private ImageExtract calculateCamera(BufferedImage bufferedImage) {
         int offset = 100;
 
 
@@ -316,18 +307,18 @@ public class GamePanel extends Panel {
         //create subimage and return upscaled one
         BufferedImage subimage;
         //linux bug
-        try{
-            subimage= bufferedImage.getSubimage((int) xLeft, (int) yTop, (int) xDiff, (int) yDiff );
-        }catch (Exception e){
+        try {
+            subimage = bufferedImage.getSubimage((int) xLeft, (int) yTop, (int) xDiff, (int) yDiff);
+        } catch (Exception e) {
             //System.out.println("Linux error");
-            subimage=bufferedImage.getSubimage((int) xLeft, (int) yTop, (int) xDiff-2, (int) yDiff-2);
+            subimage = bufferedImage.getSubimage((int) xLeft, (int) yTop, (int) xDiff - 2, (int) yDiff - 2);
         }
-        subimage=resizePicture(subimage,width/xDiff);
+        subimage = resizePicture(subimage, width / xDiff);
 
-        return new ImageExtract((int) xLeft,(int)yTop,(int)xDiff,(int)yDiff,subimage);
+        return new ImageExtract((int) xLeft, (int) yTop, (int) xDiff, (int) yDiff, subimage);
     }
 
-    public ImageExtract calculateArrows(ImageExtract imageExtract) {
+    private ImageExtract calculateArrows(ImageExtract imageExtract) {
 
         //draw direction of player if outside of map
 
@@ -343,30 +334,30 @@ public class GamePanel extends Panel {
         int[] xPos = new int[3];
         int[] yPos = new int[3];
 
-        int xLeft =  imageExtract.getxOffset();
-        int xRight = xLeft+imageExtract.getWidth();
+        int xLeft = imageExtract.getxOffset();
+        int xRight = xLeft + imageExtract.getWidth();
         int yTop = imageExtract.getyOffset();
-        int yBottom = yTop+imageExtract.getHeight();
+        int yBottom = yTop + imageExtract.getHeight();
         int xDiff = imageExtract.getWidth();
         int yDiff = imageExtract.getHeight();
 
-        double factor=0.7;
+        double factor = 0.7;
 
-        for(Player player:players) {
+        for (Player player : players) {
             transformedArrowImage = resizePicture(originalArrow, factor);
 
-            int halfArrowLength=transformedArrowImage.getWidth()/2;//picture is square
+            int halfArrowLength = transformedArrowImage.getWidth() / 2;//picture is square
 
-            boolean isPlayerOutOfMap=true;
+            boolean isPlayerOutOfMap = true;
 
             //player coordinates
-            int yPlayerTop=player.getYPos();
-            int yPlayerBottom=yPlayerTop+player.getHeight();
-            int yPlayerMiddle=player.getYPos()+player.getHeight()/2;
+            int yPlayerTop = player.getYPos();
+            int yPlayerBottom = yPlayerTop + player.getHeight();
+            int yPlayerMiddle = player.getYPos() + player.getHeight() / 2;
 
-            int xPlayerLeft=player.getXPos();
-            int xPlayerRight=xPlayerLeft+player.getWidth();
-            int xPlayerMiddle=player.getXPos()+player.getWidth()/2;
+            int xPlayerLeft = player.getXPos();
+            int xPlayerRight = xPlayerLeft + player.getWidth();
+            int xPlayerMiddle = player.getXPos() + player.getWidth() / 2;
 
             //angle to turn arrow
             double theta = 0.0;
@@ -375,63 +366,63 @@ public class GamePanel extends Panel {
             int xArrow = 0;
             int yArrow = 0;
 
-            double playerIconFactor=50.0/player.getHeight();
+            double playerIconFactor = 50.0 / player.getHeight();
             //position of player icon image (located in arrow middle)
-            int xPlayerIcon=0;
-            int playerIconWidth=(int)(player.getWidth()*playerIconFactor);
+            int xPlayerIcon = 0;
+            int playerIconWidth = (int) (player.getWidth() * playerIconFactor);
 
-            int yPlayerIcon=0;
-            int playerIconHeight=(int)(player.getHeight()*playerIconFactor);
+            int yPlayerIcon = 0;
+            int playerIconHeight = (int) (player.getHeight() * playerIconFactor);
 
 
             //corners
             //top left corner
-            if ( xPlayerMiddle < xLeft + halfArrowLength && yPlayerBottom < yTop || xPlayerRight < xLeft && yPlayerMiddle< yTop + halfArrowLength) {
+            if (xPlayerMiddle < xLeft + halfArrowLength && yPlayerBottom < yTop || xPlayerRight < xLeft && yPlayerMiddle < yTop + halfArrowLength) {
 
-                Vector2D arrowVector=new Vector2D(xPlayerMiddle-(halfArrowLength+xLeft),yPlayerMiddle-(halfArrowLength+yTop));
-                theta = arrowVector.angle(new Vector2D(0,1)) -1.5* Math.PI;
+                Vector2D arrowVector = new Vector2D(xPlayerMiddle - (halfArrowLength + xLeft), yPlayerMiddle - (halfArrowLength + yTop));
+                theta = arrowVector.angle(new Vector2D(0, 1)) - 1.5 * Math.PI;
                 xArrow = 0;
                 yArrow = 0;
 
-                xPlayerIcon=halfArrowLength-playerIconWidth/2;
-                yPlayerIcon=halfArrowLength-playerIconHeight/2;
+                xPlayerIcon = halfArrowLength - playerIconWidth / 2;
+                yPlayerIcon = halfArrowLength - playerIconHeight / 2;
             }
             //bottom left corner
             else if (xPlayerMiddle < xLeft + halfArrowLength && yPlayerTop > yBottom || xPlayerRight < xLeft && yPlayerMiddle > yBottom - halfArrowLength) {
 
-                Vector2D arrowVector=new Vector2D(xPlayerMiddle-(halfArrowLength+xLeft),yPlayerMiddle-(halfArrowLength+yBottom));
-                theta = arrowVector.angle(new Vector2D(0,1)) -1.5* Math.PI;
+                Vector2D arrowVector = new Vector2D(xPlayerMiddle - (halfArrowLength + xLeft), yPlayerMiddle - (halfArrowLength + yBottom));
+                theta = arrowVector.angle(new Vector2D(0, 1)) - 1.5 * Math.PI;
                 xArrow = 0;
-                yArrow = (int)height - transformedArrowImage.getHeight();
+                yArrow = (int) height - transformedArrowImage.getHeight();
 
-                xPlayerIcon=halfArrowLength-playerIconWidth/2;
-                yPlayerIcon=(int)height-halfArrowLength-playerIconHeight/2;
+                xPlayerIcon = halfArrowLength - playerIconWidth / 2;
+                yPlayerIcon = (int) height - halfArrowLength - playerIconHeight / 2;
 
             }
             //top right corner
-            else if (xPlayerMiddle > xRight - halfArrowLength && yPlayerBottom < yTop || xPlayerLeft > xRight && yPlayerMiddle< yTop + halfArrowLength) {
+            else if (xPlayerMiddle > xRight - halfArrowLength && yPlayerBottom < yTop || xPlayerLeft > xRight && yPlayerMiddle < yTop + halfArrowLength) {
 
-                Vector2D arrowVector=new Vector2D(xPlayerMiddle-(xRight-halfArrowLength),yPlayerMiddle-(yTop+halfArrowLength));
-                theta = 0.5*Math.PI-arrowVector.angle(new Vector2D(0,1)) ;
+                Vector2D arrowVector = new Vector2D(xPlayerMiddle - (xRight - halfArrowLength), yPlayerMiddle - (yTop + halfArrowLength));
+                theta = 0.5 * Math.PI - arrowVector.angle(new Vector2D(0, 1));
 
-                xArrow = (int)width - transformedArrowImage.getWidth();
+                xArrow = (int) width - transformedArrowImage.getWidth();
                 yArrow = 0;
 
-                xPlayerIcon=(int)width-halfArrowLength-playerIconWidth/2;
-                yPlayerIcon=halfArrowLength-playerIconHeight/2;
+                xPlayerIcon = (int) width - halfArrowLength - playerIconWidth / 2;
+                yPlayerIcon = halfArrowLength - playerIconHeight / 2;
 
             }
             //bottom right corner
             else if (xPlayerMiddle > xRight - halfArrowLength && yPlayerTop > yBottom || xPlayerLeft > xRight && yPlayerMiddle > yBottom - halfArrowLength) {
 
-                Vector2D arrowVector=new Vector2D(xPlayerMiddle-(xRight-halfArrowLength),yPlayerMiddle-(yBottom-halfArrowLength));
-                theta = 0.5* Math.PI-arrowVector.angle(new Vector2D(0,1));
+                Vector2D arrowVector = new Vector2D(xPlayerMiddle - (xRight - halfArrowLength), yPlayerMiddle - (yBottom - halfArrowLength));
+                theta = 0.5 * Math.PI - arrowVector.angle(new Vector2D(0, 1));
 
-                xArrow = (int)width - transformedArrowImage.getWidth();
-                yArrow = (int)height - transformedArrowImage.getHeight();
+                xArrow = (int) width - transformedArrowImage.getWidth();
+                yArrow = (int) height - transformedArrowImage.getHeight();
 
-                xPlayerIcon=(int)width-halfArrowLength-playerIconWidth/2;
-                yPlayerIcon=(int)height-halfArrowLength-playerIconHeight/2;
+                xPlayerIcon = (int) width - halfArrowLength - playerIconWidth / 2;
+                yPlayerIcon = (int) height - halfArrowLength - playerIconHeight / 2;
 
             }
 
@@ -439,24 +430,24 @@ public class GamePanel extends Panel {
 
 
             //left side
-            else if (xPlayerRight <  xLeft) {
+            else if (xPlayerRight < xLeft) {
 
                 theta = Math.PI;
                 xArrow = 0;
-                yArrow = yPlayerMiddle  - transformedArrowImage.getHeight() / 2;
+                yArrow = yPlayerMiddle - transformedArrowImage.getHeight() / 2;
 
-                xPlayerIcon=halfArrowLength-playerIconWidth/2;
-                yPlayerIcon=yPlayerMiddle-playerIconHeight/2;
+                xPlayerIcon = halfArrowLength - playerIconWidth / 2;
+                yPlayerIcon = yPlayerMiddle - playerIconHeight / 2;
 
             }
             //right side
             else if (xPlayerLeft > xRight) {
                 theta = 0;
-                xArrow = (int)width - transformedArrowImage.getWidth();
+                xArrow = (int) width - transformedArrowImage.getWidth();
                 yArrow = yPlayerMiddle - transformedArrowImage.getHeight() / 2;
 
-                xPlayerIcon=(int)width-halfArrowLength-playerIconWidth/2;
-                yPlayerIcon=yPlayerMiddle-playerIconHeight/2;
+                xPlayerIcon = (int) width - halfArrowLength - playerIconWidth / 2;
+                yPlayerIcon = yPlayerMiddle - playerIconHeight / 2;
 
             }
             //top side
@@ -467,8 +458,8 @@ public class GamePanel extends Panel {
                 xArrow = xPlayerMiddle - transformedArrowImage.getWidth() / 2;
                 yArrow = 0;
 
-                xPlayerIcon=xPlayerMiddle-playerIconWidth/2;
-                yPlayerIcon=halfArrowLength-playerIconHeight/2;
+                xPlayerIcon = xPlayerMiddle - playerIconWidth / 2;
+                yPlayerIcon = halfArrowLength - playerIconHeight / 2;
 
             }
             //bottom side
@@ -476,15 +467,15 @@ public class GamePanel extends Panel {
 
                 theta = Math.PI * 0.5;
                 xArrow = xPlayerMiddle - halfArrowLength;
-                yArrow = (int)height - transformedArrowImage.getHeight();
+                yArrow = (int) height - transformedArrowImage.getHeight();
 
-                xPlayerIcon=xPlayerMiddle-playerIconWidth/2;
-                yPlayerIcon=(int)height-halfArrowLength-playerIconHeight/2;
+                xPlayerIcon = xPlayerMiddle - playerIconWidth / 2;
+                yPlayerIcon = (int) height - halfArrowLength - playerIconHeight / 2;
 
             }
             //not out of map
             else {
-                isPlayerOutOfMap=false;
+                isPlayerOutOfMap = false;
             }
             if (Main.DEBUG) {
                 //graphics2D.fillPolygon(xPos, yPos, 3);
@@ -495,8 +486,8 @@ public class GamePanel extends Panel {
                 transformedArrowImage = rotatePicture(transformedArrowImage, theta);
                 //draw arrow
                 graphics2D.drawImage(transformedArrowImage, xArrow, yArrow, null);
-                BufferedImage playerIcon=resizePicture(player.getAvatar().getImage(Avatar.NORMAL),playerIconFactor);
-                graphics2D.drawImage(playerIcon,xPlayerIcon,yPlayerIcon,null);
+                BufferedImage playerIcon = resizePicture(player.getAvatar().getImage(Avatar.NORMAL), playerIconFactor);
+                graphics2D.drawImage(playerIcon, xPlayerIcon, yPlayerIcon, null);
             }
         }
 
@@ -507,8 +498,8 @@ public class GamePanel extends Panel {
         paused = !paused;
     }
 
-    public void changeCameraRunning(){
-        cameraRunning=!cameraRunning;
+    public void changeCameraRunning() {
+        cameraRunning = !cameraRunning;
     }
 
     @Override
@@ -565,13 +556,13 @@ public class GamePanel extends Panel {
         }
     }
 
-    public void updateKeys(){
-        KeyBoardLayout keyBoardLayout=KeySetPanel.getKeyBoardLayoutFromFile();
-        keys_player_1=keyBoardLayout.getPlayer1Keys();
-        keys_player_2=keyBoardLayout.getPlayer2Keys();
+    public void updateKeys() {
+        KeyBoardLayout keyBoardLayout = KeySetPanel.getKeyBoardLayoutFromFile();
+        keys_player_1 = keyBoardLayout.getPlayer1Keys();
+        keys_player_2 = keyBoardLayout.getPlayer2Keys();
     }
 
-    public void setPanelActive(){
+    public void setPanelActive() {
         Frame.getInstance().getContentPane().removeAll();
         Frame.getInstance().getContentPane().add(this);
         OurKeyListener.getInstance().setPanel(this);
@@ -579,7 +570,7 @@ public class GamePanel extends Panel {
 
     private BufferedImage resizePicture(BufferedImage bufferedImage, double factor) {
         int width = bufferedImage.getWidth();
-        int height =bufferedImage.getHeight();
+        int height = bufferedImage.getHeight();
         BufferedImage dest = new BufferedImage((int) (width * factor), (int) (height * factor), bufferedImage.getType());
         AffineTransform affineTransform = AffineTransform.getScaleInstance(factor, factor);
         AffineTransformOp op = new AffineTransformOp(affineTransform, AffineTransformOp.TYPE_BILINEAR);

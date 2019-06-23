@@ -13,7 +13,7 @@ public class LevelMap extends GameObject {
 
 
     public static final String[] MAP_NAMES = {"Wolken", "Weltraum", "Schmierzettel"};
-    public static final String[] MAP_FILES = {"clouds", "space", "scratchpad"};
+    private static final String[] MAP_FILES = {"clouds", "space", "scratchpad"};
     private static final String MAP_PATH = "./resources/maps/";
 
     private BufferedImage backgroundImage;
@@ -24,10 +24,6 @@ public class LevelMap extends GameObject {
         this.backgroundImage = backgroundImage;
         this.platformModels = platformModels;
         this.jumpThrough = jumpThrough;
-    }
-
-    public static LevelMap debugMap() throws IOException {
-        return load(MAP_PATH + MAP_NAMES[0]);
     }
 
     public static LevelMap load(String name) throws IOException {
@@ -69,10 +65,6 @@ public class LevelMap extends GameObject {
         return new LevelMap(bufferedImage, rects, jumpup);
     }
 
-    public boolean permeable() {
-        return jumpThrough;
-    }
-
     public Rectangle[] getPlatformModels() {
         return platformModels;
     }
@@ -87,30 +79,14 @@ public class LevelMap extends GameObject {
         };
     }
 
-    public boolean intersects(Shape model) {
-        for (Rectangle platform :
-                platformModels) {
-            if (model.intersects(platform))
-                return true;
-        }
-        return false;
-    }
-
     public BufferedImage getBackgroundImage() {
         return backgroundImage;
     }
 
-    @Override
-    public void collide(GameObject go) {
-
-    }
-
-    @Override
     public void calc(long millis) {
 
     }
 
-    @Override
     public void draw(Graphics2D graphics2D) {
         graphics2D.drawImage(backgroundImage, 0, 0, null);
 
