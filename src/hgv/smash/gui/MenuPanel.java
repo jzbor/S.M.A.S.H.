@@ -23,8 +23,10 @@ import java.io.InputStreamReader;
 public class MenuPanel extends Panel implements ActionListener {
     private JComboBox buttonPlayer1, buttonPlayer2, buttonMap;
     private BufferedImage backgroundImage;
+    private BufferedImage transparentBackground;
     private BufferedImage previewPlayer1;
     private BufferedImage previewPlayer2;
+    private BufferedImage platformImage;
     private JButton startButton;
     private JButton disclaimerButton;
     private JFrame frame;
@@ -47,6 +49,8 @@ public class MenuPanel extends Panel implements ActionListener {
         //Einfuegen und Deklarieren der Hintergrundgraphik
         try {
             backgroundImage = ImageIO.read(new File("./resources/menu/background.png"));
+            transparentBackground = ImageIO.read(new File("./resources/menu/background_transparent.png"));
+            platformImage = ImageIO.read(new File("./resources/menu/platform2.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -207,8 +211,17 @@ public class MenuPanel extends Panel implements ActionListener {
         super.paintComponent(g);
         Graphics2D graphics2D = (Graphics2D) g;
         graphics2D.drawImage(backgroundImage, 0, 0, null);
-        graphics2D.drawImage(previewPlayer1, 210, 370, null);
-        graphics2D.drawImage(previewPlayer2, 723, 370, null);
+        graphics2D.drawImage(transparentBackground, 0, 0, null);
+        graphics2D.drawImage(platformImage, 75, 200, null);
+        if (previewPlayer1 != null) {
+            graphics2D.drawImage(previewPlayer1, 75 + platformImage.getWidth() / 2 - previewPlayer1.getWidth() / 2,
+                    200 - previewPlayer1.getHeight() + 15, null);
+        }
+        graphics2D.drawImage(platformImage, 949 - platformImage.getWidth(), 200, null);
+        if (previewPlayer2 != null) {
+            graphics2D.drawImage(previewPlayer2, 949 - platformImage.getWidth() + platformImage.getWidth() / 2 - previewPlayer2.getWidth() / 2,
+                    200 - previewPlayer2.getHeight() + 15, null);
+        }
     }
 
     @Override
