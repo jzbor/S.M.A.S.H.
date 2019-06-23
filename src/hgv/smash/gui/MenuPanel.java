@@ -43,6 +43,8 @@ public class MenuPanel extends Panel implements ActionListener {
             oldMusic.stop();
             oldMusic=Music.getInstanceScoreMusicBavaria();
             oldMusic.stop();
+            oldMusic=Music.getInstanceScoreMusicScout();
+            oldMusic.stop();
             Music newMusic = Music.getInstanceMenuMusic();
             newMusic.play();
         }

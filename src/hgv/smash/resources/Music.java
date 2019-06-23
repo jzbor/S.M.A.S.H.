@@ -48,8 +48,10 @@ public class Music {
                 break;
             case "ScoreMusicBavaria":
                 chosenMusic=fileScoreMusicBavaria;
+                break;
             case "ScoreMusicScout":
                 chosenMusic=fileScoreMusicScout;
+                break;
             default:
                 break;
         }

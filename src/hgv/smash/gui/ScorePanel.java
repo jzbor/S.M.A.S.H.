@@ -35,8 +35,25 @@ public class ScorePanel extends Panel implements ActionListener {
         if (Frame.getInstance().getMusic()) {
             Music oldMusic = Music.getInstanceGameMusic();
             oldMusic.stop();
-            Music newMusic = Music.getInstanceScoreMusicSowjet();
-            newMusic.play();
+            Music newMusic=null;
+            if (winner.getAvatar().getIndex()==0) {
+                newMusic = Music.getInstanceScoreMusicBavaria();
+
+            }
+            else if (winner.getAvatar().getIndex()==2) {
+                newMusic = Music.getInstanceScoreMusicScout();
+
+            }
+            else if(winner.getAvatar().getIndex()==1){
+                newMusic=Music.getInstanceScoreMusicSowjet();
+
+            }
+            try {
+                newMusic.play();
+            }
+            catch (Exception e){
+                System.out.println("kein lied");
+            }
         }
         Frame.getInstance().currentpanel(2);
 
@@ -195,6 +212,8 @@ public class ScorePanel extends Panel implements ActionListener {
             Music oldmusic=Music.getInstanceScoreMusicSowjet();
             oldmusic.stop();
             oldmusic=Music.getInstanceScoreMusicBavaria();
+            oldmusic.stop();
+            oldmusic=Music.getInstanceScoreMusicScout();
             oldmusic.stop();
             Music newmusic=Music.getInstanceGameMusic();
             newmusic.play();
