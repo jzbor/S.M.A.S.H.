@@ -33,6 +33,7 @@ public class MenuPanel extends Panel implements ActionListener {
     private Avatar avatar1;
     private Avatar avatar2;
     private LevelMap levelMap;
+    private BufferedImage origBackImg;
 
     public MenuPanel() {
         frame = Frame.getInstance();
@@ -49,6 +50,7 @@ public class MenuPanel extends Panel implements ActionListener {
         //Einfuegen und Deklarieren der Hintergrundgraphik
         try {
             backgroundImage = ImageIO.read(new File("./resources/menu/background.png"));
+            origBackImg = backgroundImage;
             transparentBackground = ImageIO.read(new File("./resources/menu/background_transparent.png"));
             platformImage = ImageIO.read(new File("./resources/menu/platform2.png"));
         } catch (IOException e) {
@@ -96,10 +98,10 @@ public class MenuPanel extends Panel implements ActionListener {
         add(disclaimerButton);
 
         // Add fonts
-        buttonMap.setFont(Design.getDefaultFont(buttonMap.getFont().getSize()));
-        buttonPlayer1.setFont(Design.getDefaultFont(buttonMap.getFont().getSize()));
-        buttonPlayer2.setFont(Design.getDefaultFont(buttonMap.getFont().getSize()));
-        startButton.setFont(Design.getDefaultFont());
+        buttonMap.setFont(Design.getDefaultFont());
+        buttonPlayer1.setFont(Design.getDefaultFont());
+        buttonPlayer2.setFont(Design.getDefaultFont());
+        startButton.setFont(Design.getDefaultFont(20));
         startButton.setBackground(Design.getPrimaryColor());
         startButton.setForeground(Design.getSecondaryColor());
         disclaimerButton.setFont(Design.getDefaultFont());
@@ -211,6 +213,11 @@ public class MenuPanel extends Panel implements ActionListener {
         super.paintComponent(g);
         Graphics2D graphics2D = (Graphics2D) g;
         graphics2D.drawImage(backgroundImage, 0, 0, null);
+        if (backgroundImage != origBackImg) {
+            Color color = new Color(152, 19, 43, 150);
+            graphics2D.setColor(color);
+            graphics2D.fillRect(0, 0, getWidth(), getHeight());
+        }
         graphics2D.drawImage(transparentBackground, 0, 0, null);
         graphics2D.drawImage(platformImage, 75, 200, null);
         if (previewPlayer1 != null) {
