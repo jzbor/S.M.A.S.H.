@@ -36,10 +36,10 @@ public class GamePanel extends Panel {
 
     private boolean cameraRunning;
     //player1
-    private char[] keys_player_1 ;
+    private char[] keys_player_1;
     private boolean[] booleans_player1 = {false, false, false, false, false};
     //player2
-    private char[] keys_player_2 ;
+    private char[] keys_player_2;
     private boolean[] booleans_player2 = {false, false, false, false, false};
     //actions for keys in same order as keys
     private int[] actions = {Player.Movement.JUMP, Player.Movement.MOVE_LEFT, Player.Movement.MOVE_RIGHT,

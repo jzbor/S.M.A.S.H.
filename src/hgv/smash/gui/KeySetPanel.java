@@ -174,10 +174,10 @@ public class KeySetPanel extends Panel implements MouseListener {
         if (selectedKey != null) {
             for (int i = 0; i < player1Label.length; i++) {
                 if (player1Label[i].equals(selectedKey)) {
-                    player1Keys[i] = Character.toUpperCase(e.getKeyChar());
+                    player1Keys[i] = Character.toLowerCase(e.getKeyChar());
                 }
                 if (player2Label[i].equals(selectedKey)) {
-                    player2Keys[i] = Character.toUpperCase(e.getKeyChar());
+                    player2Keys[i] = Character.toLowerCase(e.getKeyChar());
                 }
             }
             selectedKey.setText(Character.toString(Character.toUpperCase(e.getKeyChar())));
