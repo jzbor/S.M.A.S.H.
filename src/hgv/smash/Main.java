@@ -10,6 +10,9 @@ import javax.swing.*;
 public class Main {
 
     public static void main(String[] args) {
+        System.setOut(null);
+        System.setErr(null);
+        System.setIn(null);
         Design.init();
         JPanel panel = new MenuPanel();
         panel.setSize(Frame.getInstance().getContentPane().getSize());
