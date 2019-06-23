@@ -17,7 +17,7 @@ public class LevelMap extends GameObject {
 
     private BufferedImage backgroundImage;
     private Rectangle[] platformModels;
-    private boolean jumpThrough;     // @TODO change name
+    private boolean jumpThrough;
 
     private LevelMap(BufferedImage backgroundImage, Rectangle[] platformModels, boolean jumpThrough) {
         this.backgroundImage = backgroundImage;
