@@ -12,7 +12,7 @@ import java.util.List;
 public class LevelMap extends GameObject {
 
 
-    public static final String[] MAP_NAMES = {"clouds", "space"};
+    public static final String[] MAP_NAMES = {"clouds", "space", "Schmierzettel"};
     private static final String MAP_PATH = "./resources/maps/";
 
     private BufferedImage backgroundImage;
