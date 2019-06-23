@@ -213,6 +213,8 @@ public class ScorePanel extends Panel implements ActionListener {
             oldmusic.stop();
             oldmusic=Music.getInstanceScoreMusicBavaria();
             oldmusic.stop();
+            oldmusic=Music.getInstanceScoreMusicScout();
+            oldmusic.stop();
             Music newmusic=Music.getInstanceGameMusic();
             newmusic.play();
         }
