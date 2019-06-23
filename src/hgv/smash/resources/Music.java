@@ -14,11 +14,13 @@ public class Music {
     private static Music ourInstanceMenuMusic = new Music("MenuMusic");
     private static Music ourInstanceScoreMusicSowjet = new Music("ScoreMusicSowjet");
     private static Music ourInstanceScoreMusicBavaria = new Music("ScoreMusicBavaria");
+    private static Music ourInstanceScoreMusicScout = new Music("ScoreMusicScout");
     //Files von den verschiedenen Liedern
     private File fileGameMusic;
     private File fileMenuMusic;
     private File fileScoreMusicSowjet;
     private File fileScoreMusicBavaria;
+    private File fileScoreMusicScout;
     //File von dem Lied, das spielt
     private File chosenMusic;
     //auf den Clip wird das Lied geladen und der Clip kann dann auch abgespielt werden.
@@ -32,6 +34,7 @@ public class Music {
         fileMenuMusic = new File("./resources/Sounds_and_Music/Jeopardy.wav");
         fileScoreMusicSowjet = new File("./resources/Sounds_and_Music/National_Anthem_Sowjet.wav");
         fileScoreMusicBavaria=new File("./resources/Sounds_and_Music/Rede.wav");
+        fileScoreMusicScout=new File("./resources/Sounds_and_Music/downUnder.wav");
         //hier wird entschieden welcher File dann geladen wird
         switch (musicYouNeed) {
             case "GameMusic":
@@ -45,6 +48,8 @@ public class Music {
                 break;
             case "ScoreMusicBavaria":
                 chosenMusic=fileScoreMusicBavaria;
+            case "ScoreMusicScout":
+                chosenMusic=fileScoreMusicScout;
             default:
                 break;
         }
@@ -67,11 +72,15 @@ public class Music {
         return ourInstanceGameMusic;
     }
 
-    //Über diese Methode drei Methoden kann jede Klasse auf die drei verschiedenen singleton
+    //Über diese Methode 5 Methoden kann jede Klasse auf die 5 verschiedenen
     // Objekte der Klasse Musik zugreifen.
 
     public static Music getInstanceScoreMusicSowjet() {
         return ourInstanceScoreMusicSowjet;
+    }
+
+    public static Music getInstanceScoreMusicScout() {
+        return ourInstanceScoreMusicScout;
     }
     public static Music getInstanceScoreMusicBavaria() {
         return ourInstanceScoreMusicBavaria;
