@@ -108,12 +108,12 @@ public class MenuPanel extends Panel implements ActionListener {
         disclaimerButton.setBackground(Design.getPrimaryColor());
         disclaimerButton.setForeground(Design.getSecondaryColor());
 
-//        buttonMap.setBackground(Design.getPrimaryColor());
-//        buttonMap.setForeground(Design.getSecondaryColor());
-//        buttonPlayer1.setBackground(Design.getPrimaryColor());
-//        buttonPlayer1.setForeground(Design.getSecondaryColor());
-//        buttonPlayer2.setBackground(Design.getPrimaryColor());
-//        buttonPlayer2.setForeground(Design.getSecondaryColor());
+        buttonMap.setBackground(Design.getPrimaryColor());
+        buttonMap.setForeground(Design.getSecondaryColor());
+        buttonPlayer1.setBackground(Design.getPrimaryColor());
+        buttonPlayer1.setForeground(Design.getSecondaryColor());
+        buttonPlayer2.setBackground(Design.getPrimaryColor());
+        buttonPlayer2.setForeground(Design.getSecondaryColor());
 
         previewPlayer1 = null;
         previewPlayer2 = null;
