@@ -1,5 +1,6 @@
 package hgv.smash.resources;
 
+import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -67,4 +68,40 @@ public class Design {
         return getFont(FONT_DIR + GAMEOVER_FONT, type, size);
     }
 
+    public static void init() {
+        String[] bgKeys = new String[]{
+                "Panel.background",
+                "Button.background",
+                "ComboBox.background",
+                "ComboBox.buttonBackground",
+                "ComboBox.selectionForeground",
+                "OptionPane.background"
+        };
+        for (int i = 0; i < bgKeys.length; i++) {
+            UIManager.put(bgKeys[i], getPrimaryColor());
+        }
+
+        String[] fgKeys = new String[]{
+                "ComboBox.selectionBackground",
+                "Button.foreground",
+                "Button.highlight",
+                "Button.select",
+                "OptionPane.foreground",
+                "OptionPane.messageForeground",
+                "OptionPane.buttonForeground",
+                "Panel.foreground"
+        };
+        for (int i = 0; i < fgKeys.length; i++) {
+            UIManager.put(fgKeys[i], getSecondaryColor());
+        }
+
+        String[] fontKeys = new String[]{
+                "OptionPane.font",
+                "OptionPane.messageFont",
+                "OptionPane.buttonFont"
+        };
+        for (int i = 0; i < fontKeys.length; i++) {
+            UIManager.put(fontKeys[i], getDefaultFont());
+        }
+    }
 }

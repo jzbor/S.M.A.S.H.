@@ -189,6 +189,8 @@ public class MenuPanel extends Panel implements ActionListener {
                 frame.getContentPane().removeAll();
                 frame.getContentPane().add(gamePanel);
                 ((JPanel) (frame.getContentPane())).updateUI();
+            } else {
+                JOptionPane.showMessageDialog(this, "Ihr müsst euch erst Avatare aussuchen und auf eine Karte einigen, um zu spielen.");
             }
         } else if (actionEvent.getSource() == disclaimerButton) {
             File currentFile = new File("./resources/disclaimer/disclaimer.txt");
