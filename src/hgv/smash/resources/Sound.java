@@ -59,20 +59,8 @@ public class Sound {
         return ourInstanceSoundJump;
     }
     public void play() {
-        clip.close();
-        try {
-
-            clip.open(AudioSystem.getAudioInputStream(chosenSound));
-
-        } catch (LineUnavailableException | UnsupportedAudioFileException | IOException e) {
-            e.printStackTrace();
-        }
+        clip.setFramePosition(0);
         clip.start();
-    }
-
-    public void stop() {
-        clip.stop();
-
     }
 }
 
