@@ -12,8 +12,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -61,8 +59,8 @@ public class MenuPanel extends Panel implements ActionListener {
         buttonPlayer2.addActionListener(this);
         buttonMap.addActionListener(this);
 
-        buttonPlayer1.setBounds(1024 / 4 - 75, 230, 150, 50);
-        buttonPlayer2.setBounds(1024 / 4 * 3 - 75, 230, 150, 50);
+        buttonPlayer1.setBounds(1024 / 4 - 100, 230, 200, 50);
+        buttonPlayer2.setBounds(1024 / 4 * 3 - 100, 230, 200, 50);
         buttonMap.setBounds(1024 / 2 - 75, 230, 150, 50);
         buttonPlayer1.setRenderer(new MyComboBoxRenderer("Ersten Avatar wählen"));
         buttonPlayer1.setSelectedIndex(-1);
@@ -191,25 +189,6 @@ public class MenuPanel extends Panel implements ActionListener {
         graphics2D.drawImage(backgroundImage, 0, 0, null);
         graphics2D.drawImage(previewPlayer1, 210, 320, null);
         graphics2D.drawImage(previewPlayer2, 723, 320, null);
-
-        Ellipse2D cloud = new Ellipse2D.Double(100, 220, 300, 120);
-        graphics2D.setColor(new Color(102, 51, 0));
-
-        //graphics2D.fill(cloud);
-
-
-        graphics2D.setColor(new Color(255, 204, 51));
-        Rectangle2D floor = new Rectangle2D.Double(165, 528, 180, 15);
-        graphics2D.fill(floor);
-        Rectangle2D floor2 = new Rectangle2D.Double(670, 528, 180, 15);
-        graphics2D.fill(floor2);
-        graphics2D.setColor(Color.YELLOW);
-        Rectangle2D throne = new Rectangle2D.Double(690, 508, 140, 20);
-        graphics2D.fill(throne);
-        Rectangle2D throne2 = new Rectangle2D.Double(185, 508, 140, 20);
-        graphics2D.fill(throne2);
-
-
     }
 
     @Override
