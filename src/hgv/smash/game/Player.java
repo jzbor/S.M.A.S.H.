@@ -133,7 +133,6 @@ public class Player extends GameObject {
         lastPunch += millis;
         if (punch) {
             if (Frame.getInstance().getSound()) {
-                punchSound.stop();
                 punchSound.play();
             }
             punchOtherPlayer(false, hitDirection);
@@ -152,7 +151,7 @@ public class Player extends GameObject {
         //change speed if jumped
         lastJump += millis;
         if (jumped) {
-            if (Frame.getInstance().getSound()) {
+             if (Frame.getInstance().getSound()) {
                 jumpSound.play();
             }
             vy[1] = -SPEED;
