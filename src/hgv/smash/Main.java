@@ -6,13 +6,26 @@ import hgv.smash.gui.MenuPanel;
 import hgv.smash.resources.Design;
 
 import javax.swing.*;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 
 public class Main {
 
     public static void main(String[] args) {
-        System.setOut(null);
-        System.setErr(null);
-        System.setIn(null);
+        // remove unnecessary outputs
+        System.setOut(new PrintStream(new OutputStream() {
+            @Override
+            public void write(int i) throws IOException {
+
+            }
+        }));
+        System.setErr(new PrintStream(new OutputStream() {
+            @Override
+            public void write(int i) throws IOException {
+
+            }
+        }));
         Design.init();
         JPanel panel = new MenuPanel();
         panel.setSize(Frame.getInstance().getContentPane().getSize());
