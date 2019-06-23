@@ -3,6 +3,7 @@ package hgv.smash.gui;
 
 import hgv.smash.resources.Design;
 import hgv.smash.resources.KeyBoardLayout;
+import sun.security.krb5.internal.crypto.Des;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -46,12 +47,14 @@ public class KeySetPanel extends Panel implements MouseListener {
         JPanel wholePanel = new JPanel();
         JPanel buttonPanel = new JPanel();
         JPanel keySetPanel = new JPanel();
+        JPanel labelPanel = new JPanel();
         JPanel leftPlayerKeySet = new JPanel();
         JPanel rightPlayerKeySet = new JPanel();
 
         wholePanel.setLayout(new BoxLayout(wholePanel, BoxLayout.PAGE_AXIS));
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.LINE_AXIS));
         keySetPanel.setLayout(new BoxLayout(keySetPanel, BoxLayout.LINE_AXIS));
+        labelPanel.setLayout(new BoxLayout(labelPanel,BoxLayout.LINE_AXIS));
         leftPlayerKeySet.setLayout(new GridBagLayout());
         rightPlayerKeySet.setLayout(new GridBagLayout());
 
@@ -89,9 +92,18 @@ public class KeySetPanel extends Panel implements MouseListener {
             rightPlayerKeySet.add(player2Label[i], gbc2);
         }
 
+        JLabel player1Label=new JLabel("Spieler 1");
+        JLabel player2Label=new JLabel("Spieler 2");
+        player1Label.setFont(Design.getDefaultFont(50));
+        player2Label.setFont(Design.getDefaultFont(50));
+        labelPanel.add(player1Label);
+        labelPanel.add(Box.createHorizontalStrut(60));
+        labelPanel.add(player2Label);
+
         keySetPanel.add(leftPlayerKeySet);
+        keySetPanel.add(Box.createHorizontalStrut(30));
         keySetPanel.add(rightPlayerKeySet);
-        wholePanel.add(Box.createVerticalStrut(190));
+        wholePanel.add(labelPanel);
         wholePanel.add(keySetPanel);
 
         saveButton = new JButton("Speichern");
