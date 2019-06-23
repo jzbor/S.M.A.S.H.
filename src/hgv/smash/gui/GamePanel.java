@@ -108,7 +108,7 @@ public class GamePanel extends Panel {
             player2.draw(graphics2D);
 
             //calculate camera
-            ImageExtract imageExtract = null;
+            ImageExtract imageExtract;
             if (cameraRunning) {
                 imageExtract = calculateCamera(bi);
             } else {
@@ -270,13 +270,11 @@ public class GamePanel extends Panel {
             xDiff = width / height * yDiff;
             double xAdd = (xDiff - xDiffOld) / 2;
             xLeft -= xAdd;
-            xRight += xAdd;
         } else {
             double yDiffOld = yDiff;
             yDiff = height / width * xDiff;
             double yAdd = (yDiff - yDiffOld) / 2;
             yTop -= yAdd;
-            yBottom += yAdd;
         }
 
         //no images greater than picture of map(double check)
@@ -290,18 +288,14 @@ public class GamePanel extends Panel {
         //no images outside of picture of map
         if (xLeft < 0) {
             xLeft = 0;
-            xRight = xLeft + xDiff;
         }
         if (xLeft + xDiff > width) {
             xLeft = width - xDiff;
-            xRight = width;
         }
         if (yTop < 0) {
             yTop = 0;
-            yBottom = yTop + yDiff;
         } else if (yTop + yDiff > height) {
             yTop = height - yDiff;
-            yBottom = height;
         }
 
         //create subimage and return upscaled one
@@ -477,9 +471,7 @@ public class GamePanel extends Panel {
             else {
                 isPlayerOutOfMap = false;
             }
-            if (Main.DEBUG) {
-                //graphics2D.fillPolygon(xPos, yPos, 3);
-            }
+            //graphics2D.fillPolygon(xPos, yPos, 3);
 
             //calculate size of arrow
             if (isPlayerOutOfMap) {

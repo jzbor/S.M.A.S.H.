@@ -32,7 +32,7 @@ public class KeySetPanel extends Panel implements MouseListener {
     private JButton abortButton;
     private JLabel selectedKey;
 
-    private KeyBoardLayout keyBoardLayout = null;
+    private KeyBoardLayout keyBoardLayout;
 
     private Component originalContentPane;
 
@@ -259,7 +259,7 @@ public class KeySetPanel extends Panel implements MouseListener {
                 }
                 char[] allKeys = new char[player1Keys.length + player2Keys.length];
                 System.arraycopy(player1Keys, 0, allKeys, 0, player1Keys.length);
-                System.arraycopy(player2Keys, 0, allKeys, 0 + player1Keys.length - 1, player2Keys.length);
+                System.arraycopy(player2Keys, 0, allKeys, player1Keys.length - 1, player2Keys.length);
                 boolean noSameKeys = true;
                 for (int i = 0; i < allKeys.length - 1; i++) {
                     for (int j = 1 + i; j < allKeys.length - 1; j++) {

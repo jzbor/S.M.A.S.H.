@@ -206,7 +206,7 @@ public class Avatar {
     public int getIndex() {
         int n = -1;
         for (int i = 0; i < AVATAR_NAMES.length; i++) {
-            if (AVATAR_NAMES[i] == name) {
+            if (AVATAR_NAMES[i].equals(name)) {
                 n = i;
             }
 

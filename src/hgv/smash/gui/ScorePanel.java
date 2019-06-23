@@ -46,10 +46,8 @@ public class ScorePanel extends Panel implements ActionListener {
                 newMusic = Music.getInstanceScoreMusicSowjet();
 
             }
-            try {
+            if (newMusic != null) {
                 newMusic.play();
-            } catch (Exception e) {
-                System.out.println("kein lied");
             }
         }
         Frame.getInstance().currentpanel(2);
