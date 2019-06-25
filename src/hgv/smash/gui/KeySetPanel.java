@@ -3,6 +3,7 @@ package hgv.smash.gui;
 
 import hgv.smash.resources.Design;
 import hgv.smash.resources.KeyBoardLayout;
+import sun.security.krb5.internal.crypto.Des;
 
 import javax.swing.*;
 import javax.swing.border.Border;

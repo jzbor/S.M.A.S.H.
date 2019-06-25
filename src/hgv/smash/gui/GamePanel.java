@@ -209,8 +209,7 @@ public class GamePanel extends Panel {
     private ImageExtract calculateCamera(BufferedImage bufferedImage) {
         int offset = 100;
 
-
-        //find smallest rectangle wich has both players with offset inside
+        //find smallest rectangle which has both players with offset inside
         double yTop;
         if (player1.getYPos() > player2.getYPos()) {
             yTop = player2.getYPos();
@@ -243,7 +242,6 @@ public class GamePanel extends Panel {
             xRight = player2.getXPos() + player2.getWidth();
         }
         xRight += offset;
-
 
         //calculate length of side of smallest rectangle and increase smaller size till it fits to relation of window
         double xDiff = xRight - xLeft;
@@ -290,13 +288,11 @@ public class GamePanel extends Panel {
             yTop = height - yDiff;
         }
 
-        //create subimage and return upscaled one
         BufferedImage subimage;
         //linux bug
         try {
             subimage = bufferedImage.getSubimage((int) xLeft, (int) yTop, (int) xDiff, (int) yDiff);
         } catch (Exception e) {
-            //System.out.println("Linux error");
             subimage = bufferedImage.getSubimage((int) xLeft, (int) yTop, (int) xDiff - 2, (int) yDiff - 2);
         }
         subimage = resizePicture(subimage, width / xDiff);
@@ -305,27 +301,18 @@ public class GamePanel extends Panel {
     }
 
     private ImageExtract calculateArrows(ImageExtract imageExtract) {
-
         //draw direction of player if outside of map
 
         //create picture for final arrow
         BufferedImage transformedArrowImage;
 
-
         //graphics to draw arrow on
         Graphics2D graphics2D = (Graphics2D) imageExtract.getImage().getGraphics();
-
-
-        //coordinates for debugging arrows
-        int[] xPos = new int[3];
-        int[] yPos = new int[3];
 
         int xLeft = imageExtract.getxOffset();
         int xRight = xLeft + imageExtract.getWidth();
         int yTop = imageExtract.getyOffset();
         int yBottom = yTop + imageExtract.getHeight();
-        int xDiff = imageExtract.getWidth();
-        int yDiff = imageExtract.getHeight();
 
         double factor = 0.7;
 
@@ -414,7 +401,6 @@ public class GamePanel extends Panel {
 
             //side
 
-
             //left side
             else if (xPlayerRight < xLeft) {
 
@@ -463,7 +449,6 @@ public class GamePanel extends Panel {
             else {
                 isPlayerOutOfMap = false;
             }
-            //graphics2D.fillPolygon(xPos, yPos, 3);
 
             //calculate size of arrow
             if (isPlayerOutOfMap) {

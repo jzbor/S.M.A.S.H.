@@ -258,8 +258,7 @@ public class Player extends GameObject {
         Vector2D punchVector = new Vector2D(xpos[0] + width / 2 - xCentre, ypos[0] + height / 2 - yCentre);
         //unit vector so that every punch results in same speed
         Vector2D unitPunchVector = punchVector.directionVector();
-        if (hitbox.intersects((Rectangle2D) model)
-                &&Math.abs(unitPunchVector.getX()+hitDirection)>1) {
+        if (hitbox.intersects((Rectangle2D) model)&&(Math.abs(unitPunchVector.getX()+hitDirection)>1||unitPunchVector.getX()==0)) {
             percentage += Math.random() * (SUPER_DAMAGE_RANGE[1] - SUPER_DAMAGE_RANGE[0]) + SUPER_DAMAGE_RANGE[0];
             if (superdamage) {
                 vx_punch = unitPunchVector.getX() * HIT_SPEED * hitMuliplyer * SUPER_MULTIPLIER;
