@@ -230,36 +230,37 @@ public class Player extends GameObject {
     }
 
     private void punchOtherPlayer(boolean superdamage, int direction) {
-        if (!superdamage) {
-            if (direction == -1) {
-                Shape hitbox = new Rectangle(xpos[0] + width / 2 - normalHitboxWidth, ypos[0] + height / 2 - normalHitboxHeight / 2, normalHitboxWidth, normalHitboxHeight);
-                otherPlayer.hit(hitbox, xpos[0] + width / 2, ypos[0] + height / 2, superdamage);
-            } else if (direction == 1) {
-                Shape hitbox = new Rectangle(xpos[0] + width / 2, ypos[0] + height / 2 - normalHitboxHeight / 2, normalHitboxWidth, normalHitboxHeight);
-                otherPlayer.hit(hitbox, xpos[0] + width / 2, ypos[0] + height / 2, superdamage);
+            if (!superdamage) {
+                if (direction == -1) {
+                    Shape hitbox = new Rectangle(xpos[0] + width / 2 - normalHitboxWidth, ypos[0] + height / 2 - normalHitboxHeight / 2, normalHitboxWidth, normalHitboxHeight);
+                    otherPlayer.hit(hitbox, xpos[0] + width / 2, ypos[0] + height / 2, superdamage,direction);
+                } else if (direction == 1) {
+                    Shape hitbox = new Rectangle(xpos[0] + width / 2, ypos[0] + height / 2 - normalHitboxHeight / 2, normalHitboxWidth, normalHitboxHeight);
+                    otherPlayer.hit(hitbox, xpos[0] + width / 2, ypos[0] + height / 2, superdamage,direction);
+                } else {
+                    System.err.println("unresolved hit direction");
+                }
             } else {
-                System.err.println("unresolved hit direction");
+                if (direction == -1) {
+                    Shape hitbox = new Rectangle(xpos[0] + width / 2 - normalHitboxWidth, ypos[0] + height / 2 - normalHitboxHeight / 2, normalHitboxWidth, normalHitboxHeight);
+                    otherPlayer.hit(hitbox, xpos[0] + width / 2, ypos[0] + height / 2, superdamage,direction);
+                } else if (direction == 1) {
+                    Shape hitbox = new Rectangle(xpos[0] + width / 2, ypos[0] + height / 2 - normalHitboxHeight / 2, normalHitboxWidth, normalHitboxHeight);
+                    otherPlayer.hit(hitbox, xpos[0] + width / 2, ypos[0] + height / 2, superdamage,direction);
+                } else {
+                    System.err.println("unresolved hit direction");
+                }
             }
-        } else {
-            if (direction == -1) {
-                Shape hitbox = new Rectangle(xpos[0] + width / 2 - normalHitboxWidth, ypos[0] + height / 2 - normalHitboxHeight / 2, normalHitboxWidth, normalHitboxHeight);
-                otherPlayer.hit(hitbox, xpos[0] + width / 2, ypos[0] + height / 2, superdamage);
-            } else if (direction == 1) {
-                Shape hitbox = new Rectangle(xpos[0] + width / 2, ypos[0] + height / 2 - normalHitboxHeight / 2, normalHitboxWidth, normalHitboxHeight);
-                otherPlayer.hit(hitbox, xpos[0] + width / 2, ypos[0] + height / 2, superdamage);
-            } else {
-                System.err.println("unresolved hit direction");
-            }
-        }
     }
 
-    private void hit(Shape hitbox, int xCentre, int yCentre, boolean superdamage) {
+    private void hit(Shape hitbox, int xCentre, int yCentre, boolean superdamage,int hitDirection) {
         double hitMuliplyer = percentage / 5;
-        if (hitbox.intersects((Rectangle2D) model)) {
+        Vector2D punchVector = new Vector2D(xpos[0] + width / 2 - xCentre, ypos[0] + height / 2 - yCentre);
+        //unit vector so that every punch results in same speed
+        Vector2D unitPunchVector = punchVector.directionVector();
+        if (hitbox.intersects((Rectangle2D) model)
+                &&Math.abs(unitPunchVector.getX()+hitDirection)>1) {
             percentage += Math.random() * (SUPER_DAMAGE_RANGE[1] - SUPER_DAMAGE_RANGE[0]) + SUPER_DAMAGE_RANGE[0];
-            Vector2D punchVector = new Vector2D(xpos[0] + width / 2 - xCentre, ypos[0] + height / 2 - yCentre);
-            //unit vector so that every punch results in same speed
-            Vector2D unitPunchVector = punchVector.directionVector();
             if (superdamage) {
                 vx_punch = unitPunchVector.getX() * HIT_SPEED * hitMuliplyer * SUPER_MULTIPLIER;
                 vy_punch = unitPunchVector.getY() * HIT_SPEED * hitMuliplyer * SUPER_MULTIPLIER;

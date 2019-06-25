@@ -86,6 +86,7 @@ public class KeySetPanel extends Panel implements MouseListener {
             player1KeyLabels[i].addMouseListener(this);
             player1KeyLabels[i].setPreferredSize(new Dimension(40, 40));
             player1KeyLabels[i].setBorder(raisedBorder);
+            player1KeyLabels[i].setForeground(Design.getSecondaryColor());
             leftPlayerKeySet.add(player1KeyLabels[i], gbc1);
 
 
@@ -101,16 +102,20 @@ public class KeySetPanel extends Panel implements MouseListener {
             player2KeyLabels[i].addMouseListener(this);
             player2KeyLabels[i].setPreferredSize(new Dimension(40, 40));
             player2KeyLabels[i].setBorder(raisedBorder);
+            player2KeyLabels[i].setForeground(Design.getSecondaryColor());
             rightPlayerKeySet.add(player2KeyLabels[i], gbc2);
         }
 
         JLabel player1Label = new JLabel("Spieler 1");
         JLabel player2Label = new JLabel("Spieler 2");
         player1Label.setFont(Design.getDefaultFont(50));
+        player1Label.setForeground(Design.getSecondaryColor());
         player2Label.setFont(Design.getDefaultFont(50));
+        player2Label.setForeground(Design.getSecondaryColor());
 
         saveButton = new JButton("Speichern");
         saveButton.setFont(Design.getDefaultFont(20));
+        saveButton.setForeground(Design.getSecondaryColor());
         saveButton.addMouseListener(this);
         saveButton.setBackground(Design.getPrimaryColor());
         buttonPanel.add(saveButton);
@@ -118,6 +123,7 @@ public class KeySetPanel extends Panel implements MouseListener {
 
 
         restoreDefaultButton = new JButton("Wiederherstellen");
+        restoreDefaultButton.setForeground(Design.getSecondaryColor());
         restoreDefaultButton.setFont(Design.getDefaultFont(20));
         restoreDefaultButton.addMouseListener(this);
         restoreDefaultButton.setBackground(Design.getPrimaryColor());
@@ -125,6 +131,7 @@ public class KeySetPanel extends Panel implements MouseListener {
 
 
         abortButton = new JButton("Abbrechen");
+        abortButton.setForeground(Design.getSecondaryColor());
         abortButton.setFont(Design.getDefaultFont(20));
         abortButton.addMouseListener(this);
         abortButton.setBackground(Design.getPrimaryColor());
@@ -192,12 +199,12 @@ public class KeySetPanel extends Panel implements MouseListener {
     public void keyTyped(KeyEvent e) {
         if (selectedKey != null) {
             boolean isButtonAvailable = true;
-            char key = e.getKeyChar();
+            char key = Character.toLowerCase(e.getKeyChar());
 
-            if (!(((int) key >= 65 && (int) key <= 90) || ((int) key >= 97 && (int) key <= 122) || key == 'ö' || key == 'ä' || key == 'ü')) {
+            if (!(((int) key >= 65 && (int) key <= 90) || key == 'ö' || key == 'ä' || key == 'ü')) {
                 isButtonAvailable = false;
             }
-            if (!(((int) key >= 65 && (int) key <= 90) || ((int) key >= 97 && (int) key <= 122) || key == 'ö' || key == 'ä' || key == 'ü')) {
+            if (!(((int) key >= 65 && (int) key <= 90) || key == 'ö' || key == 'ä' || key == 'ü')) {
                 isButtonAvailable = false;
             }
             if (isButtonAvailable) {
