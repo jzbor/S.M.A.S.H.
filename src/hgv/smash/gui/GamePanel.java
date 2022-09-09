@@ -20,7 +20,9 @@ import java.io.File;
 public class GamePanel extends Panel {
 
 
-    private static final int FRAMERATE = 100;
+    private static final int DEBUG_DEPTH = 60;
+    private static final boolean SHOW_DEBUG_WIDGET = false;
+    private static final int FRAMERATE = 1000;
     private static final int[] FREEZE_COLOR = new int[]{126, 197, 252, 125};
     // y coords defining a death
     private static final int RANGE_OF_DEATH = 1000;
@@ -45,6 +47,7 @@ public class GamePanel extends Panel {
     private LevelMap levelMap;
     private Image frameBuffer;
     private BufferedImage originalArrow;
+    private DebugWidget debugWidget;
     private boolean paused;
 
     public GamePanel(Avatar a1, Avatar a2, LevelMap map) {
@@ -75,12 +78,15 @@ public class GamePanel extends Panel {
 
         OurKeyListener.getInstance().setPanel(this);
 
+        debugWidget = new DebugWidget(DEBUG_DEPTH);
+
         // start gameloop
         gameloopThread.start();
     }
 
     public void gameloop() {
         long lastFrame = System.currentTimeMillis() - 1;
+        debugWidget.resetClock();
         while (running) {
             // get time for the physics to calculate
             long thisFrame = System.currentTimeMillis();
@@ -96,6 +102,7 @@ public class GamePanel extends Panel {
                 levelMap.calc(timedelta);
             }
 
+            debugWidget.recordPoint("calc");
 
             // buffer frame
             BufferedImage bi = new BufferedImage(1024, 768, BufferedImage.TYPE_INT_ARGB_PRE);
@@ -105,6 +112,8 @@ public class GamePanel extends Panel {
             levelMap.draw(graphics2D);
             player1.draw(graphics2D);
             player2.draw(graphics2D);
+
+            debugWidget.recordPoint("draw");
 
             //calculate camera
             ImageExtract imageExtract;
@@ -120,8 +129,13 @@ public class GamePanel extends Panel {
 
             frameBuffer = bi;
 
+            debugWidget.recordPoint("post");
+
             // request ui update
+            if (SHOW_DEBUG_WIDGET)
+                debugWidget.draw(bi.getGraphics(), 10, 200, 20);
             updateUI();
+            debugWidget.recordPoint("update");
 
             // sleep
             if ((System.currentTimeMillis() - thisFrame) < (1000.0 / FRAMERATE)) {
@@ -135,6 +149,8 @@ public class GamePanel extends Panel {
                 }
             }
             lastFrame = thisFrame;
+
+            debugWidget.recordPoint("sleep");
         }
     }
 
